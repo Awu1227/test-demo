@@ -1,15 +1,18 @@
 import { Vector2d } from 'konva/lib/types';
 import { Line, Point } from './type';
-import { Label } from 'konva/lib/shapes/Label';
+import graphLabel from './label'
 import Konva from 'konva';
   export default class GraphysicUtil {
-    isShow:boolean
-    points: number[]
-    lines: Map<string, Line> = new Map()
-    crossLines: Line[]
+    isShow:boolean // 是否显示辅助线
+    adsorbGap_ver = 25 // 垂直方向上触发吸附的间距
+    adsorbGap_hor = 150 // 水平方向上触发吸附的间距
+    labelWidth = 30 // label标签宽度
+    points: number[] // 背景方框的点
+    lines: Map<string, Line> = new Map() // 存储所有的线
+    crossLines: Line[] // 在鼠标处向四边做射线，与之相交的第一条线的数组
     constructor(points:number[]) {
       this.points = points;
-      this.initLabel()
+      graphLabel.generateLabel(this.labelWidth)
     }
 
     konvaPoints2Line(points: number[]) { 
@@ -43,7 +46,6 @@ import Konva from 'konva';
      * 
      * @description 给line上加上到鼠标的距离
      */
-    
     obtainLineDistance(point:Vector2d ,shape:Konva.Shape) {
       let crosNum = 0
       this.lines.forEach((value,key,line) => {
@@ -84,15 +86,13 @@ import Konva from 'konva';
       
     }
 
-    initLabel() {
-      for (let i = 0; i < 4; i++) {
-        const label = document.createElement('input');
-        label.classList.add('konva_label')
-        label.classList.add(`label${i+1}`)
-        label.style.width = '50px';
-        label.style.top = '-50px';
-        // label.style.left = `${value.start.x}px`;
-        document.body.appendChild(label);
+    conFirmPosition(line: Line, point: Point) {
+      if (line.x ) {
+        return line.x < point.x ? 'left' : 'right'
+      } 
+      
+      if (line.y){
+        return line.y < point.y ? 'top' : 'bottom'
       }
     }
     updateLabel(lineArr:Line[],point:Point,shape: Konva.Shape) {
@@ -101,39 +101,56 @@ import Konva from 'konva';
       
       for (let i = 0; i < this.crossLines.length; i++){
           const line = lineArr[i];
-          const label = document.querySelector(`.label${i+1}`) as HTMLInputElement;
-          if (line.x && line.distanceX) {
-            label.style.left = `${line.x-25}px`;
-            label.style.top = `${point.y}px`;
-            label.value=`${line.distanceX}`
-            if (line.distanceX < 150) {
-              if(point.x >line.x) {
-                verLine.x(point.x - 50)
-                label.style.left = `${line.x- 25 - 45}px`;
-                shape.x(line.x)
-              } else {
-                verLine.x(point.x + 50)
-                label.style.left = `${line.x+ -25 + 45}px`;
-                shape.x(line.x - 200)
+          const position = this.conFirmPosition(line,point)!;
+          const label = graphLabel.labelMap.get(position)!;
+          switch (position) {
+            case 'left':
+              label.style.left = `${ graphLabel.caluatePosition(line,point,shape.width(),this.labelWidth,position)}px`
+              label.style.top = `${point.y}px`;
+              label.value=`${line.distanceX}`
+              if (line.distanceX! < this.adsorbGap_hor) {
+                verLine.x(point.x - (this.adsorbGap_hor - shape.width()/2))
+                graphLabel.updateLabelPosition(verLine.x(),true)
+                label.style.left = `${line.x!- this.labelWidth/2 - 45}px`;
+                shape.x(line.x!)
               }
-            }
-
-          }else if (line.y && line.distanceY) {
-            label.style.top = `${line.y}px`;
-            label.style.left = `${point.x -25}px`;
-            label.value=`${line.distanceY}`
-            if (line.distanceY < 25) {
-              if(point.y >line.y) {
-                horLine.y(point.y - 25)
-                label.style.top = `${line.y- 25}px`;
-                shape.y(line.y)
-              } else {
-                horLine.y(point.y + 25)
-                label.style.top = `${line.y+ 25}px`;
-                shape.y(line.y)
+              break;
+            case 'right':
+              label.style.left = `${ graphLabel.caluatePosition(line,point,shape.width(),this.labelWidth,position)}px`
+              label.style.top = `${point.y}px`;
+              label.value=`${line.distanceX}`
+              if (line.distanceX! < this.adsorbGap_hor) {
+                verLine.x(point.x + (this.adsorbGap_hor - shape.width()/2))
+                // graphLabel.updateLabelPosition(point.x + (this.adsorbGap_hor - shape.width()/2),true)
+                label.style.left = `${line.x! -this.labelWidth/2 + 45}px`;
+                shape.x(line.x!- shape.width())
               }
-            }
+              break;
+              case 'top':
+                label.style.top = `${graphLabel.caluatePosition(line,point,shape.height(),this.labelWidth,position)}px`
+                label.style.left = `${point.x -this.labelWidth/2}px`;
+                label.value=`${line.distanceY}`
+                if (line.distanceY! < this.adsorbGap_ver) {
+                  horLine.y(point.y - this.labelWidth/2)
+                  label.style.top = `${line.y!- this.adsorbGap_ver}px`;
+                  shape.y(line.y!)
+                }
+                break;
+              case 'bottom':
+                label.style.top = `${graphLabel.caluatePosition(line,point,shape.height(),this.labelWidth,position)}px`
+                label.style.left = `${point.x -this.labelWidth/2}px`;
+                label.value=`${line.distanceY}`
+                if (line.distanceY! < this.adsorbGap_ver) {
+                  horLine.y(point.y + this.adsorbGap_ver)
+                  label.style.top = `${line.y!+ this.adsorbGap_ver}px`;
+                  shape.y(line.y!)
+                }
+                break;
+          
+            default:
+              break;
           }
+          
       }
     }
     /**

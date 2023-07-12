@@ -41,7 +41,7 @@ const stick = new Konva.Rect({
   x: 0,
   y: 0,
   width: 200,
-  height:  2,
+  height:  4,
   fill: 'black',
   stroke: 'black',
   strokeWidth: 4,
@@ -143,5 +143,5 @@ stage.on('mousemove', function () {
 
 stage.on('click', function () {
   writeMessage('Clicked stage');
-  draggable = false
+  // draggable = falses
 })
