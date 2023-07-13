@@ -112,6 +112,7 @@ import Konva from 'konva';
                 verLine.x(point.x - (this.adsorbGap_hor - shape.width()/2))
                 graphLabel.updateLabelPosition(verLine.x(),true)
                 label.style.left = `${line.x!- this.labelWidth/2 - 45}px`;
+                label.value = `${shape.width() / 2}`
                 shape.x(line.x!)
                 return
               }
@@ -124,6 +125,7 @@ import Konva from 'konva';
                 verLine.x(point.x + (this.adsorbGap_hor - shape.width()/2))
                 graphLabel.updateLabelPosition(verLine.x(),true)
                 label.style.left = `${line.x! -this.labelWidth/2 + 45}px`;
+                label.value = `${shape.width() / 2}`
                 shape.x(line.x!- shape.width())
                 return
               }
@@ -136,6 +138,7 @@ import Konva from 'konva';
                   horLine.y(point.y - this.labelWidth/2)
                   graphLabel.updateLabelPosition(horLine.y(),false)
                   label.style.top = `${line.y!- this.adsorbGap_ver}px`;
+                  label.value = `${shape.height() / 2}`
                   shape.y(line.y!)
                   return
                 }
@@ -148,6 +151,7 @@ import Konva from 'konva';
                   horLine.y(point.y + this.adsorbGap_ver)
                   graphLabel.updateLabelPosition(horLine.y(),false)
                   label.style.top = `${line.y!+ this.adsorbGap_ver}px`;
+                  label.value = `${shape.height() / 2}`
                   shape.y(line.y!)
                   return
                 }
