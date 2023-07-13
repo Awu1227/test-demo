@@ -113,6 +113,7 @@ import Konva from 'konva';
                 graphLabel.updateLabelPosition(verLine.x(),true)
                 label.style.left = `${line.x!- this.labelWidth/2 - 45}px`;
                 shape.x(line.x!)
+                return
               }
               break;
             case 'right':
@@ -121,9 +122,10 @@ import Konva from 'konva';
               label.value=`${line.distanceX}`
               if (line.distanceX! < this.adsorbGap_hor) {
                 verLine.x(point.x + (this.adsorbGap_hor - shape.width()/2))
-                // graphLabel.updateLabelPosition(point.x + (this.adsorbGap_hor - shape.width()/2),true)
+                graphLabel.updateLabelPosition(verLine.x(),true)
                 label.style.left = `${line.x! -this.labelWidth/2 + 45}px`;
                 shape.x(line.x!- shape.width())
+                return
               }
               break;
               case 'top':
@@ -132,8 +134,10 @@ import Konva from 'konva';
                 label.value=`${line.distanceY}`
                 if (line.distanceY! < this.adsorbGap_ver) {
                   horLine.y(point.y - this.labelWidth/2)
+                  graphLabel.updateLabelPosition(horLine.y(),false)
                   label.style.top = `${line.y!- this.adsorbGap_ver}px`;
                   shape.y(line.y!)
+                  return
                 }
                 break;
               case 'bottom':
@@ -142,8 +146,10 @@ import Konva from 'konva';
                 label.value=`${line.distanceY}`
                 if (line.distanceY! < this.adsorbGap_ver) {
                   horLine.y(point.y + this.adsorbGap_ver)
+                  graphLabel.updateLabelPosition(horLine.y(),false)
                   label.style.top = `${line.y!+ this.adsorbGap_ver}px`;
                   shape.y(line.y!)
+                  return
                 }
                 break;
           
