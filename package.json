@@ -13,6 +13,7 @@
     "vite": "^4.4.0"
   },
   "dependencies": {
+    "eventemitter2": "^6.4.9",
     "konva": "9.0.1"
   }
 }

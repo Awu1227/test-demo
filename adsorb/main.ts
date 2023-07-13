@@ -3,10 +3,11 @@ import Konva from "konva";
 const width = window.innerWidth;
 const height = window.innerHeight;
 
+import GraphysicUtil from './graphicUtil';
+
 
 const roomPoints =  [400,400,1000,400,1000,800,400,800,400,400]
 let draggable = false
-import GraphysicUtil from './graphicUtil';
 
 
 const stage = new Konva.Stage({
@@ -102,8 +103,9 @@ layer.add(text)
 
 layer.draw()
 
+
 const util = new GraphysicUtil(roomPoints)
-util.konvaPoints2Line(roomPoints)
+util.konvaPoints2Line(roomPoints);
 
 
 room.on('mouseover', function (e) {
@@ -150,7 +152,6 @@ stick.on('click', function () {
 
 stick.on('dragmove', function () {
   const mousePos = stage.getPointerPosition();
-  console.log(draggable,mousePos);
   if (mousePos && draggable) {
     writeMessage('x: ' + mousePos.x + ', y: ' + mousePos.y);
     stick.x(mousePos.x - 100);
@@ -166,10 +167,8 @@ stick.on('dragmove', function () {
 })
 
 stage.on('click', function (e) {
-  console.log(e);
   const point = {x: e.evt.clientX, y: e.evt.clientY}
   writeMessage('Clicked stage');
-  console.log(stick.intersects(point));
   
   
   draggable = false

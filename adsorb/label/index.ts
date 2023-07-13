@@ -1,9 +1,12 @@
 import { Line, Point } from "../type";
 const positionArr = ['left', 'right', 'top', 'bottom']
+import {emitter} from '../emitter';
+import Konva from "konva";
 
-export default class graphLabel{
+export default class graphLabel {
 	static labelMap: Map<string, HTMLInputElement> = new Map(); // 存放4个标签的Map
 	static labelWidth: number
+	static labelHeight = 15
 	constructor() {
 	}
 	/**
@@ -24,21 +27,47 @@ export default class graphLabel{
 			const konva_dom = document.querySelector('.konvajs-content')!;
 			konva_dom.appendChild(label);
 		}
-		console.log(this.labelMap);
 		
 	}
 
-	static onChange() {
-		this.labelMap.forEach((label, key, map) => {
-			label.addEventListener('change',e => {
-				const input = e.target as HTMLInputElement
-				console.log('修改后的标签及数值是',key,input.value);
-				// TODO:
-
-			})
-		})
+	static foucusEvent() {
 	}
 
+	static changeEvent(e,key:string) {
+		
+			const input = e.target as HTMLInputElement
+			console.log('修改后的标签及数值是',key,input.value, (window as any).lines);
+
+			const lines = (window as any).lines
+
+			lines.get(key).setDistance(input.value)
+
+			// TODO:
+			const params = {
+				position: key,
+				value: input.value
+			
+			}
+			emitter.emit('labelPositionChange', JSON.stringify(params))
+
+			return 
+
+	}
+
+	static addListener() {
+		this.labelMap.forEach((label, key, map) => {
+			const previusValue = label.value
+			label.addEventListener('focus',this.foucusEvent)
+			label.addEventListener('change',(e) => {this.changeEvent(e,key)})
+		})
+	}
+	static removeListener() {
+		this.labelMap.forEach((label, key, map) => {
+			const previusValue = label.value
+			label.removeEventListener('focus',this.foucusEvent)
+			label.removeEventListener('change',(e) => {this.changeEvent(e,key)})
+	})
+	}
 	/**
 	 * 
 	 * @param pointXorY 
@@ -50,11 +79,35 @@ export default class graphLabel{
 			this.labelMap.get('top')!.style.left = `${pointXorY - this.labelWidth / 2 }px`
 			this.labelMap.get('bottom')!.style.left = `${pointXorY - this.labelWidth / 2}px`
 		} else {
-			this.labelMap.get('left')!.style.top = `${pointXorY}px`
-			this.labelMap.get('right')!.style.top = `${pointXorY}px`
+			this.labelMap.get('left')!.style.top = `${pointXorY - this.labelHeight}px`
+			this.labelMap.get('right')!.style.top = `${pointXorY - this.labelHeight}px`
 		}
 	}
 
+	/**
+	 * @description 修改标签数值后，手动更改标签的位置
+	 */
+	static setLabelPosByHand( position: 'left' | 'right' | 'top' | 'bottom',shape:Konva.Shape, distance: number) {
+		const verLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '垂直辅助线') as unknown as any;
+		const horLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '水平辅助线') as unknown as any;   
+		console.log('position',position);
+		const lines = (window as any).lines
+		if (position === 'left' || position === 'right') { 
+			this.labelMap.get('left')!.style.left = `${verLine.x() - shape.width() / 2 - 20}px`
+			this.labelMap.get('right')!.style.left = `${verLine.x() + shape.width() / 2 + 20}px`
+
+			this.labelMap.get('top')!.style.left = `${verLine.x() - this.labelWidth / 2}px`
+			this.labelMap.get('bottom')!.style.left = `${verLine.x() - this.labelWidth / 2}px`
+		} else {
+			this.labelMap.get('top')!.style.top = `${horLine.y() - shape.height() / 2 - 20}px`
+			this.labelMap.get('bottom')!.style.top = `${horLine.y() + shape.height() / 2 + 20}px`
+
+			this.labelMap.get('left')!.style.top = `${horLine.y() }px`
+			this.labelMap.get('right')!.style.top = `${horLine.y()}px`
+		}
+		console.log((window as any).lines);
+		
+	}
 	/**
 	 * 
 	 * @param line 

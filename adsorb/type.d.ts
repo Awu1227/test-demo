@@ -10,5 +10,6 @@ export type Line = {
   distanceY?:number;
   start: Point;
   end: Point;
-  isCross: boolean
+  isCross: boolean;
+  setDistance: (distance: number) => void;
 }

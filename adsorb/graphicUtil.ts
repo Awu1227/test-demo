@@ -2,6 +2,8 @@ import { Vector2d } from 'konva/lib/types';
 import { Line, Point } from './type';
 import graphLabel from './label'
 import Konva from 'konva';
+import {emitter} from './emitter';
+import {setHelperLine} from './utils';
   export default class GraphysicUtil {
     isShow = false // 是否显示辅助线
     adsorbGap_ver = 25 // 垂直方向上触发吸附的间距
@@ -10,14 +12,24 @@ import Konva from 'konva';
     points: number[] // 背景方框的点
     lines: Map<string, Line> = new Map() // 存储所有的线
     crossLines: Line[] // 在鼠标处向四边做射线，与之相交的第一条线的数组
+    shape: Konva.Shape;
     constructor(points:number[]) {
       this.points = points;
       graphLabel.generateLabel(this.labelWidth)
-      graphLabel.onChange()
+
+      emitter.on('labelPositionChange',(params) => {
+        const info = JSON.parse(params)
+        
+        // const point =
+        // TODO:
+      })
     }
 
     konvaPoints2Line(points: number[]) { 
+      const positionArr = ['left', 'right', 'top', 'bottom']
       const lines = new Map()
+      const lineArr: Line[] = []
+      let that = this
       const pointsArr = this.numberArr2PointsArr(points);
       for (let i = 0; i < pointsArr.length - 1; i++) {
         const startPoint = pointsArr[i];
@@ -26,7 +38,17 @@ import Konva from 'konva';
           isVertical: false,
           start: {x:0,y:0},
           end: {x:0,y:0},
-          isCross:false
+          isCross:false,
+          setDistance:  function(distance) {
+              setHelperLine(this,that,distance)
+              const latestPoint:Point = {
+                x: that.shape.x(),
+                y: that.shape.y()
+              }
+              
+              // that.updateLabel(lineArr,latestPoint)
+              // this.updateLabel(this.crossLines,that.shape.,shape)
+          }
         }
         line.start = startPoint
         line.end = endPoint
@@ -37,9 +59,17 @@ import Konva from 'konva';
           line.isVertical = false;
           line.y = startPoint.y;
         }
-        lines.set(`line${i+1}`, line)
-      } 
-      this.lines = new Map([...lines])
+        lineArr.push(line)
+      }
+      // 确定每条线的位置
+      const [line1, line2] = lineArr.filter(line => line.isVertical === true)
+        lines.set('left', line1.x! > line2.x! ? line2 : line1)
+        lines.set('right', line1.x! > line2.x! ? line1 : line2)
+      const [line3, line4] = lineArr.filter(line => line.isVertical === false)
+        lines.set('top', line3.y! > line4.y! ? line4 : line3)
+        lines.set('bottom', line3.y! > line4.y! ? line3 : line4)
+      this.lines = new Map([...lines]);
+      (window as any).lines = this.lines
       return lines
     }
 
@@ -76,14 +106,13 @@ import Konva from 'konva';
           line.set(key, newLine)
         }
       })
-      console.log('CrossNum',crosNum)
       this.filterCrossLine()
       this.updateLabel(this.crossLines,point,shape)
+      
     }
     filterCrossLine() {
       // TODO:
       this.crossLines = Array.from(this.lines.values()).filter(item => item.isCross)
-      console.log(this.crossLines);
       
     }
 
@@ -96,7 +125,10 @@ import Konva from 'konva';
         return line.y < point.y ? 'top' : 'bottom'
       }
     }
-    updateLabel(lineArr:Line[],point:Point,shape: Konva.Shape) {
+    updateLabel(lineArr:Line[],point:Point,shape: Konva.Shape = this.shape) {
+      
+      // TODO:
+      this.shape = shape
       const verLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '垂直辅助线') as unknown as any;
       const horLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '水平辅助线') as unknown as any;
       
@@ -107,12 +139,13 @@ import Konva from 'konva';
           switch (position) {
             case 'left':
               label.style.left = `${ graphLabel.caluatePosition(line,point,shape.width(),this.labelWidth,position)}px`
-              label.style.top = `${point.y}px`;
+              label.style.top = `${point.y - graphLabel.labelHeight / 2}px`;
               label.value=`${line.distanceX}`
               if (line.distanceX! < this.adsorbGap_hor) {
                 verLine.x(point.x - (this.adsorbGap_hor - shape.width()/2))
                 graphLabel.updateLabelPosition(verLine.x(),true)
                 label.style.left = `${line.x!- this.labelWidth/2 - 45}px`;
+                
                 label.value = `${shape.width() / 2}`
                 shape.x(line.x!)
                 return
@@ -120,7 +153,7 @@ import Konva from 'konva';
               break;
             case 'right':
               label.style.left = `${ graphLabel.caluatePosition(line,point,shape.width(),this.labelWidth,position)}px`
-              label.style.top = `${point.y}px`;
+              label.style.top = `${point.y - graphLabel.labelHeight / 2}px`;
               label.value=`${line.distanceX}`
               if (line.distanceX! < this.adsorbGap_hor) {
                 verLine.x(point.x + (this.adsorbGap_hor - shape.width()/2))
@@ -181,19 +214,24 @@ import Konva from 'konva';
       return pointsArr;
     }
     show() {
+      
+      if (this.isShow) return
       this.isShow = true
       const konva_labels = [...document.querySelectorAll('.konva_label')]
       konva_labels.forEach(item => {
         item.classList.remove('hide')
         item.classList.add('show')
-      })
+      })      
+      graphLabel.addListener()
     }
     hide() {
+      if (!this.isShow) return
       this.isShow = false
       const konva_labels = [...document.querySelectorAll('.konva_label')]
       konva_labels.forEach(item => {
         item.classList.add('show')
         item.classList.add('hide')
       })
+      graphLabel.removeListener()
     }
   }

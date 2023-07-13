@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  eventemitter2:
+    specifier: ^6.4.9
+    version: 6.4.9
   konva:
     specifier: 9.0.1
     version: 9.0.1
@@ -242,6 +245,10 @@ packages:
       '@esbuild/win32-ia32': 0.18.11
       '@esbuild/win32-x64': 0.18.11
     dev: true
+
+  /eventemitter2@6.4.9:
+    resolution: {integrity: sha512-JEPTiaOt9f04oa6NOkc4aH+nVp5I3wEjpHbIPqfgCdD5v5bUzy7xQqwcVO2aDQgOWhI28da57HksMrzK9HlRxg==}
+    dev: false
 
   /fsevents@2.3.2:
     resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
