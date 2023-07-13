@@ -3,7 +3,7 @@ import { Line, Point } from './type';
 import graphLabel from './label'
 import Konva from 'konva';
   export default class GraphysicUtil {
-    isShow:boolean // 是否显示辅助线
+    isShow = false // 是否显示辅助线
     adsorbGap_ver = 25 // 垂直方向上触发吸附的间距
     adsorbGap_hor = 150 // 水平方向上触发吸附的间距
     labelWidth = 30 // label标签宽度
@@ -13,6 +13,7 @@ import Konva from 'konva';
     constructor(points:number[]) {
       this.points = points;
       graphLabel.generateLabel(this.labelWidth)
+      graphLabel.onChange()
     }
 
     konvaPoints2Line(points: number[]) { 

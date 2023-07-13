@@ -5,7 +5,7 @@ const height = window.innerHeight;
 
 
 const roomPoints =  [400,400,1000,400,1000,800,400,800,400,400]
-let draggable = true
+let draggable = false
 import GraphysicUtil from './graphicUtil';
 
 
@@ -44,12 +44,12 @@ const stick = new Konva.Rect({
   height:  4,
   fill: 'black',
   stroke: 'black',
-  strokeWidth: 4,
-  listening: false
+  strokeWidth: 0.01,
+  draggable: false
+  // listening: false
 });
-stick.on('click', function () {
-  draggable = true
-})
+
+
 layer.add(stick);
 
 
@@ -107,11 +107,13 @@ util.konvaPoints2Line(roomPoints)
 
 
 room.on('mouseover', function (e) {
-  util.show()
-  const mousePos = stage.getPointerPosition();
   writeMessage('Mouseover room');
-  verLine.visible(true)
-  horLine.visible(true)
+  if (draggable) {
+    util.show()
+    verLine.visible(true)
+    horLine.visible(true)
+
+  }
 });
 room.on('mouseout', function () {
   util.hide()
@@ -129,19 +131,48 @@ room.on('mouseup', function () {
 
 
 
-stage.on('mousemove', function () {
+stick.on('mousedown', function () {
+  draggable = true
+  stick.draggable(draggable)
+  stick.fill('red')
+})
+stick.on('click', function () {
+  // draggable = true
+  // stick.draggable(draggable)
+  stick.fill('red')
+})
+
+// stick.on('mouseup', function () {
+//   draggable = false
+//   stick.draggable(draggable)
+//   stick.fill('black')
+// })
+
+stick.on('dragmove', function () {
   const mousePos = stage.getPointerPosition();
+  console.log(draggable,mousePos);
   if (mousePos && draggable) {
-    // writeMessage('x: ' + mousePos.x + ', y: ' + mousePos.y);
+    writeMessage('x: ' + mousePos.x + ', y: ' + mousePos.y);
     stick.x(mousePos.x - 100);
     stick.y(mousePos.y);
     drawIntersectLine(mousePos.x,mousePos.y)
-    
-    util.isShow&&util.obtainLineDistance(mousePos ,stick)
-  }
-});
 
-stage.on('click', function () {
+    const isShow =  room.intersects({x:mousePos.x,y:mousePos.y})
+    isShow? util.show() : util.hide()
+    verLine.visible(isShow)
+    horLine.visible(isShow)
+    isShow&&util.obtainLineDistance(mousePos ,stick)
+  }
+})
+
+stage.on('click', function (e) {
+  console.log(e);
+  const point = {x: e.evt.clientX, y: e.evt.clientY}
   writeMessage('Clicked stage');
-  // draggable = falses
+  console.log(stick.intersects(point));
+  
+  
+  draggable = false
+  stick.draggable(draggable)
+  stick.fill('black')
 })

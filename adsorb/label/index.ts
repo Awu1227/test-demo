@@ -15,17 +15,36 @@ export default class graphLabel{
 		this.labelWidth = width
 		for (let i = 0; i < positionArr.length; i++) {
 			const label = document.createElement('input');
+			// label.setAttribute('type', 'number');
 			label.classList.add('konva_label')
 			label.classList.add(`label-${positionArr[i]}`)
 			this.labelMap.set(positionArr[i], label)
 			label.style.width = `${width}px`;
 			label.style.top = '-50px';
-			document.body.appendChild(label);
+			const konva_dom = document.querySelector('.konvajs-content')!;
+			konva_dom.appendChild(label);
 		}
 		console.log(this.labelMap);
 		
 	}
 
+	static onChange() {
+		this.labelMap.forEach((label, key, map) => {
+			label.addEventListener('change',e => {
+				const input = e.target as HTMLInputElement
+				console.log('修改后的标签及数值是',key,input.value);
+				// TODO:
+
+			})
+		})
+	}
+
+	/**
+	 * 
+	 * @param pointXorY 
+	 * @param isVertical 
+	 * @description 实时更新标签的位置
+	 */
 	static updateLabelPosition(pointXorY: number, isVertical: boolean) {
 		if (isVertical) {
 			this.labelMap.get('top')!.style.left = `${pointXorY - this.labelWidth / 2 }px`
@@ -36,6 +55,15 @@ export default class graphLabel{
 		}
 	}
 
+	/**
+	 * 
+	 * @param line 
+	 * @param point 
+	 * @param objectWidth 
+	 * @param labelWidth 
+	 * @param linePosition 
+	 * @description 计算正确的标签位置
+	 */
 	static caluatePosition(line: Line, point: Point, objectWidth: number, labelWidth: number, linePosition: 'left' | 'right' | 'top' | 'bottom') {
 		switch (linePosition) {
 			case 'left':
