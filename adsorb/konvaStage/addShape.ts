@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import lineHelper from './lineHelper';
 import GraphysicUtil from '../graphicUtil';
-import { Point } from '../type';
+import { Line, Point } from '../type';
 const verLine = lineHelper.verLine
 const horLine = lineHelper.horLine
 /**
@@ -44,15 +44,37 @@ export async function addKonvaImage(name: string, src: string,layer: Konva.Layer
       horLine.stroke('grey')
       verLine.dash([0,0])
       horLine.dash([0,0])
+      util.konvaPoints2Line(util.points) // 移动之前将四边设为原始边
+
       exisitPointsArr.forEach(([name, point]) => {
         if ( Math.abs(point.x -mousePos.x) < 2 ) {
-          console.log(name);
           verLine.stroke('lightblue')
           verLine.dash([33, 10])
+          
+          const needUpdateLine = point.y < mousePos.y ? 'top' : 'bottom'
+          const line = util.lines.get(needUpdateLine) as Line
+          // 替换一边的数据
+          line.start.y = point.y
+          line.end.y = point.y
+          line.y = point.y
+          
+          // 更新线的数据及标签的位置
+          util.obtainLineDistance(mousePos ,this)
         } 
         if (Math.abs(point.y -mousePos.y) < 2) {
           horLine.stroke('lightblue')
           horLine.dash([33, 10])
+
+
+          const needUpdateLine = point.x < mousePos.x ? 'left' : 'right'
+          const line = util.lines.get(needUpdateLine) as Line
+          // 替换一边的数据
+          line.start.x = point.x
+          line.end.x = point.x
+          line.x = point.x
+          
+          // 更新线的数据及标签的位置
+          util.obtainLineDistance(mousePos ,this)
         } 
       })
 

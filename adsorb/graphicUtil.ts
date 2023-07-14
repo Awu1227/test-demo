@@ -3,6 +3,7 @@ import { Line, Point } from './type';
 import graphLabel from './label'
 import Konva from 'konva';
 import {setHelperLine} from './utils';
+import lineHelper from './konvaStage/lineHelper';
 /**
  * 图形工具类
  */
@@ -103,6 +104,7 @@ import {setHelperLine} from './utils';
         }
       })
       this.filterCrossLine()
+      // 更新4个标签的位置
       this.updateLabel(this.crossLines,point,shape)
       
     }
@@ -125,8 +127,7 @@ import {setHelperLine} from './utils';
       
       // TODO:
       this.shape = shape
-      const verLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '垂直辅助线') as unknown as any;
-      const horLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '水平辅助线') as unknown as any;
+      const {verLine, horLine} = lineHelper
       
       for (let i = 0; i < this.crossLines.length; i++){
           const line = lineArr[i];
