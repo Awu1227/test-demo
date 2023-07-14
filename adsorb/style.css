@@ -4,9 +4,15 @@
   left: 5px;
   z-index: 2;
 }
+.konva_label:focus {
+  outline: none;
+}
 .show {
   display: block;
 }
 .hide {
   display: none;
+}
+.error{
+  border: 1px solid red;
 }

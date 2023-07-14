@@ -13,6 +13,9 @@ import { addKonvaImage } from './konvaStage/addShape';
 
 
 const roomPoints =  [400,200,1500,200,1500,800,400,800,400,200]
+// TODO:
+const width = 1100
+const height = 600
 const room = new Konva.Line({
   points: roomPoints,
   fill: 'white',

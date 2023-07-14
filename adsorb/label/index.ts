@@ -39,13 +39,21 @@ export default class graphLabel {
 	static changeLabelValue(e,key:string) {
 		
 			const input = e.target as HTMLInputElement
-			console.log('修改后的标签及数值是',key,input.value, (window as any).lines);
-
 			const lines = (window as any).lines
-
+			if ( !/^\d+$/.test(input.value) || +input.value > 600) {
+				return
+			}
 			lines.get(key).setDistance(input.value)
 			return 
 
+	}
+	static onChangeLabelValue(e,key:string) {
+		const input = e.target as HTMLInputElement
+		if (!/^\d+$/.test(input.value)  || +input.value > 600) {
+			this.labelMap.get(key)!.classList.add('error')
+		} else {
+			this.labelMap.get(key)!.classList.remove('error')
+		}
 	}
 /**
  * @description 添加监听器
@@ -53,6 +61,7 @@ export default class graphLabel {
 	static addListener() {
 		this.labelMap.forEach((label, key, map) => {
 			label.addEventListener('change',(e) => {this.changeLabelValue(e,key)})
+			label.addEventListener('input',(e) => {this.onChangeLabelValue(e,key)})
 		})
 	}
 
@@ -142,5 +151,9 @@ export default class graphLabel {
 				default:
 					break;
 		} 
+	}
+
+	static addErrorLabelStyle(key: string) {
+		this.labelMap.get(key)!.classList.add('error')
 	}
 }
