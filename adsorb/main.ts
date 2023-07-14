@@ -21,9 +21,8 @@ const room = new Konva.Line({
   strokeWidth: 4,
   closed:true
 });
-// add the shape to the layer
+
 layer.add(room);
-room.zIndex(1)
 const triangle = new Konva.RegularPolygon({
   x: 480,
   y: 520,
@@ -52,31 +51,10 @@ layer.add(stick);
 
 layer.add(verLine,horLine)
 
-function writeMessage(message: string) {
-  text.text(message)
-}
-
-
 function drawIntersectLine(x: number, y: number) {
   verLine.x(x);
   horLine.y(y)
-  // layer.draw()
 } 
-
-
-
-const text = new Konva.Text({
-  x: 10,
-  y: 10,
-  fontFamily: 'Calibri',
-  fontSize: 24,
-  text: '',
-  fill: 'black',
-});
-
-layer.add(text)
-
-layer.draw()
 
 
 const util = new GraphysicUtil(roomPoints)
@@ -84,7 +62,6 @@ util.konvaPoints2Line(roomPoints);
 
 
 room.on('mouseover', function (e) {
-  writeMessage('Mouseover room');
   if (draggable) {
     util.show()
     verLine.visible(true)
@@ -94,19 +71,10 @@ room.on('mouseover', function (e) {
 });
 room.on('mouseout', function () {
   util.hide()
-  writeMessage('Mouseout room');
   verLine.visible(false)
   horLine.visible(false)
   
 });
-room.on('mousedown', function () {
-  writeMessage('Mousedown room');
-});
-room.on('mouseup', function () {
-  writeMessage('Mouseup room');
-});
-
-
 
 stick.on('mousedown', function () {
   draggable = true
@@ -122,7 +90,6 @@ stick.on('click', function () {
 stick.on('dragmove', function () {
   const mousePos = stage.getPointerPosition();
   if (mousePos && draggable) {
-    writeMessage('x: ' + mousePos.x + ', y: ' + mousePos.y);
     stick.x(mousePos.x - 100);
     stick.y(mousePos.y);
     drawIntersectLine(mousePos.x,mousePos.y)
@@ -136,8 +103,6 @@ stick.on('dragmove', function () {
 })
 
 stage.on('click', function (e) {
-  const point = {x: e.evt.clientX, y: e.evt.clientY}
-  writeMessage('Clicked stage');
   draggable = false
   stick.draggable(draggable)
   stick.fill('black')
