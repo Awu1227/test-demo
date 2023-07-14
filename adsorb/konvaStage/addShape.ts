@@ -4,6 +4,16 @@ import GraphysicUtil from '../graphicUtil';
 import { Point } from '../type';
 const verLine = lineHelper.verLine
 const horLine = lineHelper.horLine
+/**
+ * 
+ * @param name 对象名称
+ * @param src 图片资源地址
+ * @param layer konva layer
+ * @param room 需要处理交互的对象
+ * @param util 图形工具实例
+ * @param size 对象长宽
+ * @description 生成Konva图片对象
+ */
 export async function addKonvaImage(name: string, src: string,layer: Konva.Layer, room: Konva.Line, util: GraphysicUtil, size:{x: number, y:number} = {x: 30, y: 30}) {
   const flower= await loadKonvaImage(name,src,layer,size) as unknown as Konva.Image
 

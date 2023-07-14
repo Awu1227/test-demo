@@ -5,8 +5,8 @@ import Konva from 'konva';
 
 const {stage, layer} =  initCanvas()
 
-const verLine = lineHelper.verLine
-const horLine = lineHelper.horLine
+const verLine = lineHelper.verLine // 垂直辅助线
+const horLine = lineHelper.horLine // 水平辅助线
 
 import GraphysicUtil from './graphicUtil';
 import { addKonvaImage } from './konvaStage/addShape';

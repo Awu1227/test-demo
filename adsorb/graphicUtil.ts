@@ -3,6 +3,9 @@ import { Line, Point } from './type';
 import graphLabel from './label'
 import Konva from 'konva';
 import {setHelperLine} from './utils';
+/**
+ * 图形工具类
+ */
   export default class GraphysicUtil {
     exisitPoints: Map<string,Point> = new Map() // 存储需要捕捉的点
     isShow = false // 是否显示辅助线
