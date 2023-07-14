@@ -34,9 +34,9 @@ export async function addKonvaImage(name: string, src: string,layer: Konva.Layer
       horLine.stroke('grey')
       verLine.dash([0,0])
       horLine.dash([0,0])
-      exisitPointsArr.forEach(([string, point]) => {
+      exisitPointsArr.forEach(([name, point]) => {
         if ( Math.abs(point.x -mousePos.x) < 2 ) {
-          console.log(string);
+          console.log(name);
           verLine.stroke('lightblue')
           verLine.dash([33, 10])
         } 
