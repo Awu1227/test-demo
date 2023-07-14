@@ -4,7 +4,7 @@ import {Point} from '../type';
 export default class LineHelper {
   static verLine = new Konva.Line({
     name:'垂直辅助线',
-    points: [0, 0, 0, 2000],
+    points: [0, 0, 0, window.innerHeight],
     stroke: 'grey',
     strokeWidth: 2,
     lineJoin: 'round',
@@ -14,7 +14,7 @@ export default class LineHelper {
   });
   static horLine=new Konva.Line({
     name:'水平辅助线',
-    points: [0, 0, 2000, 0],
+    points: [0, 0,  window.innerWidth, 0],
     stroke: 'grey',
     strokeWidth: 2,
     lineJoin: 'round',

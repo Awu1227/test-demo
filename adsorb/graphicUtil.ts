@@ -5,6 +5,7 @@ import Konva from 'konva';
 import {emitter} from './emitter';
 import {setHelperLine} from './utils';
   export default class GraphysicUtil {
+    exisitPoints: Map<string,Point> = new Map() // 存储需要捕捉的点
     isShow = false // 是否显示辅助线
     adsorbGap_ver = 25 // 垂直方向上触发吸附的间距
     adsorbGap_hor = 150 // 水平方向上触发吸附的间距

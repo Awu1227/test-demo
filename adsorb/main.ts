@@ -39,21 +39,23 @@ const triangle = new Konva.RegularPolygon({
 });
 layer.add(triangle);
 
-const stick = new Konva.Rect({
-  x: 0,
-  y: 0,
-  width: 200,
-  height:  4,
-  fill: 'black',
-  stroke: 'black',
-  strokeWidth: 0.01,
-  draggable: false
-  // listening: false
-});
-layer.add(stick);
 
 
-const flower = await addKonvaImage(layer,room,util) as unknown as Konva.Image
+const flower1Src = "https://s41.shejijia.com/i/e243f818-2c57-4106-b7d3-e5d28f12bf00/Top.png?x-oss-process=image/format,webp"
+const flower1 = await addKonvaImage('角花1',flower1Src,layer,room,util) as unknown as Konva.Image
+
+const flower2Src = "https://s41.shejijia.com/i/e243f818-2c57-4106-b7d3-e5d28f12bf00/Top.png?x-oss-process=image/format,webp"
+const flower2 = await addKonvaImage('角花2',flower2Src,layer,room,util) as unknown as Konva.Image
+
+const flower3Src = "https://s41.shejijia.com/i/e243f818-2c57-4106-b7d3-e5d28f12bf00/Top.png?x-oss-process=image/format,webp"
+const flower3 = await addKonvaImage('角花3',flower3Src,layer,room,util) as unknown as Konva.Image
+
+const flower4Src = "https://s41.shejijia.com/i/e243f818-2c57-4106-b7d3-e5d28f12bf00/Top.png?x-oss-process=image/format,webp"
+const flower4 = await addKonvaImage('角花4',flower3Src,layer,room,util) as unknown as Konva.Image
+
+
+const plasterLine1Src = 'https://s45.shejijia.com/i/64b2317a-f57d-4d18-bc2b-da03edb56c3b/Top.png?x-oss-process=image/format,webp'
+const plasterLine1 = await addKonvaImage('成品石膏线1',plasterLine1Src,layer,room,util,{x: 200, y: 10}) as unknown as Konva.Image
 
 layer.add(verLine,horLine)
 
@@ -73,35 +75,3 @@ room.on('mouseout', function () {
   horLine.visible(false)
   
 });
-
-stick.on('mousedown', function () {
-  draggable = true
-  stick.draggable(draggable)
-  stick.fill('red')
-})
-stick.on('click', function () {
-  stick.fill('red')
-})
-
-
-
-stick.on('dragmove', function () {
-  const mousePos = stage.getPointerPosition();
-  if (mousePos && draggable) {
-    stick.x(mousePos.x - 100);
-    stick.y(mousePos.y);
-    lineHelper.setPosition({x: mousePos.x, y: mousePos.y})
-
-    const isShow =  room.intersects({x:mousePos.x,y:mousePos.y})
-    isShow? util.show() : util.hide()
-    verLine.visible(isShow)
-    horLine.visible(isShow)
-    isShow&&util.obtainLineDistance(mousePos ,stick)
-  }
-})
-
-stage.on('click', function (e) {
-  draggable = false
-  stick.draggable(draggable)
-  stick.fill('black')
-})
