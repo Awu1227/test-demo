@@ -2,6 +2,9 @@ import { Line, Point } from "../type";
 const positionArr = ['left', 'right', 'top', 'bottom']
 import Konva from "konva";
 
+/**
+ * @description 标签输入框静态类
+ */
 export default class graphLabel {
 	static labelMap: Map<string, HTMLInputElement> = new Map(); // 存放4个标签的Map
 	static labelWidth: number
@@ -29,10 +32,11 @@ export default class graphLabel {
 		
 	}
 
-	static foucusEvent() {
-	}
-
-	static changeEvent(e,key:string) {
+	/**
+	 * 
+	 * @description 修改标签数值
+	 */
+	static changeLabelValue(e,key:string) {
 		
 			const input = e.target as HTMLInputElement
 			console.log('修改后的标签及数值是',key,input.value, (window as any).lines);
@@ -40,29 +44,24 @@ export default class graphLabel {
 			const lines = (window as any).lines
 
 			lines.get(key).setDistance(input.value)
-
-			// TODO:
-			const params = {
-				position: key,
-				value: input.value
-			
-			}
 			return 
 
 	}
-
+/**
+ * @description 添加监听器
+ */
 	static addListener() {
 		this.labelMap.forEach((label, key, map) => {
-			const previusValue = label.value
-			label.addEventListener('focus',this.foucusEvent)
-			label.addEventListener('change',(e) => {this.changeEvent(e,key)})
+			label.addEventListener('change',(e) => {this.changeLabelValue(e,key)})
 		})
 	}
+
+	/**
+ * @description 删除监听器
+ */
 	static removeListener() {
 		this.labelMap.forEach((label, key, map) => {
-			const previusValue = label.value
-			label.removeEventListener('focus',this.foucusEvent)
-			label.removeEventListener('change',(e) => {this.changeEvent(e,key)})
+			label.removeEventListener('change',(e) => {this.changeLabelValue(e,key)})
 	})
 	}
 	/**
