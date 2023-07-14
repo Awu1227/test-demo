@@ -25,6 +25,9 @@ const room = new Konva.Line({
 
 layer.add(room);
 
+const util = new GraphysicUtil(roomPoints)
+util.konvaPoints2Line(roomPoints);
+
 const triangle = new Konva.RegularPolygon({
   x: 480,
   y: 520,
@@ -50,41 +53,10 @@ const stick = new Konva.Rect({
 layer.add(stick);
 
 
-const flower = await addKonvaImage(layer) as Konva.Image
-
-flower.on('mousedown', function () {
-  flower.draggable(true)
-  flower.fill('#ddd')
-})
-flower.on('mouseup', function () {
-  flower.draggable(true)
-  flower.fill('white')
-})
-
-flower.on('dragmove', function () {
-  const mousePos = stage.getPointerPosition();
-  if (mousePos) {
-    flower.x(mousePos.x - flower.width() / 2);
-    flower.y(mousePos.y - flower.height() / 2);
-    lineHelper.setPosition({x: mousePos.x, y: mousePos.y})
-
-    const isShow =  room.intersects({x:mousePos.x,y:mousePos.y})
-    isShow? util.show() : util.hide()
-    verLine.visible(isShow)
-    horLine.visible(isShow)
-    isShow&&util.obtainLineDistance(mousePos ,flower)
-  }
-})
-
-
+const flower = await addKonvaImage(layer,room,util) as unknown as Konva.Image
 
 layer.add(verLine,horLine)
 
-
-
-
-const util = new GraphysicUtil(roomPoints)
-util.konvaPoints2Line(roomPoints);
 
 
 room.on('mouseover', function (e) {
