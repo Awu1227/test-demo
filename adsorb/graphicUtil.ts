@@ -10,8 +10,8 @@ import lineHelper from './konvaStage/lineHelper';
   export default class GraphysicUtil {
     exisitPoints: Map<string,Point> = new Map() // 存储需要捕捉的点
     isShow = false // 是否显示辅助线
-    adsorbGap_ver = 25 // 垂直方向上触发吸附的间距
-    adsorbGap_hor = 150 // 水平方向上触发吸附的间距
+    adsorbGap_ver = 20 // 垂直方向上触发吸附的间距
+    adsorbGap_hor = 20 // 水平方向上触发吸附的间距
     labelWidth = 30 // label标签宽度
     points: number[] // 背景方框的点
     lines: Map<string, Line> = new Map() // 存储所有的线
@@ -131,8 +131,8 @@ import lineHelper from './konvaStage/lineHelper';
               label.style.left = `${ graphLabel.caluatePosition(line,point,shape.width(),this.labelWidth,position)}px`
               label.style.top = `${point.y - graphLabel.labelHeight / 2}px`;
               label.value=`${line.distanceX}`
-              if (line.distanceX! < this.adsorbGap_hor) {
-                verLine.x(point.x - (this.adsorbGap_hor - shape.width()/2))
+              if (line.distanceX! < this.adsorbGap_hor + shape.width() / 2) {
+                verLine.x(line.x! + shape.width() / 2)
                 graphLabel.updateLabelPosition(verLine.x(),true)
                 label.style.left = `${line.x!- this.labelWidth/2 - 45}px`;
                 
@@ -145,8 +145,8 @@ import lineHelper from './konvaStage/lineHelper';
               label.style.left = `${ graphLabel.caluatePosition(line,point,shape.width(),this.labelWidth,position)}px`
               label.style.top = `${point.y - graphLabel.labelHeight / 2}px`;
               label.value=`${line.distanceX}`
-              if (line.distanceX! < this.adsorbGap_hor) {
-                verLine.x(point.x + (this.adsorbGap_hor - shape.width()/2))
+              if (line.distanceX! < this.adsorbGap_hor + shape.width() / 2) {
+                verLine.x(line.x! - shape.width() / 2)
                 graphLabel.updateLabelPosition(verLine.x(),true)
                 label.style.left = `${line.x! -this.labelWidth/2 + 45}px`;
                 label.value = `${shape.width() / 2}`
@@ -158,8 +158,8 @@ import lineHelper from './konvaStage/lineHelper';
                 label.style.top = `${graphLabel.caluatePosition(line,point,shape.height(),this.labelWidth,position)}px`
                 label.style.left = `${point.x -this.labelWidth/2}px`;
                 label.value=`${line.distanceY}`
-                if (line.distanceY! < this.adsorbGap_ver) {
-                  horLine.y(point.y - this.labelWidth/2)
+                if (line.distanceY! < this.adsorbGap_ver + shape.height() / 2) {
+                  horLine.y(line.y! + shape.height() / 2)
                   graphLabel.updateLabelPosition(horLine.y(),false)
                   label.style.top = `${line.y!- this.adsorbGap_ver}px`;
                   label.value = `${shape.height() / 2}`
@@ -171,12 +171,12 @@ import lineHelper from './konvaStage/lineHelper';
                 label.style.top = `${graphLabel.caluatePosition(line,point,shape.height(),this.labelWidth,position)}px`
                 label.style.left = `${point.x -this.labelWidth/2}px`;
                 label.value=`${line.distanceY}`
-                if (line.distanceY! < this.adsorbGap_ver) {
-                  horLine.y(point.y + this.adsorbGap_ver)
+                if (line.distanceY! < this.adsorbGap_ver + shape.height() / 2) {
+                  horLine.y(line.y! - shape.height() / 2)
                   graphLabel.updateLabelPosition(horLine.y(),false)
                   label.style.top = `${line.y!+ this.adsorbGap_ver}px`;
                   label.value = `${shape.height() / 2}`
-                  shape.y(line.y!)
+                  shape.y(line.y! - shape.height())
                   return
                 }
                 break;
