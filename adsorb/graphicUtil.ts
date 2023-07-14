@@ -2,7 +2,6 @@ import { Vector2d } from 'konva/lib/types';
 import { Line, Point } from './type';
 import graphLabel from './label'
 import Konva from 'konva';
-import {emitter} from './emitter';
 import {setHelperLine} from './utils';
   export default class GraphysicUtil {
     exisitPoints: Map<string,Point> = new Map() // 存储需要捕捉的点
@@ -17,13 +16,6 @@ import {setHelperLine} from './utils';
     constructor(points:number[]) {
       this.points = points;
       graphLabel.generateLabel(this.labelWidth)
-
-      emitter.on('labelPositionChange',(params) => {
-        const info = JSON.parse(params)
-        
-        // const point =
-        // TODO:
-      })
     }
 
     konvaPoints2Line(points: number[]) { 

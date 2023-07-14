@@ -1,6 +1,5 @@
 import { Line, Point } from "../type";
 const positionArr = ['left', 'right', 'top', 'bottom']
-import {emitter} from '../emitter';
 import Konva from "konva";
 
 export default class graphLabel {
@@ -48,8 +47,6 @@ export default class graphLabel {
 				value: input.value
 			
 			}
-			emitter.emit('labelPositionChange', JSON.stringify(params))
-
 			return 
 
 	}
