@@ -13,8 +13,6 @@ import { addKonvaImage } from './konvaStage/addShape';
 
 
 const roomPoints =  [400,200,1500,200,1500,800,400,800,400,200]
-let draggable = false
-
 const room = new Konva.Line({
   points: roomPoints,
   fill: 'white',
@@ -49,17 +47,4 @@ layer.add(verLine,horLine)
 
 
 
-room.on('mouseover', function (e) {
-  if (draggable) {
-    util.show()
-    verLine.visible(true)
-    horLine.visible(true)
 
-  }
-});
-room.on('mouseout', function () {
-  util.hide()
-  verLine.visible(false)
-  horLine.visible(false)
-  
-});
