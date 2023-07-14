@@ -1,6 +1,13 @@
 import { Line } from "../type";
 import graphLabel from '../label';
 
+/**
+ * 
+ * @param line 
+ * @param that 
+ * @param distance
+ * @description 更改标签后，更新标签位置
+ */
 export const setHelperLine = function(line:Line,that:any, distance: number) {
   const verLine = that.shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '垂直辅助线') as unknown as any;
   const horLine = that.shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '水平辅助线') as unknown as any;    
@@ -38,4 +45,5 @@ export const setHelperLine = function(line:Line,that:any, distance: number) {
       }
 
     }
+    that.obtainLineDistance({x: that.shape.x() + that.shape.width() / 2, y: that.shape.y() + that.shape.height() / 2}, that.shape)
   }

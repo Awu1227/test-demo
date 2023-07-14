@@ -84,24 +84,28 @@ export default class graphLabel {
 	 * @description 修改标签数值后，手动更改标签的位置
 	 */
 	static setLabelPosByHand( position: 'left' | 'right' | 'top' | 'bottom',shape:Konva.Shape, distance: number) {
+		console.log('distance',distance);
+		
 		const verLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '垂直辅助线') as unknown as any;
 		const horLine = shape.getLayer()?.getChildren().find(item => item.getAttr('name') === '水平辅助线') as unknown as any;   
 		console.log('position',position);
 		const lines = (window as any).lines
+		console.log((window as any).lines);
 		if (position === 'left' || position === 'right') { 
-			this.labelMap.get('left')!.style.left = `${verLine.x() - shape.width() / 2 - 20}px`
-			this.labelMap.get('right')!.style.left = `${verLine.x() + shape.width() / 2 + 20}px`
+			this.labelMap.get('left')!.style.left = `${verLine.x() - shape.width() / 2 - distance / 2}px`
+			this.labelMap.get('right')!.style.left = `${verLine.x() + shape.width() / 2 + distance / 2}px`
 
 			this.labelMap.get('top')!.style.left = `${verLine.x() - this.labelWidth / 2}px`
 			this.labelMap.get('bottom')!.style.left = `${verLine.x() - this.labelWidth / 2}px`
 		} else {
-			this.labelMap.get('top')!.style.top = `${horLine.y() - shape.height() / 2 - 20}px`
-			this.labelMap.get('bottom')!.style.top = `${horLine.y() + shape.height() / 2 + 20}px`
+			this.labelMap.get('top')!.style.top = `${horLine.y() - shape.height() / 2 - distance / 2}px`
+			
+			this.labelMap.get('bottom')!.style.top = `${horLine.y() + shape.height() / 2 +  distance / 2}px`
 
 			this.labelMap.get('left')!.style.top = `${horLine.y() }px`
 			this.labelMap.get('right')!.style.top = `${horLine.y()}px`
 		}
-		console.log((window as any).lines);
+
 		
 	}
 	/**
