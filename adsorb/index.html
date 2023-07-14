@@ -4,9 +4,73 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>konva吸附</title>
+  <script src="./symbolFont.js"></script>
+  <style type="text/css">
+    .icon {
+       width: 1em; height: 1em;
+       vertical-align: -0.15em;
+       fill: currentColor;
+       overflow: hidden;
+    }
+</style>
 </head>
 <body>
   <div id="container"></div>
+  <footer class="draw_navigation">
+    <div class="box">
+      <div class="icon-box">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-line"></use>
+        </svg>
+      </div>
+      <span>直线</span>
+    </div>
+
+    <div class="box">
+      <div class="icon-box">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-xingzhuang-juxing"></use>
+        </svg>
+      </div>
+      <span>矩形</span>
+    </div>
+
+    <div class="box">
+      <div class="icon-box">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-duobianxing"></use>
+        </svg>
+      </div>
+      <span>多边形</span>
+    </div>
+
+    <div class="box">
+      <div class="icon-box">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-xingzhuang-tuoyuanxing"></use>
+        </svg>
+      </div>
+      <span>圆形</span>
+    </div>
+
+    <div class="box">
+      <div class="icon-box">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-caozuojiemiantubiao---_daojiao"></use>
+        </svg>
+      </div>
+      <span>倒角</span>
+    </div>
+
+    <div class="box">
+      <div class="icon-box">
+        <svg class="icon" aria-hidden="true">
+          <use xlink:href="#icon-caozuojiemiantubiao---_pianyi"></use>
+        </svg>
+      </div>
+      <span>偏移</span>
+    </div>
+  </footer>
   <script type="module" src="./main.ts"></script>
 </body>
 </html>

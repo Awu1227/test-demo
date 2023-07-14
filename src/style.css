@@ -34,6 +34,9 @@ a:hover {
   box-shadow: 4px 4px 5px 0px #ddd;
 }
 body {
+  position: absolute;
+  display: flex;
+  justify-content: center;
   margin: 0;
   display: flex;
   min-width: 320px;
