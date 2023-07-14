@@ -37,9 +37,14 @@ export async function addKonvaImage(name: string, src: string,layer: Konva.Layer
   const stage = layer.getStage()
   flower.on('dragmove', function () {
     const mousePos = stage.getPointerPosition();
-
     if (mousePos) {
       const exisitPointsArr = [...util.exisitPoints]
+      // 当前角花的点已存在，将其删除
+      const [flowerObj] =  exisitPointsArr.filter(item => item[0] === flower.name())
+      if (flowerObj) {
+        util.exisitPoints.delete(flowerObj[0])
+      }
+      // 将其他炮将角花的炮位置设置为原始炮位置
       verLine.stroke('grey')
       horLine.stroke('grey')
       verLine.dash([0,0])
@@ -72,7 +77,7 @@ export async function addKonvaImage(name: string, src: string,layer: Konva.Layer
           line.start.x = point.x
           line.end.x = point.x
           line.x = point.x
-          
+
           // 更新线的数据及标签的位置
           util.obtainLineDistance(mousePos ,this)
         } 
