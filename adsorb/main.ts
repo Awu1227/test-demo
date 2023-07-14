@@ -28,18 +28,6 @@ layer.add(room);
 const util = new GraphysicUtil(roomPoints)
 util.konvaPoints2Line(roomPoints);
 
-const triangle = new Konva.RegularPolygon({
-  x: 480,
-  y: 520,
-  sides: 3,
-  radius: 80,
-  fill: '#00D2FF',
-  stroke: 'black',
-  strokeWidth: 4,
-});
-layer.add(triangle);
-
-
 
 const flower1Src = "https://s41.shejijia.com/i/e243f818-2c57-4106-b7d3-e5d28f12bf00/Top.png?x-oss-process=image/format,webp"
 const flower1 = await addKonvaImage('角花1',flower1Src,layer,room,util) as unknown as Konva.Image
