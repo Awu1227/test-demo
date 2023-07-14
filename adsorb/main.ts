@@ -1,14 +1,15 @@
 import './style.css'
-
 import initCanvas from './konvaStage';
 import lineHelper from './konvaStage/lineHelper';
 import Konva from 'konva';
 
 const {stage, layer} =  initCanvas()
 
-const { verLine,horLine} = lineHelper(stage)
+const verLine = lineHelper.verLine
+const horLine = lineHelper.horLine
 
 import GraphysicUtil from './graphicUtil';
+import { addKonvaImage } from './konvaStage/addShape';
 
 
 const roomPoints =  [400,200,1500,200,1500,800,400,800,400,200]
@@ -23,6 +24,7 @@ const room = new Konva.Line({
 });
 
 layer.add(room);
+
 const triangle = new Konva.RegularPolygon({
   x: 480,
   y: 520,
@@ -45,16 +47,40 @@ const stick = new Konva.Rect({
   draggable: false
   // listening: false
 });
-
-
 layer.add(stick);
+
+
+const flower = await addKonvaImage(layer) as Konva.Image
+
+flower.on('mousedown', function () {
+  flower.draggable(true)
+  flower.fill('#ddd')
+})
+flower.on('mouseup', function () {
+  flower.draggable(true)
+  flower.fill('white')
+})
+
+flower.on('dragmove', function () {
+  const mousePos = stage.getPointerPosition();
+  if (mousePos) {
+    flower.x(mousePos.x - flower.width() / 2);
+    flower.y(mousePos.y - flower.height() / 2);
+    lineHelper.setPosition({x: mousePos.x, y: mousePos.y})
+
+    const isShow =  room.intersects({x:mousePos.x,y:mousePos.y})
+    isShow? util.show() : util.hide()
+    verLine.visible(isShow)
+    horLine.visible(isShow)
+    isShow&&util.obtainLineDistance(mousePos ,flower)
+  }
+})
+
+
 
 layer.add(verLine,horLine)
 
-function drawIntersectLine(x: number, y: number) {
-  verLine.x(x);
-  horLine.y(y)
-} 
+
 
 
 const util = new GraphysicUtil(roomPoints)
@@ -92,7 +118,7 @@ stick.on('dragmove', function () {
   if (mousePos && draggable) {
     stick.x(mousePos.x - 100);
     stick.y(mousePos.y);
-    drawIntersectLine(mousePos.x,mousePos.y)
+    lineHelper.setPosition({x: mousePos.x, y: mousePos.y})
 
     const isShow =  room.intersects({x:mousePos.x,y:mousePos.y})
     isShow? util.show() : util.hide()
