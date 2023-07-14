@@ -38,7 +38,7 @@ import lineHelper from './konvaStage/lineHelper';
           isCross:false,
           setDistance:  function(distance) {
               setHelperLine(this,that,distance)
-              that.konvaPoints2Line(that.points) 
+
 
           }
         }
