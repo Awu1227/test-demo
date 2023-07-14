@@ -38,13 +38,6 @@ import lineHelper from './konvaStage/lineHelper';
           isCross:false,
           setDistance:  function(distance) {
               setHelperLine(this,that,distance)
-              const latestPoint:Point = {
-                x: that.shape.x(),
-                y: that.shape.y()
-              }
-              
-              // that.updateLabel(lineArr,latestPoint)
-              // this.updateLabel(this.crossLines,that.shape.,shape)
           }
         }
         line.start = startPoint
@@ -210,8 +203,11 @@ import lineHelper from './konvaStage/lineHelper';
       pointsArr.push(pointsArr[0]);
       return pointsArr;
     }
+    /**
+     * 
+     * @description 显示标签
+     */
     show() {
-      
       if (this.isShow) return
       this.isShow = true
       const konva_labels = [...document.querySelectorAll('.konva_label')]
@@ -221,6 +217,11 @@ import lineHelper from './konvaStage/lineHelper';
       })      
       graphLabel.addListener()
     }
+
+    /**
+     * 
+     * @description 隐藏标签
+     */
     hide() {
       if (!this.isShow) return
       this.isShow = false
