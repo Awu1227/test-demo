@@ -1,22 +1,16 @@
 import './style.css'
-import Konva from "konva";
-const width = window.innerWidth;
-const height = window.innerHeight;
+
+import initCanvas from './konvaStage';
+import Konva from 'konva';
+
+const {stage, layer} =  initCanvas()
 
 import GraphysicUtil from './graphicUtil';
 
 
-const roomPoints =  [400,400,1000,400,1000,800,400,800,400,400]
+const roomPoints =  [400,200,1500,200,1500,800,400,800,400,200]
 let draggable = false
 
-
-const stage = new Konva.Stage({
-  container: 'container',
-  width: width,
-  height: height,
-});
-
-const layer = new Konva.Layer();
 const room = new Konva.Line({
   points: roomPoints,
   fill: 'white',
@@ -139,16 +133,10 @@ stick.on('mousedown', function () {
   stick.fill('red')
 })
 stick.on('click', function () {
-  // draggable = true
-  // stick.draggable(draggable)
   stick.fill('red')
 })
 
-// stick.on('mouseup', function () {
-//   draggable = false
-//   stick.draggable(draggable)
-//   stick.fill('black')
-// })
+
 
 stick.on('dragmove', function () {
   const mousePos = stage.getPointerPosition();
@@ -169,8 +157,6 @@ stick.on('dragmove', function () {
 stage.on('click', function (e) {
   const point = {x: e.evt.clientX, y: e.evt.clientY}
   writeMessage('Clicked stage');
-  
-  
   draggable = false
   stick.draggable(draggable)
   stick.fill('black')
