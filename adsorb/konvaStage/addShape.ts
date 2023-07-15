@@ -97,6 +97,28 @@ export async function addKonvaImage(name: string, src: string,layer: Konva.Layer
   return flower
 }
 
+export function addkonvaCircle(radius: number,stage: Konva.Stage,room: Konva.Line, util: GraphysicUtil) {
+  const circle = new Konva.Circle({
+    radius,
+    fill: 'black',
+  })
+  circle.on('mousemove',function() {
+  const mousePos = stage.getPointerPosition();
+  console.log('change');
+    if (mousePos) {
+      circle.x(mousePos.x - circle.width() / 2);
+      circle.y(mousePos.y - circle.height() / 2);
+      lineHelper.setPosition({x: mousePos.x, y: mousePos.y})
+      const isShow =  room.intersects({x:mousePos.x,y:mousePos.y})
+      isShow? util.show() : util.hide()
+      lineHelper.verLine.visible(isShow)
+      lineHelper.horLine.visible(isShow)
+      isShow&&util.obtainLineDistance(mousePos ,circle)
+    }
+  })
+  return circle
+}
+
 function loadKonvaImage(name: string, src: string,layer: Konva.Layer, {x: width, y: height}: {x: number, y:number}) {
   let flower: Konva.Image
   let imageObj = new Image();
