@@ -97,26 +97,69 @@ export async function addKonvaImage(name: string, src: string,layer: Konva.Layer
   return flower
 }
 
-export function addkonvaCircle(radius: number,stage: Konva.Stage,room: Konva.Line, util: GraphysicUtil) {
+export function addkonvaCircle(radius: number,stage: Konva.Stage, layer: Konva.Layer, room: Konva.Line, util: GraphysicUtil, lineGroup: Konva.Group) {
   const circle = new Konva.Circle({
     radius,
     fill: 'black',
   })
+  let isclickDown = false
+  let lastCircle = circle.clone() as Konva.Circle
+  const drawLine: Map<string, Konva.Line> = new Map()
   circle.on('mousemove',function() {
-  const mousePos = stage.getPointerPosition();
-  console.log('change');
-    if (mousePos) {
-      circle.x(mousePos.x - circle.width() / 2);
-      circle.y(mousePos.y - circle.height() / 2);
-      lineHelper.setPosition({x: mousePos.x, y: mousePos.y})
-      const isShow =  room.intersects({x:mousePos.x,y:mousePos.y})
-      isShow? util.show() : util.hide()
-      lineHelper.verLine.visible(isShow)
-      lineHelper.horLine.visible(isShow)
-      isShow&&util.obtainLineDistance(mousePos ,circle)
-    }
+    const mousePos = stage.getPointerPosition();
+    console.log('change');
+      if (mousePos) {
+        circle.x(mousePos.x - circle.width() / 2);
+        circle.y(mousePos.y - circle.height() / 2);
+        lineHelper.setPosition({x: mousePos.x, y: mousePos.y})
+        const isShow =  room.intersects({x:mousePos.x,y:mousePos.y}) && !isclickDown
+        isShow? util.show() : util.hide()
+        lineHelper.verLine.visible(isShow)
+        lineHelper.horLine.visible(isShow)
+        isShow&&util.obtainLineDistance(mousePos ,circle)
+      }
   })
-  return circle
+
+  circle.on('mousedown',function() {
+    console.log('画下了一笔');
+    // 画下第一笔就使其失活
+    circle.listening(false)
+    lastCircle.listening(true)
+    lastCircle.setAttr('lineIndex',1)
+    console.log(lastCircle);
+    
+    isclickDown = true
+    util.hide()
+    lineHelper.verLine.visible(false)
+    lineHelper.horLine.visible(false)
+    
+    // 下一笔的move
+    lastCircle && lastCircle.on('mousemove',function() {
+      
+      const points= [circle.x(),circle.y(), lastCircle.x(), lastCircle.y()]
+      
+
+      const line = new Konva.Line({
+      points,
+      stroke: 'red',
+      strokeWidth: 1,
+      lineCap: 'round',
+      lineJoin: 'round',
+      lineIndex: lastCircle.getAttr('lineIndex')
+      })
+      drawLine.set(lastCircle.getAttr('lineIndex'), line)
+      lineGroup.destroyChildren();
+      
+      [...drawLine].forEach(([index, line]) => {
+      
+      lineGroup.add(line)
+      } )
+
+      })
+  })
+
+
+  return {circle,lastCircle}
 }
 
 function loadKonvaImage(name: string, src: string,layer: Konva.Layer, {x: width, y: height}: {x: number, y:number}) {
