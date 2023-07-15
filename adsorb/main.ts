@@ -2,6 +2,7 @@ import './style.css'
 import initCanvas from './konvaStage';
 import lineHelper from './konvaStage/lineHelper';
 import Konva from 'konva';
+import {drawLine} from './drawutil'
 
 const {stage, layer} =  initCanvas()
 
@@ -48,6 +49,34 @@ const plasterLine1 = await addKonvaImage('成品石膏线1',plasterLine1Src,laye
 
 layer.add(verLine,horLine)
 
+const container = document.getElementById('container')!
+
+const drawLabels = document.querySelectorAll('.box')
+console.log(drawLabels);
+
+
+
+[...drawLabels].forEach((label,index) => {
+  label.addEventListener('click',() => {
+    console.log(index,label);
+    switch (index) {
+      case 0:
+        drawLine(stage,layer,room,util)
+        container.setAttribute('data-content', 'none')
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+      default:
+        break;
+    }
+  })
+})
 
 
 
