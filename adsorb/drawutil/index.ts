@@ -21,8 +21,11 @@ export function drawLine(stage: Konva.Stage, layer: Konva.Layer, room: Konva.Lin
 		}
 		
 		if (lastCircle) {
+			
 			lastCircle.x(x)
 			lastCircle.y(y)
+			console.log("mousepos",lastCircle.x());
+
 		}
 
 		

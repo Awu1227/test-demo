@@ -3,6 +3,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  base: '/test-demo/',
   build: {
     // rollupOptions: {
     //   input: {
@@ -11,6 +12,5 @@ export default defineConfig({
     //     cssExercise: resolve(__dirname, 'cssExercise/index.html'),
     //   },
     // },
-    outDir: 'docs'
   },
 })

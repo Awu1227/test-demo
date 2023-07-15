@@ -98,7 +98,7 @@ export async function addKonvaImage(name: string, src: string,layer: Konva.Layer
 }
 
 export function addkonvaCircle(radius: number,stage: Konva.Stage, layer: Konva.Layer, room: Konva.Line, util: GraphysicUtil, lineGroup: Konva.Group) {
-  const circle = new Konva.Circle({
+  let circle = new Konva.Circle({
     radius,
     fill: 'black',
   })
@@ -125,7 +125,7 @@ export function addkonvaCircle(radius: number,stage: Konva.Stage, layer: Konva.L
     // 画下第一笔就使其失活
     circle.listening(false)
     lastCircle.listening(true)
-    lastCircle.setAttr('lineIndex',1)
+    lastCircle.setAttr('lineIndex',[...drawLine].length + 1)
     console.log(lastCircle);
     
     isclickDown = true
@@ -136,6 +136,35 @@ export function addkonvaCircle(radius: number,stage: Konva.Stage, layer: Konva.L
     // 下一笔的move
     lastCircle && lastCircle.on('mousemove',function() {
       
+      const points= [circle.x(),circle.y(), lastCircle.x(), lastCircle.y()]
+      // console.log('xxxxx',circle.x(), lastCircle.x());
+      // console.log('yyyyy',circle.y(), lastCircle.y());
+
+      
+
+      const line = new Konva.Line({
+      points,
+      stroke: 'red',
+      strokeWidth: 1,
+      lineCap: 'round',
+      lineJoin: 'round',
+      lineIndex: lastCircle.getAttr('lineIndex')
+      })
+      drawLine.set(lastCircle.getAttr('lineIndex'), line)
+      lineGroup.removeChildren();
+      
+      [...drawLine].forEach(([index, line]) => {
+      
+      lineGroup.add(line)
+      } )
+
+    })
+
+    function lastCircleClickEvt({evt: {x, y}}) {
+      const clickPoint = {x,y}
+      console.log('dddddd',clickPoint);
+
+      console.log(lastCircle.x(),circle.x());
       const points= [circle.x(),circle.y(), lastCircle.x(), lastCircle.y()]
       
 
@@ -148,14 +177,32 @@ export function addkonvaCircle(radius: number,stage: Konva.Stage, layer: Konva.L
       lineIndex: lastCircle.getAttr('lineIndex')
       })
       drawLine.set(lastCircle.getAttr('lineIndex'), line)
-      lineGroup.destroyChildren();
+      lineGroup.removeChildren();
       
       [...drawLine].forEach(([index, line]) => {
       
       lineGroup.add(line)
       } )
+      circle = circle.clone()
 
+      circle.x(clickPoint.x)
+      circle.y(clickPoint.y)
+      console.log(circle);
+      
+      circle = lastCircle
+      // lastCircle = lastCircle.clone()
+      console.log('lineGroup', lineGroup);
+      
+      // lastCircle.on('mousedown', lastCircleClickEvt)
+      lastCircle.on('mousedown', function() {
+        console.log(1111);
+        
       })
+
+      lastCircle.setAttr('lineIndex',[...drawLine].length+1)
+    }
+
+    lastCircle.on('mousedown', lastCircleClickEvt)
   })
 
 
