@@ -10,8 +10,7 @@
   },
   "devDependencies": {
     "typescript": "^5.0.2",
-    "vite": "^4.4.0",
-    "homepage": "https://Awu1227.github.io/test-demo/"
+    "vite": "^4.4.0"
   },
   "dependencies": {
     "eventemitter2": "^6.4.9",
