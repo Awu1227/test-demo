@@ -1,42 +1,29 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
+name: 构建页面
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  push:  # 指定触发事件
+    branches:
+      - master  # 指定触发 action 的分支
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   main:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-        with: 
-          persist-credentials: false
 
-      # 安装依赖
-      - name: 安装依赖
-        run: |
+    # 拉取github仓库代码
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        persist-credentials: false
+
+    # 执行依赖安装
+    - name: 安装依赖
+      run: |
           npm install
-
-      # 构建
-      - name: 构建
-        run: |
-            npm run build
-
+        
+    # 执行构建步骤
+    - name: 构建
+      run: |
+          npm run build
     # 执行部署
     - name: 部署
       uses: JamesIves/github-pages-deploy-action@releases/v3 # 这个action会根据配置自动推送代码到指定分支
