@@ -1,5 +1,8 @@
 <template>
-	vue sfc
+
+	<div class="text-3xl font-bold">
+		vue sfc
+	</div>
 </template>
 
 <script setup>
