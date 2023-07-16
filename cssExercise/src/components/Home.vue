@@ -7,7 +7,7 @@
 	</header>
 	<main class=" w-full h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 overflow-hidden">
 		<div class="card-container m-4 flex flex-wrap justify-center">
-			<div class="card bg-pink-100  m-4 border rounded-xl" @click="linkToView(i)" v-for="i in 8">
+			<div class="card bg-pink-100  m-4 border rounded-xl bg-cover" @click="linkToView(i)" v-for="i in 8" :style="{'background-image': `url('/css_day${i}.png')`}">
 				<div class="card-header flex justify-center mt-1" >Day {{ i }}</div>
 			</div>
 		</div>
