@@ -42,7 +42,7 @@ const linkToView = dayNum => {
 	}
 	to {
 	transform: scale(1.1);
-	font-size: 100px;
+	font-size: 6vw;
 	}
 }
 
