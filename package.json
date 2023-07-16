@@ -19,6 +19,7 @@
   "dependencies": {
     "eventemitter2": "^6.4.9",
     "konva": "9.0.1",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "vue-router": "4"
   }
 }

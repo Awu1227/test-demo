@@ -1,8 +1,11 @@
 <template>
-	<RouterView/>
+	<div>
+		Day1
+	</div>
 </template>
 
 <script setup>
+
 </script>
 
 <style lang="scss" scoped>
