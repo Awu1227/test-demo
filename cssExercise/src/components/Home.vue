@@ -7,8 +7,8 @@
 	</header>
 	<main class=" w-full h-full bg-gradient-to-r from-violet-500 to-fuchsia-500 overflow-hidden">
 		<div class="card-container m-4 flex flex-wrap justify-center">
-			<div class="card bg-pink-100  m-4 border rounded-xl bg-cover" @click="linkToView(i)" v-for="i in 8" :style="{'background-image': `url('/css_day${i}.png')`}">
-				<div class="card-header flex justify-center mt-1" >Day {{ i }}</div>
+			<div class="card bg-pink-100  m-4 border rounded-xl bg-cover shadow-md" @click="linkToView(i)" v-for="i in 8" :style="{'background-image': `url('/css_day${i}.png')`}">
+				<div class="card-header hidden justify-center mt-1" >Day {{ i }}</div>
 			</div>
 		</div>
 	</main>
@@ -25,5 +25,25 @@ const linkToView = dayNum => {
 </script>
 
 <style scoped>
+.card:hover .card-header{
+	display: flex;
+}
+.card:hover {
+	animation: cardScale;
+	animation-duration: 0.68s;
+	animation-fill-mode: forwards;
+
+}
+
+@keyframes cardScale {
+	from {
+	transform:  scale(1);
+	font-size: 12px;
+	}
+	to {
+	transform: scale(1.1);
+	font-size: 100px;
+	}
+}
 
 </style>
