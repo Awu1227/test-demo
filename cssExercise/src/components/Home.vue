@@ -11,7 +11,6 @@
 				<div class="card-header flex justify-center mt-1" >Day {{ i }}</div>
 			</div>
 		</div>
-
 	</main>
 </template>
 
@@ -25,6 +24,6 @@ const linkToView = dayNum => {
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

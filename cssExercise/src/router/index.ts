@@ -1,10 +1,11 @@
 import {createRouter, createWebHashHistory} from 'vue-router'
-import Main from '../components/Main.vue'
+import Home from '../components/Home.vue'
 import Day1 from '../components/Day1.vue'
 
 
+
 const routes = [
-	{path: '/', component: Main},
+	{path: '/', component: Home},
 	{path: '/day1', component: Day1}
 ]
 
