@@ -24,6 +24,7 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         adsorb: resolve(__dirname, 'adsorb/index.html'),
         cssExercise: resolve(__dirname, 'cssExercise/index.html'),
+        vue_router: resolve(__dirname, 'vue_router/index.html'),
       },
     },
   },
