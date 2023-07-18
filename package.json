@@ -14,9 +14,12 @@
     "postcss": "^8.4.26",
     "tailwindcss": "^3.3.3",
     "typescript": "^5.0.2",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-vue-components": "^0.25.1",
     "vite": "^4.4.0"
   },
   "dependencies": {
+    "element-plus": "^2.3.8",
     "eventemitter2": "^6.4.9",
     "konva": "9.0.1",
     "vue": "^3.3.4",
