@@ -2,6 +2,8 @@ import {createRouter, createWebHashHistory} from 'vue-router'
 import Home from '../components/Home.vue'
 import Page1 from '../components/Page1.vue'
 import User from '../components/User.vue'
+import NotFound from '../components/NotFound.vue'
+import UserGeneric from '../components/UserGeneric.vue'
 const routes = [
 	{
 		path: '/',
@@ -14,6 +16,15 @@ const routes = [
 	{
 		path: '/user/:id',
 		component: User
+	},
+	{
+		path: '/:pathMatch(.*)*',
+		name: 'NotFound',
+		component: NotFound
+	},
+	{
+		path: '/user-:pathMatch(.*)',
+		component: UserGeneric
 	}
 ]
 const router = createRouter({

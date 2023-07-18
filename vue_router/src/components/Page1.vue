@@ -1,7 +1,9 @@
 <template>
-	<div>
-		Page1页面
-		<p>当前路由：{{route}}</p>
+	<div class="flex justify-center">
+		<el-result
+				icon="success"
+				title="Page1组件">
+		</el-result>
 	</div>
 </template>
 
@@ -15,9 +17,7 @@ const route = useRoute()
 
 onMounted(() => {
 	console.log(router.currentRoute.value);
-	console.log(route);
-
-	
+	console.log(route);	
 })
 </script>
 

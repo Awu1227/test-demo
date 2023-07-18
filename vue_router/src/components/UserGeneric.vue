@@ -2,15 +2,15 @@
 	<div class="flex justify-center">
 		<el-result
 				icon="success"
-				title="Home组件">
+				title="该组件会匹配以“user-”开头的路由">
 		</el-result>
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
