@@ -7,9 +7,11 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 import vue from '@vitejs/plugin-vue'
+import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins:[
     vue(),
+    react(),
     AutoImport({
       resolvers: [ElementPlusResolver()]
     }),

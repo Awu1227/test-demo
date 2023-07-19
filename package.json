@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.0.3",
     "@vitejs/plugin-vue": "^4.2.3",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.26",
@@ -19,9 +20,13 @@
     "vite": "^4.4.0"
   },
   "dependencies": {
+    "@react-three/fiber": "8.9",
     "element-plus": "^2.3.8",
     "eventemitter2": "^6.4.9",
     "konva": "9.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "0.148",
     "vue": "^3.3.4",
     "vue-router": "4"
   }
