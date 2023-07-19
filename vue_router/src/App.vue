@@ -48,7 +48,7 @@
 				</router-link>
 			</div>
 		</main>
-		<main class="right p-4">
+		<main class="right p-4 border ml-4">
 			<router-view></router-view>
 		</main>
 	</div>

@@ -18,7 +18,7 @@ a:hover {
   width: 16vw;
   height: 8vw;
   border-radius: 4px;
-  background: rgba(97, 101, 97, 0.159);
+  background: lightcyan;
   box-shadow: 4px 4px 5px 0px #ddd;
 }
 body {
@@ -63,7 +63,21 @@ h1 {
   background-repeat: no-repeat;
   background-size: contain;
 }
-
+.card_css {
+  background-image: url('/public/css_logo.jpeg');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.card_vue {
+  background-image: url('/public/vue_logo.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.card_threejs {
+  background-image: url('/public/threejs_logo.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 
 @media (prefers-color-scheme: light) {
   :root {
