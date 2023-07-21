@@ -4,6 +4,7 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    /*👇为了防止一些库如vue不能很好地与"isolatedModules": true共同工作*/
     "skipLibCheck": true,
     /* Bundler mode */
     "moduleResolution": "bundler",
