@@ -39,6 +39,9 @@ devDependencies:
   postcss:
     specifier: ^8.4.26
     version: 8.4.26
+  postcss-nesting:
+    specifier: ^12.0.0
+    version: 12.0.0(postcss@8.4.26)
   tailwindcss:
     specifier: ^3.3.3
     version: 3.3.3
@@ -388,6 +391,15 @@ packages:
       '@babel/helper-string-parser': 7.22.5
       '@babel/helper-validator-identifier': 7.22.5
       to-fast-properties: 2.0.0
+
+  /@csstools/selector-specificity@3.0.0(postcss-selector-parser@6.0.13):
+    resolution: {integrity: sha512-hBI9tfBtuPIi885ZsZ32IMEU/5nlZH/KOVYJCOh7gyMxaVLGmLedYqFN6Ui1LXkI8JlC8IsuC0rF0btcRZKd5g==}
+    engines: {node: ^14 || ^16 || >=18}
+    peerDependencies:
+      postcss-selector-parser: ^6.0.13
+    dependencies:
+      postcss-selector-parser: 6.0.13
+    dev: true
 
   /@ctrl/tinycolor@3.6.0:
     resolution: {integrity: sha512-/Z3l6pXthq0JvMYdUFyX9j0MaCltlIn6mfh9jLyQwg5aPKxkyNa0PTHtU1AlFXLNk55ZuAeJRcpvq+tmLfKmaQ==}
@@ -1691,6 +1703,17 @@ packages:
     peerDependencies:
       postcss: ^8.2.14
     dependencies:
+      postcss: 8.4.26
+      postcss-selector-parser: 6.0.13
+    dev: true
+
+  /postcss-nesting@12.0.0(postcss@8.4.26):
+    resolution: {integrity: sha512-knqwW65kxssmyIFadRSimaiRyLVRd0MdwfabesKw6XvGLwSOCJ+4zfvNQQCOOYij5obwpZzDpODuGRv2PCyiUw==}
+    engines: {node: ^14 || ^16 || >=18}
+    peerDependencies:
+      postcss: ^8.4
+    dependencies:
+      '@csstools/selector-specificity': 3.0.0(postcss-selector-parser@6.0.13)
       postcss: 8.4.26
       postcss-selector-parser: 6.0.13
     dev: true

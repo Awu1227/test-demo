@@ -36,5 +36,6 @@ export default defineConfig({
         page_threejs: resolve(__dirname, 'page_threejs/index.html'),
       },
     },
+    cssCodeSplit: true // 是否提取所有CSS到一个CSS文件中, introduct: https://cn.vitejs.dev/config/build-options.html#build-csscodesplit
   },
 })
