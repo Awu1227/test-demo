@@ -24,7 +24,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        adsorb: resolve(__dirname, 'adsorb/index.html'),
+        vite: resolve(__dirname, 'page_vite/index.html'),
         cssExercise: resolve(__dirname, 'cssExercise/index.html'),
         vue_router: resolve(__dirname, 'vue_router/index.html'),
         page_threejs: resolve(__dirname, 'page_threejs/index.html'),
