@@ -7,14 +7,12 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 import vue from '@vitejs/plugin-vue'
-import react from '@vitejs/plugin-react'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import checker from 'vite-plugin-checker'
 export default defineConfig({
   plugins:[
     vue(),
     vueJsx(),
-    react(),
     AutoImport({
       resolvers: [ElementPlusResolver()]
     }),
