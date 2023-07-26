@@ -6,7 +6,7 @@ export const createCamera = () => {
     1, // aspect radio (dummy value)
     0.1, // near clipping plane
     100 // far clipping plane
-  ) as any;
+  );
   camera.position.set(0, 0, 10);
-  return camera as PerspectiveCamera;
+  return camera;
 };
