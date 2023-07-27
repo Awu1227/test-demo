@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { createCamera } from "./components/camera";
 import { createCube } from "./components/cube";
-import { createLight } from './components/light';
+import { createLight } from "./components/light";
 import { createScene } from "./components/scene";
 
 import { createRenderer } from "./systems/renderer";
@@ -23,6 +23,10 @@ export default class World {
     this.scene.add(cube, light);
 
     const resizer = new Resizer(container, this.camera, this.renderer);
+    // resize 触发后，重新渲染
+    resizer.onResize = () => {
+      this.render();
+    };
   }
 
   render() {
