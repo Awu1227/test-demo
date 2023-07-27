@@ -1,5 +1,3 @@
-import { PerspectiveCamera, WebGLRenderer } from "three";
-
 export const Resizer = class {
   constructor(container, camera, renderer) {
     camera.aspect = container.clientWidth / container.clientHeight;
