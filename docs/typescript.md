@@ -95,3 +95,97 @@ function dataAnalysisWithNerver(data: TData) {
 	}
 }
 ```
+
+## 枚举
+
+### 为什么要用枚举？
+
+1. 常量解决
+2. 使用常量带来的局限性
+
+```ts
+const Status = {
+	error: -1,
+	warning: 0,
+	success: 1,
+}
+
+class Notice {
+	getStatus(status: number) {
+		if (status === Status.error) {
+			console.log('状态错误')
+		} else if (status === Status.warning) {
+			console.log('状态警告')
+		} else if (status === Status.success) {
+			console.log('状态成功')
+		}
+	}
+}
+```
+
+> 方法参数不能定义为具体类型，只能初级使用 number，string 基本类型替代，**降低了代码的可读性和可维护性**
+
+_使用枚举：_
+
+```ts
+enum EStatus {
+	error = -1,
+	warning  = 0,
+	success = 1
+}
+
+class Notice {
+	getStatus(status: EStatus) {
+		if (status === EStatus.error) {
+			console.log('状态错误')
+		} else if (status === EStatus.warning) {
+			console.log('状态警告')
+		} else if (status === EStatus.success) {
+			console.log('状态成功')
+		}
+	}
+}
+```
+
+### 枚举的定义，分类，取值方式
+
+#### 1. 枚举的定义
+
+用来存放一组固定的常量的序列
+
+#### 2. 枚举分类
+
+```ts
+// 字符串枚举
+enum EDay {
+	Monday = 'Monday',
+	Tuesday = 'Tuesday',
+	Wensday = 'Wensday'
+}
+// 数字枚举
+enum EDay {
+	Monday,
+	Tuesday,
+	Wensday
+}
+enum EDay {
+	Monday = 1,
+	Tuesday,
+	Wensday
+}
+enum EDay {
+	Monday = -1,
+	Tuesday,
+	Wensday
+}
+```
+
+注意 ⚠️：
+
+1. 数字枚举可由值取 key，但是**字符串枚举不行**
+2. 数字枚举可指定从哪个数字开始
+
+### 枚举的好处
+
+1. 有默认值和可以自增值，节省编码时间
+2. 语义更清晰，可读性增强，方法参数类型可以明确为枚举类型
