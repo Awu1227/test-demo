@@ -77,3 +77,21 @@ let obj: Tobj1 & Tobj2 = {
 ```ts
 type position = 'top' | 'left' | 'bottom' | 'right'
 ```
+
+## nerver 类型的意义
+
+> 使用 nerver 避免出现未来扩展新的类没有对应类型的实现，目的就是写出**类型绝对安全的代码**
+
+```ts
+type TData = string | number
+
+function dataAnalysisWithNerver(data: TData) {
+	if (typeof data === 'string') {
+		console.log('字符串类型：', data.length)
+	} else if (typeof data === 'number') {
+		console.log('数值类型：', data.toFixed(2))
+	} else {
+		data.xxxx
+	}
+}
+```
