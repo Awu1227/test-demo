@@ -185,6 +185,29 @@ enum EDay {
 1. 数字枚举可由值取 key，但是**字符串枚举不行**
 2. 数字枚举可指定从哪个数字开始
 
+### 枚举的底层
+
+#### 数字枚举
+
+[Playground](https://www.typescriptlang.org/zh/play?#code/KYOwrgtgBAogIgQwJ5QN4FgBQBIAsgexABNkoBeKAWgEYAaLbAFTGAGcSl6cB1Ud5LAF8gA)
+
+> 采用的是双向映射
+
+```js
+var EDay;
+(function (EDay) {
+    EDay[EDay["Monday"] = -1] = "Monday";
+    EDay[EDay["Tuesday"] = 0] = "Tuesday";
+    EDay[EDay["Wensday"] = 1] = "Wensday";
+})(EDay || (EDay = {}));
+```
+
+#### 字符串枚举
+
+[Playground](https://www.typescriptlang.org/zh/play?#code/KYOwrgtgBAogIgQwJ5QN4FgBQBIAsgexABNkoBeKAcgOOUoBotsAVMYAZxJQstY64ZMA6qE6keIkGKSUsAXyA)
+
+> 采用的就是普通对象
+
 ### 枚举的好处
 
 1. 有默认值和可以自增值，节省编码时间
