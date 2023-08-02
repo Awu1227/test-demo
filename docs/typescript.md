@@ -213,12 +213,12 @@ var EDay;
 1. 有默认值和可以自增值，节省编码时间
 2. 语义更清晰，可读性增强，方法参数类型可以明确为枚举类型
 
-## any和unknown的区别
+## any 和 unknown 的区别
 
-- 相同点：**any** 和 **unknown** 可以是任何类的父类，所以任何类型的变量都可以赋值给 any 类型或 unknown类型的变量
+- 相同点：**any** 和 **unknown** 可以是任何类的父类，所以任何类型的变量都可以赋值给 any 类型或 unknown 类型的变量
 
-- 不同点1： **any** 也可以是任何类的子类，但 **unknown** 不可以，所以**any**类型的变量都可以赋值给 其他类型的变量。
-- 不同点2： 不能拿 **unknown** 类型的变量来获取任何属性和方法，但 **any** 类型的变量可以获取任意名称的属性和任意名称的方法。
+- 不同点 1： **any** 也可以是任何类的子类，但 **unknown** 不可以，所以**any**类型的变量都可以赋值给 其他类型的变量。
+- 不同点 2： 不能拿 **unknown** 类型的变量来获取任何属性和方法，但 **any** 类型的变量可以获取任意名称的属性和任意名称的方法。
 
 **总结：**
 
@@ -226,3 +226,68 @@ var EDay;
 - any 类型几乎失去了类型系统的好处，可能导致类型错误和运行时异常，而 unknown 类型提供了更严格的类型检查。
 - 使用 unknown 类型可以在编译时捕获更多的类型错误，并提供更可靠的代码。
 
+## 接口和应用场景
+
+> 另一种定义对象类型的类型
+
+### 接口应用场景
+
+1. 一些第三方包或者框架底层源码种有大量的接口类型
+2. 提供方法的对象类型的参数时使用
+3. 为多个同类别的类提供统一的方法和属性声明
+
+### 接口定义
+
+```ts
+interface Point {
+	x: number,
+	y: number
+}
+```
+
+### 继承接口
+
+> 新的接口只是在原来接口继承之上增加一些属性或方法，这时就用接口继承
+
+```ts
+interface IPerson {
+	name: string,
+	sex: string
+}
+
+interface ITeacher extends IPerson {
+	teach():void
+}
+
+interface ISinger extends IPerson {
+	sing():void
+}
+
+```
+
+> 为多个同类别的类提供统一的方法和属性声明
+
+```ts
+interface List {
+	add(): void
+	remove():void
+}
+
+class ArrayList implements List {
+	add():void {
+		'xxx'
+	}
+	remove():void {
+		'xxx'
+	}
+}
+
+class LinkedList implements List {
+	add():void {
+		'xxx'
+	}
+	remove():void {
+		'xxx'
+	}
+}
+```
