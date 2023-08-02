@@ -291,3 +291,52 @@ class LinkedList implements List {
 	}
 }
 ```
+
+### 可索引签名
+
+```ts
+interface Product {
+	name: string
+	price: number
+	account: number
+	[x: string]: any
+}
+
+let p: Product {
+	name: 'Orange',
+	price: 15,
+	account: 1000,
+	isOnSale: true
+}
+```
+
+> 可索引签名的类型需兼容其他属性的类型，一般写为**any**
+
+### 索引访问类型
+
+```ts
+const symId = Symbol('product')
+
+interface Product {
+	[symId]: number
+	name: string
+	price: number
+	account: number
+	buy(): string
+}
+
+type A = Product["price"]
+type B = Product["price" | "name"]
+type S = Product[typeof symId]
+
+type PKeys = keyof Product
+
+type AllKeys<T> = T extends any ? T : never
+
+type PKeys2 = AllKeys<keyof Product>
+
+let key: PKeys2 = "name"
+
+console.log(key)
+
+```
