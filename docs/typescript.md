@@ -350,3 +350,17 @@ function printInfo(name: string, age:number, ...rest: any) {
 
 printInfo('orange',13,'das',true)
 ```
+
+## TS 函数类型及相关解构
+
+```ts
+type TInfo = {name: string, age:number,phone: number}
+
+function printInfo({name, age}: TInfo) {
+	console.log('name',name)
+	console.log('age',age)
+}
+
+const info = {name: 'orange', age:18,phone: 12111}
+printInfo(info)
+```
