@@ -364,3 +364,30 @@ function printInfo({name, age}: TInfo) {
 const info = {name: 'orange', age:18,phone: 12111}
 printInfo(info)
 ```
+
+## interface 和 type 的区别
+
+1. 定义范围不同
+   > interface 只能定义对象类型或接口当名字的函数类型；type 可以定义任何类型，包括基础类型、联合类型、交叉类型、元组
+2. 继承功能
+   > 接口可以 extends 一个或者多个接口或类，也可以继承 type，但 type 类型没有继承功能
+3. 交叉合并
+   > 用 type 交叉类型可让类型中的成员合并成一个新的 type，但接口不能交叉合并
+4. 接口可合并声明
+   > 定义两个相同名称的接口会合并声明，定义两个同名的 type 会出现编译错误
+
+```ts
+interface Error {
+	name: string
+}
+
+interface Error {
+	message: string
+	stack?:string
+}
+
+let error:Error = {
+	message: '空指针',
+	name: "NullPointException"
+}
+```
