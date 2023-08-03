@@ -340,3 +340,13 @@ let key: PKeys2 = "name"
 console.log(key)
 
 ```
+
+## TS 函数与 rest 参数
+
+```ts
+function printInfo(name: string, age:number, ...rest: any) {
+	return 3
+}
+
+printInfo('orange',13,'das',true)
+```
