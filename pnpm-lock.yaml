@@ -4,6 +4,9 @@ dependencies:
   element-plus:
     specifier: ^2.3.8
     version: 2.3.8(vue@3.3.4)
+  konva:
+    specifier: ^9.2.0
+    version: 9.2.0
   three:
     specifier: '0.148'
     version: 0.148.0
@@ -1319,6 +1322,10 @@ packages:
     optionalDependencies:
       graceful-fs: 4.2.11
     dev: true
+
+  /konva@9.2.0:
+    resolution: {integrity: sha512-+woI76Sk+VFVl9z7zPkuTnN2zFpEYg27YWz8BCdQXpt5IS3pdnSPAPQVPPMidcbDi9/G5b/IOIp35/KqMGiYPA==}
+    dev: false
 
   /lilconfig@2.1.0:
     resolution: {integrity: sha512-utWOt/GHzuUxnLKxB6dk81RoOeoNeHgbrXiuGk4yyF5qlRz+iIVWu56E2fqGHFrXz0QNUhLB/8nKqvRH66JKGQ==}
