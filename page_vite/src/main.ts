@@ -7,9 +7,9 @@ import HotKey from "./hotKey";
 
 const ly = new CreateLayout();
 
-const coordinate = new CreateCoordinate(ly);
+ly.coordinate = new CreateCoordinate(ly);
 
-const sprites = new createRandomSprite(ly);
+ly.sprites = new createRandomSprite(ly);
 
 const ballClass = new CreateBall(ly);
-const hotKey = new HotKey(ballClass);
+const hotKey = new HotKey(ly, ballClass);

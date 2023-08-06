@@ -13,6 +13,7 @@ export default class createRandomSprite {
   createShape(count: number) {
     for (let i = 0; i < count; i++) {
       const polygon = new Konva.RegularPolygon({
+        name: "sprite",
         x: Math.random() * window.innerWidth,
         y: Math.random() * window.innerHeight,
         sides: this.getRandomSize(),

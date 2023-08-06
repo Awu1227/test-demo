@@ -1,9 +1,15 @@
 import Konva from "konva";
+import CreateCoordinate from "./coordinate";
+import createRandomSprite from "./randomSprite";
 
 /**@description Layout类，存放Stage和Layer */
 export default class CreateLayout {
   public stage: Konva.Stage;
   public layer: Konva.Layer;
+  /**@description 坐标系 */
+  public coordinate?: CreateCoordinate;
+  public sprites?: createRandomSprite;
+  public;
   constructor() {
     const width = window.innerWidth;
     const height = window.innerHeight;
