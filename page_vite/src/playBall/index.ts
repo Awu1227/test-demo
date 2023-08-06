@@ -1,4 +1,5 @@
 import Konva from "konva";
+import HotKey from "../hotKey";
 import CreateLayout from "../layout";
 
 /**@description 创建球球 */
@@ -19,5 +20,9 @@ export default class CreateBall {
     this.ball.y(ly.stage.height() / 2);
 
     ly.layer.add(this.ball);
+  }
+
+  responseKeydown(hotKey: HotKey) {
+    console.log(hotKey);
   }
 }
