@@ -2,6 +2,7 @@ import Konva from "konva";
 import CreateLayout from "../layout";
 
 export default class CreateCoordinate {
+  ly: CreateLayout;
   /**@description 垂直线组 */
   verLineGroup = new Konva.Group();
   /**@description 水平线组 */
@@ -10,11 +11,14 @@ export default class CreateCoordinate {
   distance = 20;
   constructor(ly: CreateLayout) {
     this.createLine(ly, "#484842"); // 创建网格
+    ly.layer.add(this.verLineGroup, this.horLineGroup);
   }
   /**@description 创建网格 */
-  createLine(ly: CreateLayout, Color: string) {
-    const bgWidth = ly.layer.width();
-    const bgHeight = ly.layer.height();
+  createLine(ly: CreateLayout, Color: string = "#484842") {
+    this.ly = ly;
+    const bgWidth = ly.layer.width() * 10;
+    const bgHeight = ly.layer.height() * 10;
+
     for (let i = 0; i < bgWidth; i += this.distance) {
       const verLine = new Konva.Line({
         points: [i, 0, i, bgHeight],
@@ -35,6 +39,10 @@ export default class CreateCoordinate {
       });
       this.horLineGroup.add(horLine);
     }
-    ly.layer.add(this.verLineGroup, this.horLineGroup);
+  }
+  resize() {
+    this.horLineGroup = new Konva.Group();
+    this.verLineGroup = new Konva.Group();
+    this.createLine(this.ly);
   }
 }

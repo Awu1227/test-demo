@@ -5,7 +5,7 @@ export default class createRandomSprite {
     name: "ranDomSprite",
   });
   constructor(ly: CreateLayout) {
-    this.createShape(300);
+    this.createShape(3000);
 
     ly.layer.add(this.spriteGroup);
   }
@@ -14,8 +14,8 @@ export default class createRandomSprite {
     for (let i = 0; i < count; i++) {
       const polygon = new Konva.RegularPolygon({
         name: "sprite",
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
+        x: Math.random() * window.innerWidth * 10,
+        y: Math.random() * window.innerHeight * 10,
         sides: this.getRandomSize(),
         radius: 6,
         fill: this.getRandomColor(),

@@ -59,8 +59,12 @@ export default class HotKey {
       item.destroy();
     });
     const generateSpriteCount = aroundSprites.length;
-    ly.ballClass && ly.ballClass.scale(generateSpriteCount);
-    ly.sprites?.createShape(generateSpriteCount);
+    if (generateSpriteCount) {
+      ly.ballClass && ly.ballClass.scale(generateSpriteCount);
+      ly.sprites?.createShape(generateSpriteCount);
+    }
+
+    aroundSprites.length = 0;
   }
   /**@description 获取当前球的周围的距离 */
   getRange(ball: Circle) {

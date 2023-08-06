@@ -7,11 +7,12 @@ import createRandomSprite from "./randomSprite";
 export default class CreateLayout {
   public stage: Konva.Stage;
   public layer: Konva.Layer;
+  ballInfo: Konva.Text;
+
   /**@description 坐标系 */
   public coordinate?: CreateCoordinate;
   public sprites?: createRandomSprite;
   public ballClass?: CreateBall;
-  public;
   constructor() {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -24,5 +25,12 @@ export default class CreateLayout {
 
     this.layer = new Konva.Layer();
     this.stage.add(this.layer);
+  }
+  reSizeStage() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    this.stage.width(width);
+    this.stage.height(height);
+    this.coordinate?.resize();
   }
 }
