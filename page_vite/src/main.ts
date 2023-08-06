@@ -11,5 +11,5 @@ ly.coordinate = new CreateCoordinate(ly);
 
 ly.sprites = new createRandomSprite(ly);
 
-const ballClass = new CreateBall(ly);
-const hotKey = new HotKey(ly, ballClass);
+ly.ballClass = new CreateBall(ly);
+const hotKey = new HotKey(ly, ly.ballClass);

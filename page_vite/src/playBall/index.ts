@@ -25,4 +25,8 @@ export default class CreateBall {
   responseKeydown(hotKey: HotKey) {
     console.log(hotKey);
   }
+  // 放大或缩小球球
+  scale(count: number) {
+    this.ball.radius(this.ball.radius() + count);
+  }
 }

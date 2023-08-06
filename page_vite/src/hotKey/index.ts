@@ -59,6 +59,7 @@ export default class HotKey {
       item.destroy();
     });
     const generateSpriteCount = aroundSprites.length;
+    ly.ballClass && ly.ballClass.scale(generateSpriteCount);
     ly.sprites?.createShape(generateSpriteCount);
   }
   /**@description 获取当前球的周围的距离 */
