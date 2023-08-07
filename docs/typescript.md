@@ -391,3 +391,40 @@ let error:Error = {
 	name: "NullPointException"
 }
 ```
+
+## 元组
+
+满足以下 3 点的数组就是元组
+
+1. 在定义时每个元素的类型都确定
+2. 元素值的数据类型必须是当前元素定义你的类型
+3. 元素值的个数必须和定义时的个数相同
+
+```ts
+const salary: [string,number, number] = ['张三', 25000,1000]
+```
+
+## 数组和数组元素怎样同时为只读
+
+```ts
+const account = [10,40,50,60,90] as const
+// account[1] =100
+```
+
+## 可变元组
+
+```ts
+const customers: [string,number,...any[]] =
+
+['张三'，18，'男','会员']
+```
+
+### 可变元组解构
+
+```ts
+let [custname,age,...rest]: [string,number,...any[]] =
+
+['张三',18,'男','会员']
+
+console.log(custname, age, rest)
+```
