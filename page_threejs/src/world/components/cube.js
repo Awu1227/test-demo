@@ -5,11 +5,12 @@ import {
   Mesh,
   MeshBasicMaterial,
   MeshStandardMaterial,
+  MathUtils
 } from "three";
 
 export const createCube = () => {
   // 单位为米
-  const geometry = new BoxGeometry(2, 2, 2);
+  const geometry = new BoxGeometry(1, 1, 1);
 
   // create a default (white) Basic material
   const material = new MeshStandardMaterial({ color: "purple" });
@@ -17,13 +18,15 @@ export const createCube = () => {
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material);
 
-  cube.position.x = -0.5;
-  cube.position.y = -0.1;
-  cube.position.z = 1;
+  const radiansPerSecond = MathUtils.degToRad(30);
 
-  cube.scale.x = 1.25;
-  cube.scale.y = 0.25;
-  cube.scale.z = 0.5;
+  // this method will be called once per frame
+  cube.tick = (delta) => {
+    // increase the cube's rotation each frame
+    cube.rotation.z += radiansPerSecond * delta;
+    cube.rotation.x += radiansPerSecond * delta;
+    cube.rotation.y += radiansPerSecond * delta;
+  };
 
   console.log(cube.matrixWorld);
   // cube.matrixWorld = new Matrix4();

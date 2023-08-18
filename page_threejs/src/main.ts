@@ -7,7 +7,7 @@ function main() {
   if (!container) return;
 
   const world = new World(container);
-  world.render();
+  world.start();
 }
 
 main();
