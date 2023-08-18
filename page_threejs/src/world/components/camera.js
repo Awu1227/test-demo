@@ -5,8 +5,8 @@ export const createCamera = () => {
     35, // fov = Field Of View
     1, // aspect radio (dummy value)
     0.1, // near clipping plane
-    100 // far clipping plane
+    300 // far clipping plane
   );
-  camera.position.set(0, 0, 10);
+  camera.position.set(10, 20, 40);
   return camera;
 };
