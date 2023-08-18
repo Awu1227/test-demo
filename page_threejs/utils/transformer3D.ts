@@ -2,16 +2,8 @@
 import GlobalApi from "../js/GlobalApi";
 import * as THREE from 'three'
 
-/**
- * @api TransformController3D
- * @apiGroup TransformController3D
- * @apiDescription 3D变换控制类,obj属性中不使用mJsonData类
- * @apiParam (成员变量) controllerCenter    总控制器          
- * @apiParam (成员变量) transform           平移变换 
- * @apiParam (成员变量) rotateArrowCenter         旋转箭头
- * @apiParam (成员变量) rotateRingCenter          旋转圆环
- */
-export default class TransformController3D {
+
+export default class Transformer3D {
 
     // 空父对象
     controllerCenter: THREE.Object3D | null = null;
