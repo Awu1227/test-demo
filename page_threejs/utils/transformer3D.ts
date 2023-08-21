@@ -1,5 +1,4 @@
 
-import GlobalApi from "../js/GlobalApi";
 import * as THREE from 'three'
 
 interface IStaff extends THREE.Object3D{
@@ -9,6 +8,7 @@ interface IStaff extends THREE.Object3D{
 
 export default class Transformer3D {
     camera!: THREE.PerspectiveCamera
+    raycaster = new THREE.Raycaster
     object_3D: IStaff;
     // 空父对象
     controllerCenter: THREE.Object3D | null = null;
@@ -883,7 +883,8 @@ export default class Transformer3D {
         this.updateRotateArrow(obj);
         this.updateRotateRing(obj);
 
-        GlobalApi.scene3D.add(this.controllerCenter);
+        // TODO:
+        // GlobalApi.scene3D.add(this.controllerCenter);
     }
 
     /**
@@ -1020,7 +1021,7 @@ export default class Transformer3D {
         let Intersection: any;
 
         // 判断X
-        Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject((this.transformArrowX as THREE.Mesh));
+        Intersection = this.raycaster.intersectObject((this.transformArrowX as THREE.Mesh));
         if (Intersection.length > 0) {
             this.m_iSelected = 1;
             this.lastMouseX = Intersection[0].point.x;
@@ -1030,7 +1031,7 @@ export default class Transformer3D {
         }
 
         // 判断Y
-        Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject((this.transformArrowY as THREE.Mesh));
+        Intersection = this.raycaster.intersectObject((this.transformArrowY as THREE.Mesh));
         if (Intersection.length > 0) {
             this.m_iSelected = 2;
             this.lastMouseY = Intersection[0].point.y;
@@ -1040,7 +1041,7 @@ export default class Transformer3D {
         }
 
         // 判断Z
-        Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject((this.transformArrowZ as THREE.Mesh));
+        Intersection = this.raycaster.intersectObject((this.transformArrowZ as THREE.Mesh));
         if (Intersection.length > 0) {
             this.m_iSelected = 3;
             this.lastMouseZ = Intersection[0].point.z;
@@ -1050,7 +1051,7 @@ export default class Transformer3D {
         }
 
         // 判断X旋转
-        Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObjects((this.rotateArrowX as THREE.Object3D).children);
+        Intersection = this.raycaster.intersectObjects((this.rotateArrowX as THREE.Object3D).children);
         if (Intersection.length > 0) {
             this.m_iSelected = 4;
             this.lastRadian = -Math.atan2(Intersection[0].point.y - obj.m_Object3D.position.y, Intersection[0].point.z - obj.m_Object3D.position.z);
@@ -1064,7 +1065,7 @@ export default class Transformer3D {
             return true;
         }
         // 判断Y旋转
-        Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObjects((this.rotateArrowY as THREE.Object3D).children);
+        Intersection = this.raycaster.intersectObjects((this.rotateArrowY as THREE.Object3D).children);
         if (Intersection.length > 0) {
             this.m_iSelected = 5;
             this.lastRadian = -Math.atan2(Intersection[0].point.z - obj.m_Object3D.position.z, Intersection[0].point.x - obj.m_Object3D.position.x);
@@ -1079,7 +1080,7 @@ export default class Transformer3D {
             return true;
         }
         // 判断Z旋转
-        Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObjects((this.rotateArrowZ as THREE.Object3D).children);
+        Intersection = this.raycaster.intersectObjects((this.rotateArrowZ as THREE.Object3D).children);
         if (Intersection.length > 0) {
             this.m_iSelected = 6;
             this.lastRadian = -Math.atan2(Intersection[0].point.x - obj.m_Object3D.position.x, Intersection[0].point.y - obj.m_Object3D.position.y);
@@ -1111,7 +1112,7 @@ export default class Transformer3D {
 
         switch (this.m_iSelected) {
             case 1: {
-                let Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject(this.transformArrowXHelp as THREE.Mesh);
+                let Intersection = this.raycaster.intersectObject(this.transformArrowXHelp as THREE.Mesh);
                 if (Intersection.length > 0) {
                     obj.m_Object3D.position.x += Intersection[0].point.x - this.lastMouseX;
                     this.lastMouseX = Intersection[0].point.x;
@@ -1119,7 +1120,7 @@ export default class Transformer3D {
                 break;
             };
             case 2: {
-                let Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject(this.transformArrowYHelp as THREE.Mesh);
+                let Intersection = this.raycaster.intersectObject(this.transformArrowYHelp as THREE.Mesh);
                 if (Intersection.length > 0) {
                     // obj.m_Object3D.position.y += Intersection[0].point.y - this.lastMouseY;
                     if(obj.mJsonParam.m_fHight>=0)
@@ -1134,7 +1135,7 @@ export default class Transformer3D {
                 break;
             };
             case 3: {
-                let Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject(this.transformArrowZHelp as THREE.Mesh);
+                let Intersection = this.raycaster.intersectObject(this.transformArrowZHelp as THREE.Mesh);
                 if (Intersection.length > 0) {
                     obj.m_Object3D.position.z += Intersection[0].point.z - this.lastMouseZ;
                     this.lastMouseZ = Intersection[0].point.z;
@@ -1142,7 +1143,7 @@ export default class Transformer3D {
                 break;
             };
             case 4: {
-                let Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject(this.rotateArrowHelp as THREE.Mesh);
+                let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh);
 
                 if (Intersection.length > 0) {
 
@@ -1185,7 +1186,7 @@ export default class Transformer3D {
                 break;
             };
             case 5: {
-                let Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject(this.rotateArrowHelp as THREE.Mesh);
+                let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh);
 
                 if (Intersection.length > 0) {
 
@@ -1228,7 +1229,7 @@ export default class Transformer3D {
                 break;
             };
             case 6: {
-                let Intersection = (GlobalApi.raycaster as THREE.Raycaster).intersectObject(this.rotateArrowHelp as THREE.Mesh);
+                let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh);
 
                 if (Intersection.length > 0) {
 
