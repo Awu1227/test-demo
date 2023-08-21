@@ -11,6 +11,7 @@ import { Resizer } from "./systems/Resizer";
 import Loop from './systems/Loop';
 import { createGridHelper } from "./components/gridHelper";
 import Transformer3D from '../../utils/transformer3D';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class World {
   tsf?: Transformer3D
@@ -23,6 +24,7 @@ export default class World {
 
   pointer = new Vector2()
   raycaster = new Raycaster()
+  controls: OrbitControls;
 
   constructor(container: Element) {
 
@@ -36,6 +38,7 @@ export default class World {
 
     document.addEventListener('pointermove',(evt) => this.onPointerMove(evt))
     document.addEventListener('pointerdown',(evt) => this.onPointerDown(evt))
+    // document.addEventListener('pointerup',(evt) => this.onPointerUp(evt))
 
     const cube = createTorusKnot();
     this._meshs.push(cube)
@@ -53,9 +56,9 @@ export default class World {
 
     const gridHelper = createGridHelper()
 
-    const controls = createControls(this.camera,this.renderer.domElement)
+    this.controls = createControls(this.camera,this.renderer.domElement)
 
-    this.loop.updatables.push(controls)
+    this.loop.updatables.push(this.controls)
     this.scene.add(cube,gridHelper, light);
 
     console.log('scene',this.scene);
@@ -69,6 +72,11 @@ export default class World {
 
   onPointerMove(evt:MouseEvent) {
     // this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
+     if (this.tsf?.isDragging) {
+      this.controls.enableRotate = false
+     } else {
+      this.controls.enableRotate = true
+     }
   }
 
   onPointerDown(event:MouseEvent) {    

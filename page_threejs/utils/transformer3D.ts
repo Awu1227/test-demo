@@ -20,6 +20,7 @@ enum ESelectArrow {
 
 export default class Transformer3D {
     isShow = false
+    isDragging = false
     camera!: THREE.PerspectiveCamera
     raycaster = new THREE.Raycaster
 
@@ -92,6 +93,7 @@ export default class Transformer3D {
     constructor(staff:IStaff, camera: THREE.PerspectiveCamera) {
         this.staff = staff 
         this.camera = camera
+        this.isDragging = true
     }
 
     /**
