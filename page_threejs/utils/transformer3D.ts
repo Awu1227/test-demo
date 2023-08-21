@@ -110,9 +110,9 @@ export default class Transformer3D {
             this.transformArrowX,
             this.transformArrowY,
             this.transformArrowZ,
-            this.rotateArrowX,
-            this.rotateArrowY,
-            this.rotateArrowZ,
+            ...(this.rotateArrowX?.children!),
+            ...(this.rotateArrowY?.children!),
+            ...(this.rotateArrowZ?.children!),
         )
     }
 
@@ -350,7 +350,10 @@ export default class Transformer3D {
     showRotateX(obj: any, arrowDis: number, rotateDis: number, rotateWidth: number, RidianLeft: number, RidianRight: number, RidianWidth: number, arrowWidth: number) {
         this.rotateArrowX = new THREE.Object3D();
         let vertices = new Array();
-
+        this.rotateArrowX.name="x箭头组"
+        this.rotateArrowX.userData = {
+            prevColor: 0xffad28
+        }
         if (this.m_iSelected != 4) {//未选中时
             //箭头中段
             let arrowRotateLineGeo = new THREE.RingGeometry(rotateDis, rotateDis + rotateWidth, 8, 1, RidianLeft, RidianWidth);
@@ -365,6 +368,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+            (this.rotateArrowRingX as THREE.Mesh).name="x箭头中段";
             (this.rotateArrowX as THREE.Object3D).add((this.rotateArrowRingX as THREE.Mesh));
 
             //左箭头
@@ -388,6 +392,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+            (this.rotateArrowLeftX as THREE.Mesh).name="x左箭头";
             (this.rotateArrowX as THREE.Object3D).add((this.rotateArrowLeftX as THREE.Mesh));
 
             //右箭头
@@ -410,6 +415,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+            (this.rotateArrowRightX as THREE.Mesh).name="x右箭头";
             (this.rotateArrowX as THREE.Object3D).add((this.rotateArrowRightX as THREE.Mesh));
 
             (this.rotateArrowX as THREE.Object3D).position.x = 2;
@@ -438,6 +444,10 @@ export default class Transformer3D {
 
     showRotateY(obj: any, arrowDis: number, rotateDis: number, rotateWidth: number, RidianLeft: number, RidianRight: number, RidianWidth: number, arrowWidth: number) {
         this.rotateArrowY = new THREE.Object3D();
+        this.rotateArrowY.name = "y箭头组";
+        this.rotateArrowY.userData = {
+            prevColor: 0x48D9A7
+        }
         let vertices = new Array();
 
         if (this.m_iSelected != 5) {//未选中时
@@ -455,6 +465,8 @@ export default class Transformer3D {
                 })
             );
             (this.rotateArrowRingY as THREE.Mesh).rotation.x = Math.PI / 2;
+            (this.rotateArrowRingY as THREE.Mesh).name="y箭头中段";
+
             (this.rotateArrowY as THREE.Object3D).add((this.rotateArrowRingY as THREE.Mesh));
 
             //左箭头
@@ -478,6 +490,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+            (this.rotateArrowLeftY as THREE.Mesh).name="y左箭头";
             (this.rotateArrowY as THREE.Object3D).add((this.rotateArrowLeftY as THREE.Mesh));
 
             //右箭头
@@ -500,6 +513,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+            (this.rotateArrowRightY as THREE.Mesh).name="y右箭头";
             (this.rotateArrowY as THREE.Object3D).add((this.rotateArrowRightY as THREE.Mesh));
             (this.rotateArrowY as THREE.Object3D).position.y = 2;
 
@@ -529,6 +543,10 @@ export default class Transformer3D {
 
     showRotateZ(obj: any, arrowDis: number, rotateDis: number, rotateWidth: number, RidianLeft: number, RidianRight: number, RidianWidth: number, arrowWidth: number) {
         this.rotateArrowZ = new THREE.Object3D();
+        this.rotateArrowZ.name="z箭头组"
+        this.rotateArrowZ.userData = {
+            prevColor: 0x1890FF
+        }
         let vertices = new Array();
 
         if (this.m_iSelected != 6) {//未选中时
@@ -545,6 +563,8 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+            (this.rotateArrowRingZ as THREE.Mesh).name="z箭头中段";
+
             (this.rotateArrowZ as THREE.Object3D).add((this.rotateArrowRingZ as THREE.Mesh));
 
             //左箭头
@@ -568,6 +588,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+            (this.rotateArrowLeftZ as THREE.Mesh).name="z左箭头";
             (this.rotateArrowZ as THREE.Object3D).add((this.rotateArrowLeftZ as THREE.Mesh));
 
             //右箭头
@@ -590,6 +611,8 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
+
+            (this.rotateArrowRightZ as THREE.Mesh).name="z右箭头";
             (this.rotateArrowZ as THREE.Object3D).add((this.rotateArrowRightZ as THREE.Mesh));
             (this.rotateArrowZ as THREE.Object3D).position.z = 2;
 
@@ -1146,15 +1169,33 @@ export default class Transformer3D {
             console.log('intersect',intersects);
             if (intersects.length > 0) {
                 const object = intersects[0].object as any
-                this.highLightArrow = object
-                // 将箭头高亮
-                const prevColor = new THREE.Color(this.highLightArrow.userData.prevColor)
-                prevColor.multiply(prevColor)
-                object.material.color.set(prevColor)
+                if (object.name.includes('箭头')) {
+                    const arrowParent = object.parent
+                    console.log('obj11',object,arrowParent);
+                    this.highLightArrow = arrowParent
+                    // 将箭头高亮
+                    const prevColor = new THREE.Color(this.highLightArrow.userData.prevColor)
+                    prevColor.multiply(prevColor)
+                    arrowParent.children.forEach((item: any) => {
+                        item.material.color.set(prevColor)
+                    })
+                } else {
+                    this.highLightArrow = object
+                    // 将箭头高亮
+                    const prevColor = new THREE.Color(this.highLightArrow.userData.prevColor)
+                    prevColor.multiply(prevColor)
+                    object.material.color.set(prevColor)
+                }
             } else {
+                // 恢复箭头之前的颜色
                 if (this.highLightArrow) {
-                    // 恢复箭头之前的颜色
-                    this.highLightArrow.material.color.set(this.highLightArrow.userData.prevColor)
+                    if (this.highLightArrow.children.length) {
+                        this.highLightArrow.children.forEach((item: any) => {
+                            item.material.color.set(this.highLightArrow.userData.prevColor)
+                        })
+                    }else {
+                        this.highLightArrow.material.color.set(this.highLightArrow.userData.prevColor)
+                    }
                 }
             }
         }
