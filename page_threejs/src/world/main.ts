@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { PerspectiveCamera, Scene, WebGLRenderer,Vector2, Raycaster } from "three";
 import { createCamera } from "./components/camera";
 import { createCube } from "./components/cube";
 import { createTorusKnot } from './components/torusKnot';
@@ -13,13 +13,20 @@ import { createGridHelper } from "./components/gridHelper";
 import Transformer3D from '../../utils/transformer3D';
 
 export default class World {
-  tsf: Transformer3D
+  tsf?: Transformer3D
   private camera: PerspectiveCamera;
   private scene: Scene;
   private renderer: WebGLRenderer;
   private loop: Loop
 
+  private _meshs: THREE.Mesh[] = []
+
+  pointer = new Vector2()
+  raycaster = new Raycaster()
+
   constructor(container: Element) {
+
+    
     this.camera = createCamera();
     this.scene = createScene();
     this.renderer = createRenderer();
@@ -28,18 +35,19 @@ export default class World {
     container.append(this.renderer.domElement);
 
     document.addEventListener('pointermove',(evt) => this.onPointerMove(evt))
+    document.addEventListener('pointerdown',(evt) => this.onPointerDown(evt))
 
     const cube = createTorusKnot();
-
+    this._meshs.push(cube)
     const stuff = {
       m_Object3D: cube,
       setVisible: () => {},
       destory: () => {}
     }
     
-    this.tsf = new Transformer3D(stuff, this.camera)
-    console.log('controller',this.tsf);
-    this.tsf.showController(stuff)
+    // this.tsf = new Transformer3D(stuff, this.camera)
+    // console.log('controller',this.tsf);
+    // this.tsf.showController(stuff)
 
     const light = createLight();
 
@@ -48,7 +56,7 @@ export default class World {
     const controls = createControls(this.camera,this.renderer.domElement)
 
     this.loop.updatables.push(controls)
-    this.scene.add(cube,gridHelper, light,this.tsf.controller_3d!);
+    this.scene.add(cube,gridHelper, light);
 
     console.log('scene',this.scene);
     
@@ -60,7 +68,33 @@ export default class World {
   }
 
   onPointerMove(evt:MouseEvent) {
-    this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
+    // this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
+  }
+
+  onPointerDown(event:MouseEvent) {    
+      // 移动到箭头上高亮
+      this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+      this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+      this.raycaster.setFromCamera( this.pointer, this.camera );
+      const intersects= this.raycaster.intersectObjects(this._meshs, false)
+      if (intersects.length > 0) {
+        const object = intersects[0].object
+        const stuff = {
+          m_Object3D: object,
+          setVisible: () => {},
+          destory: () => {}
+        }
+        if (!this.tsf) {
+          this.tsf = new Transformer3D(stuff, this.camera)
+          this.tsf.showController(stuff)
+          this.scene.add(this.tsf.controller_3d!)
+          console.log('controller',this.tsf);
+        }
+      } else {
+        this.tsf && this.scene.remove(this.tsf.controller_3d!)
+        this.tsf = undefined
+      }
+      console.log('intersect',intersects);
   }
 
   render() {
