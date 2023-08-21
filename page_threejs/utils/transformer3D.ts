@@ -2,9 +2,14 @@
 import GlobalApi from "../js/GlobalApi";
 import * as THREE from 'three'
 
+interface IStaff extends THREE.Object3D{
+    setVisible(),
+    destory()
+}
 
 export default class Transformer3D {
-
+    camera!: THREE.PerspectiveCamera
+    object_3D: IStaff;
     // 空父对象
     controllerCenter: THREE.Object3D | null = null;
 
@@ -62,6 +67,11 @@ export default class Transformer3D {
     lastMouseZ: number = -999999;
     lastRadian: number = 0;
 
+
+    constructor(object_3D:IStaff, camera: THREE.PerspectiveCamera) {
+        this.object_3D = object_3D 
+        this.camera = camera
+    }
 
     /**
      * @api showController
@@ -861,11 +871,11 @@ export default class Transformer3D {
 
         // 根据摄像机与世界坐标原点距离改变大小
         // let proportion =
-        //     GlobalApi.mCameraClass.m_Camera3D.position.distanceTo(new THREE.Vector3(0, 0, 0)) / 1000;
+        //     this.camera.position.distanceTo(new THREE.Vector3(0, 0, 0)) / 1000;
 
         // 根据摄像机与物体坐标原点距离改变大小
         let proportion =
-            GlobalApi.mCameraClass.m_Camera3D.position.distanceTo(obj.m_Object3D.position) / 1000;
+            this.camera.position.distanceTo(obj.m_Object3D.position) / 1000;
         this.controllerCenter.scale.x *= proportion;
         this.controllerCenter.scale.y *= proportion;
         this.controllerCenter.scale.z *= proportion;
@@ -883,20 +893,20 @@ export default class Transformer3D {
      */
     updateTransformArrow(obj: any) {
         // 根据摄像机与模型角度修改箭头方向
-        (this.transformArrowX as THREE.Mesh).rotation.x = -Math.atan2((GlobalApi.mCameraClass.m_Camera3D!.position.y - (this.controllerCenter as THREE.Object3D).position.y), (GlobalApi.mCameraClass.m_Camera3D!.position.z - (this.controllerCenter as THREE.Object3D).position.z)) + Math.PI / 2;
-        (this.transformArrowY as THREE.Mesh).rotation.y = Math.atan2((GlobalApi.mCameraClass.m_Camera3D!.position.x - (this.controllerCenter as THREE.Object3D).position.x), (GlobalApi.mCameraClass.m_Camera3D!.position.z - (this.controllerCenter as THREE.Object3D).position.z)) + Math.PI / 2;
-        (this.transformArrowZ as THREE.Mesh).rotation.z = Math.atan2((GlobalApi.mCameraClass.m_Camera3D!.position.y - (this.controllerCenter as THREE.Object3D).position.y), (GlobalApi.mCameraClass.m_Camera3D!.position.x - (this.controllerCenter as THREE.Object3D).position.x));
+        (this.transformArrowX as THREE.Mesh).rotation.x = -Math.atan2((this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y), (this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z)) + Math.PI / 2;
+        (this.transformArrowY as THREE.Mesh).rotation.y = Math.atan2((this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x), (this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z)) + Math.PI / 2;
+        (this.transformArrowZ as THREE.Mesh).rotation.z = Math.atan2((this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y), (this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x));
 
 
         // x箭头反向
-        if (GlobalApi.mCameraClass.m_Camera3D.position.x < obj.m_Object3D.position.x) {
+        if (this.camera.position.x < obj.m_Object3D.position.x) {
             (this.transformArrowX as THREE.Mesh).rotation.z = Math.PI;
         } else {
             (this.transformArrowX as THREE.Mesh).rotation.z = 0;
         }
 
         // y箭头反向
-        if (GlobalApi.mCameraClass.m_Camera3D.position.y < obj.m_Object3D.position.y) {
+        if (this.camera.position.y < obj.m_Object3D.position.y) {
             (this.transformArrowY as THREE.Mesh).rotation.x = Math.PI;
             (this.transformArrowY as THREE.Mesh).rotation.y = Math.PI - (this.transformArrowY as THREE.Mesh).rotation.y;
 
@@ -908,7 +918,7 @@ export default class Transformer3D {
         }
 
         // z箭头反向
-        if (GlobalApi.mCameraClass.m_Camera3D.position.z < obj.m_Object3D.position.z) {
+        if (this.camera.position.z < obj.m_Object3D.position.z) {
             (this.transformArrowZ as THREE.Mesh).rotation.x = Math.PI;
             (this.transformArrowZ as THREE.Mesh).rotation.z = Math.PI - (this.transformArrowZ as THREE.Mesh).rotation.z;
 
@@ -938,13 +948,13 @@ export default class Transformer3D {
     */
     updateRotateArrow(obj: any) {
 
-        let cameraRadianX = Math.atan2((GlobalApi.mCameraClass.m_Camera3D!.position.z - (this.controllerCenter as THREE.Object3D).position.z), (GlobalApi.mCameraClass.m_Camera3D!.position.y - (this.controllerCenter as THREE.Object3D).position.y));
+        let cameraRadianX = Math.atan2((this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z), (this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y));
         (this.rotateArrowX as THREE.Object3D).rotation.x = Math.floor(cameraRadianX / (Math.PI / 2)) * (Math.PI / 2);
 
-        let cameraRadianY = Math.atan2((GlobalApi.mCameraClass.m_Camera3D!.position.x - (this.controllerCenter as THREE.Object3D).position.x), (GlobalApi.mCameraClass.m_Camera3D!.position.z - (this.controllerCenter as THREE.Object3D).position.z));
+        let cameraRadianY = Math.atan2((this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x), (this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z));
         (this.rotateArrowY as THREE.Object3D).rotation.y = Math.floor(cameraRadianY / (Math.PI / 2)) * (Math.PI / 2);
 
-        let cameraRadianZ = Math.atan2((GlobalApi.mCameraClass.m_Camera3D!.position.y - (this.controllerCenter as THREE.Object3D).position.y), (GlobalApi.mCameraClass.m_Camera3D!.position.x - (this.controllerCenter as THREE.Object3D).position.x));
+        let cameraRadianZ = Math.atan2((this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y), (this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x));
         (this.rotateArrowZ as THREE.Object3D).rotation.z = Math.floor(cameraRadianZ / (Math.PI / 2)) * (Math.PI / 2);
 
         if (this.m_iSelected == 4) {
