@@ -846,11 +846,6 @@ export default class Transformer3D {
 
     }
 
-    // TODO 显示外发光
-    showOutLine(obj: any) {
-    }
-    /*--------------------------------------------------------------------------------*/
-
     /**
      * @api updateController
      * @apiGroup TransformController3D
