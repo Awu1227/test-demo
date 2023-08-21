@@ -9,8 +9,10 @@ import { createControls } from './systems/controls.js';
 import { Resizer } from "./systems/Resizer";
 import Loop from './systems/Loop';
 import { createGridHelper } from "./components/gridHelper";
+import Transformer3D from '../../utils/transformer3D';
 
 export default class World {
+  tsf: Transformer3D
   private camera: PerspectiveCamera;
   private scene: Scene;
   private renderer: WebGLRenderer;
@@ -21,11 +23,22 @@ export default class World {
     this.scene = createScene();
     this.renderer = createRenderer();
     this.loop = new Loop(this.camera,this.scene,this.renderer)
+    
     container.append(this.renderer.domElement);
+
+    document.addEventListener('pointermove',(evt) => this.onPointerMove(evt))
 
     const cube = createCube();
 
-
+    const stuff = {
+      m_Object3D: cube,
+      setVisible: () => {},
+      destory: () => {}
+    }
+    
+    this.tsf = new Transformer3D(stuff, this.camera)
+    console.log('controller',this.tsf);
+    this.tsf.showController(stuff)
 
     const light = createLight();
 
@@ -34,7 +47,7 @@ export default class World {
     const controls = createControls(this.camera,this.renderer.domElement)
 
     this.loop.updatables.push(cube,controls)
-    this.scene.add(cube,gridHelper, light);
+    this.scene.add(cube,gridHelper, light,this.tsf.controller_3d!);
 
     console.log('scene',this.scene);
     
@@ -43,6 +56,10 @@ export default class World {
     resizer.onResize = () => {
       this.render();
     };
+  }
+
+  onPointerMove(evt:MouseEvent) {
+    this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
   }
 
   render() {

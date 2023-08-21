@@ -3,18 +3,24 @@ import * as THREE from 'three'
 
 /**@description 传入的Staff */
 interface IStaff{
-    object_3d: THREE.Object3D
+    m_Object3D: THREE.Object3D
     setVisible(),
     destory()
 }
 
 export default class Transformer3D {
+    isShow = false
     camera!: THREE.PerspectiveCamera
     raycaster = new THREE.Raycaster
+
+    pointer = new THREE.Vector2()
     staff: IStaff;
     // 空父对象
     controller_3d: THREE.Object3D | null = null;
 
+
+    /**@description 高亮的箭头 */
+    highLightArrow?: any
     // 平移
     transform: THREE.Object3D | null = null;
     // 平移箭头
@@ -60,6 +66,9 @@ export default class Transformer3D {
     rotateRingBelowZ: THREE.Mesh | null = null;
     rotateRingLinesZ: THREE.LineSegments | null = null;
 
+    // 存放所有的箭头
+
+    arrowArray:any[] = []
     // 当前选择对象
     m_iSelected: number = -1;   // 1:X 2:Y 3:Z  4:X 5:Y 6:Z
 
@@ -88,9 +97,23 @@ export default class Transformer3D {
         this.controller_3d = new THREE.Object3D();
         this.showTransformArrow(obj);
         this.showRotateArrow(obj);
+
+        this.addArrowToArr()
+        
         // this.showRotateRing(obj);
 
         this.updateController(obj);
+        this.isShow = true
+    }
+    addArrowToArr() {
+        this.arrowArray.push(
+            this.transformArrowX,
+            this.transformArrowY,
+            this.transformArrowZ,
+            this.rotateArrowX,
+            this.rotateArrowY,
+            this.rotateArrowZ,
+        )
     }
 
     /**
@@ -149,7 +172,9 @@ export default class Transformer3D {
             depthWrite: arrowDepthWrite,
             depthTest: arrowDepthTest,
         }));
-
+        this.transformArrowX.userData={
+            prevColor: 0xF8AB04
+        }
         // X 箭头辅助平面
         let arrowXHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -201,7 +226,9 @@ export default class Transformer3D {
             depthWrite: arrowDepthWrite,
             depthTest: arrowDepthTest,
         }));
-
+        this.transformArrowY.userData={
+            prevColor: 0x48D9A7
+        }
         // Y 箭头辅助平面
         let arrowYHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -249,7 +276,9 @@ export default class Transformer3D {
             depthWrite: arrowDepthWrite,
             depthTest: arrowDepthTest,
         }));
-
+        this.transformArrowZ.userData={
+            prevColor: 0x1890FF
+        }
         // Z 箭头辅助平面
         let arrowZHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -858,7 +887,7 @@ export default class Transformer3D {
         (this.controller_3d as THREE.Object3D).position.y = obj.m_Object3D.position.y;
         (this.controller_3d as THREE.Object3D).position.z = obj.m_Object3D.position.z;
 
-        obj.OnUpdate3D();
+        // obj.OnUpdate3D();
 
 
         // 根据摄像机坐标调整操作箭头大小
@@ -1103,8 +1132,34 @@ export default class Transformer3D {
      * @apiDescription 鼠标移动时进行判断
      */
     // 在对obj进行移动判定时先判定Controller,返回为true即为选中
-    OnMouseMove(mouseX: number, mouseY: number, obj: any) {
+    OnMouseMove(event: MouseEvent, obj: any) {
+        if (this.arrowArray.length) {
 
+            // 移动到箭头上高亮
+            this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            
+            this.raycaster.setFromCamera( this.pointer, this.camera );
+            console.log('arrowArray',this.arrowArray);
+            
+            const intersects = this.raycaster.intersectObjects(this.arrowArray, false)
+            console.log('intersect',intersects);
+            if (intersects.length > 0) {
+                const object = intersects[0].object as any
+                this.highLightArrow = object
+                // 将箭头高亮
+                const prevColor = new THREE.Color(this.highLightArrow.userData.prevColor)
+                prevColor.multiply(prevColor)
+                object.material.color.set(prevColor)
+            } else {
+                if (this.highLightArrow) {
+                    // 恢复箭头之前的颜色
+                    this.highLightArrow.material.color.set(this.highLightArrow.userData.prevColor)
+                }
+            }
+        }
+        
+        console.log('this.pointer', this.pointer);
         if (this.m_iSelected < 0 || this.controller_3d == null || obj.m_Locking == true) return false;
 
         switch (this.m_iSelected) {
