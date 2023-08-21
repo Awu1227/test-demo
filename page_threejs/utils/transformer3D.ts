@@ -1,7 +1,9 @@
 
 import * as THREE from 'three'
 
-interface IStaff extends THREE.Object3D{
+/**@description 传入的Staff */
+interface IStaff{
+    object_3d: THREE.Object3D
     setVisible(),
     destory()
 }
@@ -9,7 +11,7 @@ interface IStaff extends THREE.Object3D{
 export default class Transformer3D {
     camera!: THREE.PerspectiveCamera
     raycaster = new THREE.Raycaster
-    object_3D: IStaff;
+    staff: IStaff;
     // 空父对象
     controllerCenter: THREE.Object3D | null = null;
 
@@ -68,8 +70,8 @@ export default class Transformer3D {
     lastRadian: number = 0;
 
 
-    constructor(object_3D:IStaff, camera: THREE.PerspectiveCamera) {
-        this.object_3D = object_3D 
+    constructor(staff:IStaff, camera: THREE.PerspectiveCamera) {
+        this.staff = staff 
         this.camera = camera
     }
 
