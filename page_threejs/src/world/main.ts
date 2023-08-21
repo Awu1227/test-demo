@@ -99,8 +99,12 @@ export default class World {
           console.log('controller',this.tsf);
         }
       } else {
-        this.tsf && this.scene.remove(this.tsf.controller_3d!)
-        this.tsf = undefined
+        if (!this.tsf?.OnMouseDown(event)) {
+          this.tsf && this.scene.remove(this.tsf.controller_3d!)
+          this.tsf = undefined
+        }
+        
+
       }
       console.log('intersect',intersects);
   }

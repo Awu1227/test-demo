@@ -187,6 +187,7 @@ export default class Transformer3D {
         this.transformArrowX.userData={
             prevColor: 0xF8AB04
         }
+        this.transformArrowX.name="x箭头"
         // X 箭头辅助平面
         let arrowXHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -241,6 +242,7 @@ export default class Transformer3D {
         this.transformArrowY.userData={
             prevColor: 0x48D9A7
         }
+        this.transformArrowY.name="y箭头"
         // Y 箭头辅助平面
         let arrowYHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -291,6 +293,7 @@ export default class Transformer3D {
         this.transformArrowZ.userData={
             prevColor: 0x1890FF
         }
+        this.transformArrowZ.name="z箭头"
         // Z 箭头辅助平面
         let arrowZHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -1075,8 +1078,19 @@ export default class Transformer3D {
      * @apiDescription 鼠标按下时进行判断
      */
     // 在对obj进行mousedown判定时先判定Controller,返回为true即为选中
-    OnMouseDown(mouseX: number, mouseY: number, obj: any) {  //mouseX:X     mouseY:Z
-
+    OnMouseDown(event: MouseEvent) {  //mouseX:X     mouseY:Z
+        console.log('downevt',event);
+        this.pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        this.pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        this.raycaster.setFromCamera( this.pointer, this.camera );
+        const intersects= this.raycaster.intersectObjects(this.arrowArray, false)
+        if (intersects.length > 0) {
+            const object = intersects[0].object
+            console.log('箭头mesh',object);
+            
+        } else {
+            return false
+        }
         if (this.controller_3d == null) return false;
 
         let Intersection: any;
@@ -1087,7 +1101,7 @@ export default class Transformer3D {
             this.m_iSelected = 1;
             this.lastMouseX = Intersection[0].point.x;
             (this.rotateArrowCenter as THREE.Object3D).visible = false;
-            this.updateController(obj);
+            this.updateController(this.staff);
             return true;
         }
 
@@ -1097,7 +1111,7 @@ export default class Transformer3D {
             this.m_iSelected = 2;
             this.lastMouseY = Intersection[0].point.y;
             (this.rotateArrowCenter as THREE.Object3D).visible = false;
-            this.updateController(obj);
+            this.updateController(this.staff);
             return true;
         }
 
@@ -1107,7 +1121,7 @@ export default class Transformer3D {
             this.m_iSelected = 3;
             this.lastMouseZ = Intersection[0].point.z;
             (this.rotateArrowCenter as THREE.Object3D).visible = false;
-            this.updateController(obj);
+            this.updateController(this.staff);
             return true;
         }
 
@@ -1115,11 +1129,11 @@ export default class Transformer3D {
         Intersection = this.raycaster.intersectObjects((this.rotateArrowX as THREE.Object3D).children);
         if (Intersection.length > 0) {
             this.m_iSelected = 4;
-            this.lastRadian = -Math.atan2(Intersection[0].point.y - obj.m_Object3D.position.y, Intersection[0].point.z - obj.m_Object3D.position.z);
-            this.showRotateArrow(obj);
-            this.showRotateRing(obj);
-            this.showRotateHelp(obj);
-            this.updateController(obj);
+            this.lastRadian = -Math.atan2(Intersection[0].point.y - this.staff.m_Object3D.position.y, Intersection[0].point.z - this.staff.m_Object3D.position.z);
+            this.showRotateArrow(this.staff);
+            this.showRotateRing(this.staff);
+            this.showRotateHelp(this.staff);
+            this.updateController(this.staff);
             (this.transform as THREE.Object3D).visible = false;
             this.rotateArrowY!.visible = false;
             this.rotateArrowZ!.visible = false;
@@ -1129,11 +1143,11 @@ export default class Transformer3D {
         Intersection = this.raycaster.intersectObjects((this.rotateArrowY as THREE.Object3D).children);
         if (Intersection.length > 0) {
             this.m_iSelected = 5;
-            this.lastRadian = -Math.atan2(Intersection[0].point.z - obj.m_Object3D.position.z, Intersection[0].point.x - obj.m_Object3D.position.x);
-            this.showRotateArrow(obj);
-            this.showRotateRing(obj);
-            this.showRotateHelp(obj);
-            this.updateController(obj);
+            this.lastRadian = -Math.atan2(Intersection[0].point.z - this.staff.m_Object3D.position.z, Intersection[0].point.x - this.staff.m_Object3D.position.x);
+            this.showRotateArrow(this.staff);
+            this.showRotateRing(this.staff);
+            this.showRotateHelp(this.staff);
+            this.updateController(this.staff);
             (this.transform as THREE.Object3D).visible = false;
             this.rotateArrowX!.visible = false;
             this.rotateArrowZ!.visible = false;
@@ -1144,11 +1158,11 @@ export default class Transformer3D {
         Intersection = this.raycaster.intersectObjects((this.rotateArrowZ as THREE.Object3D).children);
         if (Intersection.length > 0) {
             this.m_iSelected = 6;
-            this.lastRadian = -Math.atan2(Intersection[0].point.x - obj.m_Object3D.position.x, Intersection[0].point.y - obj.m_Object3D.position.y);
-            this.showRotateArrow(obj);
-            this.showRotateRing(obj);
-            this.showRotateHelp(obj);
-            this.updateController(obj);
+            this.lastRadian = -Math.atan2(Intersection[0].point.x - this.staff.m_Object3D.position.x, Intersection[0].point.y - this.staff.m_Object3D.position.y);
+            this.showRotateArrow(this.staff);
+            this.showRotateRing(this.staff);
+            this.showRotateHelp(this.staff);
+            this.updateController(this.staff);
             (this.transform as THREE.Object3D).visible = false;
             this.rotateArrowX!.visible = false;
             this.rotateArrowY!.visible = false;
@@ -1157,7 +1171,7 @@ export default class Transformer3D {
 
         // 未点击到
         this.m_iSelected = -1;
-        this.updateController(obj);
+        this.updateController(this.staff);
         return false;
     }
 
