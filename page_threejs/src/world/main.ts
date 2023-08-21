@@ -1,6 +1,7 @@
 import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { createCamera } from "./components/camera";
 import { createCube } from "./components/cube";
+import { createTorusKnot } from './components/torusKnot';
 import { createLight } from "./components/light";
 import { createScene } from "./components/scene";
 
@@ -28,7 +29,7 @@ export default class World {
 
     document.addEventListener('pointermove',(evt) => this.onPointerMove(evt))
 
-    const cube = createCube();
+    const cube = createTorusKnot();
 
     const stuff = {
       m_Object3D: cube,
@@ -46,7 +47,7 @@ export default class World {
 
     const controls = createControls(this.camera,this.renderer.domElement)
 
-    this.loop.updatables.push(cube,controls)
+    this.loop.updatables.push(controls)
     this.scene.add(cube,gridHelper, light,this.tsf.controller_3d!);
 
     console.log('scene',this.scene);

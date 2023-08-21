@@ -8,6 +8,16 @@ interface IStaff{
     destory()
 }
 
+/**@description 选择的箭头 */
+enum ESelectArrow {
+    ARROWX = 'x',
+    ARROWY = 'y',
+    ARROWZ = 'z',
+    RINGX = 'rx',
+    RINGY = 'ry',
+    RINGZ = 'rz',
+}
+
 export default class Transformer3D {
     isShow = false
     camera!: THREE.PerspectiveCamera
@@ -193,7 +203,7 @@ export default class Transformer3D {
             new THREE.MeshBasicMaterial({
                 color: 'red',
                 transparent: true,
-                opacity: 0.2,
+                opacity: 0,
                 depthWrite: false,
                 side: THREE.DoubleSide,
             }),
