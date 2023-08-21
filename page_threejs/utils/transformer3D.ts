@@ -13,7 +13,7 @@ export default class Transformer3D {
     raycaster = new THREE.Raycaster
     staff: IStaff;
     // 空父对象
-    controllerCenter: THREE.Object3D | null = null;
+    controller_3d: THREE.Object3D | null = null;
 
     // 平移
     transform: THREE.Object3D | null = null;
@@ -85,7 +85,7 @@ export default class Transformer3D {
 
         if (obj == null) return;
         if (obj.m_Locking == true) return;
-        this.controllerCenter = new THREE.Object3D();
+        this.controller_3d = new THREE.Object3D();
         this.showTransformArrow(obj);
         this.showRotateArrow(obj);
         // this.showRotateRing(obj);
@@ -276,7 +276,7 @@ export default class Transformer3D {
         (this.transform as THREE.Object3D).add(this.transformArrowX, this.transformArrowY, this.transformArrowZ);
         (this.transform as THREE.Object3D).add(this.transformArrowXHelp, this.transformArrowYHelp, this.transformArrowZHelp);
         // 添加入场景
-        (this.controllerCenter as THREE.Object3D).add((this.transform as THREE.Object3D));
+        (this.controller_3d as THREE.Object3D).add((this.transform as THREE.Object3D));
     }
 
     /**
@@ -315,7 +315,7 @@ export default class Transformer3D {
         this.showRotateY(obj, arrowDis, rotateDis, rotateWidth, RidianLeft, RidianRight, RidianWidth, arrowWidth);
         this.showRotateZ(obj, arrowDis, rotateDis, rotateWidth, RidianLeft, RidianRight, RidianWidth, arrowWidth);
 
-        (this.controllerCenter as THREE.Object3D).add(this.rotateArrowCenter as THREE.Object3D);
+        (this.controller_3d as THREE.Object3D).add(this.rotateArrowCenter as THREE.Object3D);
     }
 
     showRotateX(obj: any, arrowDis: number, rotateDis: number, rotateWidth: number, RidianLeft: number, RidianRight: number, RidianWidth: number, arrowWidth: number) {
@@ -607,7 +607,7 @@ export default class Transformer3D {
                 break;
         }
 
-        this.controllerCenter!.add(this.rotateRingCenter!);
+        this.controller_3d!.add(this.rotateRingCenter!);
     }
     /**
      * @api showRotateRingX
@@ -852,19 +852,19 @@ export default class Transformer3D {
      * @apiDescription 总更新
      */
     updateController(obj: any) {
-        if (this.controllerCenter == null || obj == null) return;
+        if (this.controller_3d == null || obj == null) return;
 
-        (this.controllerCenter as THREE.Object3D).position.x = obj.m_Object3D.position.x;
-        (this.controllerCenter as THREE.Object3D).position.y = obj.m_Object3D.position.y;
-        (this.controllerCenter as THREE.Object3D).position.z = obj.m_Object3D.position.z;
+        (this.controller_3d as THREE.Object3D).position.x = obj.m_Object3D.position.x;
+        (this.controller_3d as THREE.Object3D).position.y = obj.m_Object3D.position.y;
+        (this.controller_3d as THREE.Object3D).position.z = obj.m_Object3D.position.z;
 
         obj.OnUpdate3D();
 
 
         // 根据摄像机坐标调整操作箭头大小
-        this.controllerCenter.scale.x = 0.5;
-        this.controllerCenter.scale.y = 0.5;
-        this.controllerCenter.scale.z = 0.5;
+        this.controller_3d.scale.x = 0.5;
+        this.controller_3d.scale.y = 0.5;
+        this.controller_3d.scale.z = 0.5;
 
         // 根据摄像机与世界坐标原点距离改变大小
         // let proportion =
@@ -873,15 +873,15 @@ export default class Transformer3D {
         // 根据摄像机与物体坐标原点距离改变大小
         let proportion =
             this.camera.position.distanceTo(obj.m_Object3D.position) / 1000;
-        this.controllerCenter.scale.x *= proportion;
-        this.controllerCenter.scale.y *= proportion;
-        this.controllerCenter.scale.z *= proportion;
+        this.controller_3d.scale.x *= proportion;
+        this.controller_3d.scale.y *= proportion;
+        this.controller_3d.scale.z *= proportion;
         this.updateTransformArrow(obj);
         this.updateRotateArrow(obj);
         this.updateRotateRing(obj);
 
         // TODO:
-        // GlobalApi.scene3D.add(this.controllerCenter);
+        // GlobalApi.scene3D.add(this.controller_3d);
     }
 
     /**
@@ -891,9 +891,9 @@ export default class Transformer3D {
      */
     updateTransformArrow(obj: any) {
         // 根据摄像机与模型角度修改箭头方向
-        (this.transformArrowX as THREE.Mesh).rotation.x = -Math.atan2((this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y), (this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z)) + Math.PI / 2;
-        (this.transformArrowY as THREE.Mesh).rotation.y = Math.atan2((this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x), (this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z)) + Math.PI / 2;
-        (this.transformArrowZ as THREE.Mesh).rotation.z = Math.atan2((this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y), (this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x));
+        (this.transformArrowX as THREE.Mesh).rotation.x = -Math.atan2((this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y), (this.camera.position.z - (this.controller_3d as THREE.Object3D).position.z)) + Math.PI / 2;
+        (this.transformArrowY as THREE.Mesh).rotation.y = Math.atan2((this.camera.position.x - (this.controller_3d as THREE.Object3D).position.x), (this.camera.position.z - (this.controller_3d as THREE.Object3D).position.z)) + Math.PI / 2;
+        (this.transformArrowZ as THREE.Mesh).rotation.z = Math.atan2((this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y), (this.camera.position.x - (this.controller_3d as THREE.Object3D).position.x));
 
 
         // x箭头反向
@@ -946,13 +946,13 @@ export default class Transformer3D {
     */
     updateRotateArrow(obj: any) {
 
-        let cameraRadianX = Math.atan2((this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z), (this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y));
+        let cameraRadianX = Math.atan2((this.camera.position.z - (this.controller_3d as THREE.Object3D).position.z), (this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y));
         (this.rotateArrowX as THREE.Object3D).rotation.x = Math.floor(cameraRadianX / (Math.PI / 2)) * (Math.PI / 2);
 
-        let cameraRadianY = Math.atan2((this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x), (this.camera.position.z - (this.controllerCenter as THREE.Object3D).position.z));
+        let cameraRadianY = Math.atan2((this.camera.position.x - (this.controller_3d as THREE.Object3D).position.x), (this.camera.position.z - (this.controller_3d as THREE.Object3D).position.z));
         (this.rotateArrowY as THREE.Object3D).rotation.y = Math.floor(cameraRadianY / (Math.PI / 2)) * (Math.PI / 2);
 
-        let cameraRadianZ = Math.atan2((this.camera.position.y - (this.controllerCenter as THREE.Object3D).position.y), (this.camera.position.x - (this.controllerCenter as THREE.Object3D).position.x));
+        let cameraRadianZ = Math.atan2((this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y), (this.camera.position.x - (this.controller_3d as THREE.Object3D).position.x));
         (this.rotateArrowZ as THREE.Object3D).rotation.z = Math.floor(cameraRadianZ / (Math.PI / 2)) * (Math.PI / 2);
 
         if (this.m_iSelected == 4) {
@@ -983,7 +983,7 @@ export default class Transformer3D {
     //  * @apiDescription 总清空
     //  */
     clearController() {
-        let stack = [this.controllerCenter]; // 初始化栈，并将根节点入栈
+        let stack = [this.controller_3d]; // 初始化栈，并将根节点入栈
         while (stack.length > 0) {
             let node = stack.pop(); // 弹出栈顶节点
             if (node == null || 'children' in node == false) continue;
@@ -1013,7 +1013,7 @@ export default class Transformer3D {
     // 在对obj进行mousedown判定时先判定Controller,返回为true即为选中
     OnMouseDown(mouseX: number, mouseY: number, obj: any) {  //mouseX:X     mouseY:Z
 
-        if (this.controllerCenter == null) return false;
+        if (this.controller_3d == null) return false;
 
         let Intersection: any;
 
@@ -1105,7 +1105,7 @@ export default class Transformer3D {
     // 在对obj进行移动判定时先判定Controller,返回为true即为选中
     OnMouseMove(mouseX: number, mouseY: number, obj: any) {
 
-        if (this.m_iSelected < 0 || this.controllerCenter == null || obj.m_Locking == true) return false;
+        if (this.m_iSelected < 0 || this.controller_3d == null || obj.m_Locking == true) return false;
 
         switch (this.m_iSelected) {
             case 1: {
@@ -1306,12 +1306,12 @@ export default class Transformer3D {
      * @apiDescription 鼠标抬起时进行判断
      */
     OnMouseUp(obj: any) {
-        // if (this.controllerCenter == null) return false;
+        // if (this.controller_3d == null) return false;
         // this.m_iSelected = -1;
         // this.showRotateArrow(obj);
         // this.updateController(obj);
 
-        if (this.controllerCenter == null) return false;
+        if (this.controller_3d == null) return false;
 
         if (this.m_iSelected >= 0) {
 
