@@ -88,7 +88,9 @@ export default class Transformer3D {
   lastMouseZ: number = -999999
   lastRadian: number = 0
 
-  radius = 0
+  radiusX = 0
+  radiusY = 0
+  radiusZ = 0
 
   constructor(staff: IStaff, camera: THREE.PerspectiveCamera) {
     this.staff = staff
@@ -1383,18 +1385,17 @@ export default class Transformer3D {
 
           this.lastRadian = mouseRadian
 
-          //距离中点过近时不操作
-          if (new THREE.Vector3(Intersection[0].point.x, 0, Intersection[0].point.z).distanceTo(obj.m_Object3D.position) >= 2) {
-            this.radius = (this.radius * Math.PI) / 180
+          this.radiusX = (this.radiusX * Math.PI) / 180
 
-            this.radius += diffRadian
+          this.radiusX += diffRadian
 
-            //将结果限制在0-2PI
-            this.radius = (this.radius + Math.PI * 2) % (Math.PI * 2)
+          //将结果限制在0-2PI
+          this.radiusX = (this.radiusX + Math.PI * 2) % (Math.PI * 2)
 
-            this.radius = (this.radius * 180) / Math.PI
-            obj.m_Object3D.rotation.x = THREE.MathUtils.degToRad(this.radius)
-          }
+          this.radiusX = (this.radiusX * 180) / Math.PI
+          console.log('x-radiusX', this.radiusX)
+
+          obj.m_Object3D.rotation.x = THREE.MathUtils.degToRad(this.radiusX)
         }
         break
       }
@@ -1425,17 +1426,17 @@ export default class Transformer3D {
 
           this.lastRadian = mouseRadian
 
-          //距离中点过近时不操作
-          if (new THREE.Vector3(Intersection[0].point.x, 0, Intersection[0].point.z).distanceTo(obj.m_Object3D.position) >= 2) {
-            obj.mJsonParam.m_fRotateY = (obj.mJsonParam.m_fRotateY * Math.PI) / 180
+          this.radiusY = (this.radiusY * Math.PI) / 180
 
-            obj.mJsonParam.m_fRotateY += diffRadian
+          this.radiusY += diffRadian
 
-            //将结果限制在0-2PI
-            obj.mJsonParam.m_fRotateY = (obj.mJsonParam.m_fRotateY + Math.PI * 2) % (Math.PI * 2)
+          //将结果限制在0-2PI
+          this.radiusY = (this.radiusY + Math.PI * 2) % (Math.PI * 2)
 
-            obj.mJsonParam.m_fRotateY = (obj.mJsonParam.m_fRotateY * 180) / Math.PI
-          }
+          this.radiusY = (this.radiusY * 180) / Math.PI
+          console.log('x-radiusY', this.radiusY)
+
+          obj.m_Object3D.rotation.y = THREE.MathUtils.degToRad(this.radiusY)
         }
         break
       }
@@ -1466,17 +1467,17 @@ export default class Transformer3D {
 
           this.lastRadian = mouseRadian
 
-          //距离中点过近时不操作
-          if (new THREE.Vector3(Intersection[0].point.x, 0, Intersection[0].point.z).distanceTo(obj.m_Object3D.position) >= 2) {
-            obj.mJsonParam.m_fRotate = (obj.mJsonParam.m_fRotate * Math.PI) / 180
+          this.radiusZ = (this.radiusZ * Math.PI) / 180
 
-            obj.mJsonParam.m_fRotate += diffRadian
+          this.radiusZ += diffRadian
 
-            //将结果限制在0-2PI
-            obj.mJsonParam.m_fRotate = (obj.mJsonParam.m_fRotate + Math.PI * 2) % (Math.PI * 2)
+          //将结果限制在0-2PI
+          this.radiusZ = (this.radiusZ + Math.PI * 2) % (Math.PI * 2)
 
-            obj.mJsonParam.m_fRotate = (obj.mJsonParam.m_fRotate * 180) / Math.PI
-          }
+          this.radiusZ = (this.radiusZ * 180) / Math.PI
+          console.log('x-radiusZ', this.radiusZ)
+
+          obj.m_Object3D.rotation.z = THREE.MathUtils.degToRad(this.radiusZ)
         }
         break
       }
