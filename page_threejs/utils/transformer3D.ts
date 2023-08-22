@@ -229,7 +229,7 @@ export default class Transformer3D {
       new THREE.MeshBasicMaterial({
         color: 'red',
         transparent: true,
-        opacity: 0.1,
+        opacity: 0,
         depthWrite: false,
         side: THREE.DoubleSide
       })
@@ -1325,7 +1325,7 @@ export default class Transformer3D {
       }
     }
 
-    if (this.m_iSelected < 0 || this.controller_3d == null || obj.m_Locking == true) return false
+    if (this.m_iSelected < 0 || this.controller_3d == null || obj.m_Locking == true || !this.isDragging) return false
     console.log('this.pointer', this.m_iSelected, this.pointer)
 
     switch (this.m_iSelected) {

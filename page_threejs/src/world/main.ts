@@ -70,7 +70,7 @@ export default class World {
 
   onPointerMove(evt: MouseEvent) {
     // this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
-    if (this.tsf?.isDragging) {
+    if (this.tsf?.isShow) {
       this.tsf.OnMouseMove(evt, this.tsf.staff)
       this.controls.enableRotate = false
     } else {
@@ -112,15 +112,6 @@ export default class World {
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
     this.raycaster.setFromCamera(this.pointer, this.camera)
-    // const intersects = this.raycaster.intersectObjects(this.tsf.arrowArray, false)
-    // if (intersects.length > 0) {
-    //   if (this.tsf.isDragging) {
-    //     console.log('dragup')
-    //     this.tsf.isDragging = false
-    //     this.tsf && this.scene.remove(this.tsf.controller_3d!)
-    //     this.tsf = undefined
-    //   }
-    // }
   }
   render() {
     this.renderer.render(this.scene, this.camera)
