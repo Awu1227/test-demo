@@ -3,7 +3,7 @@ import Transformer3D from '../transformer3D'
 import { ESelectArrow } from '../type'
 
 /**@description 鼠标移动事件 */
-export default function onMouseMove(event: MouseEvent, obj: any, tfs: Transformer3D) {
+export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D) {
   if (tfs.arrowArray.length) {
     // 移动到箭头上高亮
     tfs.pointer.x = (event.clientX / window.innerWidth) * 2 - 1

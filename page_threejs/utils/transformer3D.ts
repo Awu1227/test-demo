@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { ESelectArrow } from './type'
-import onMouseMove from './EventHandlers'
+import { event_MouseMove } from './EventHandlers'
 /**@description 传入的Staff */
 interface IStaff {
   m_Object3D: THREE.Object3D
@@ -1252,7 +1252,7 @@ export default class Transformer3D {
    */
   // 在对obj进行移动判定时先判定Controller,返回为true即为选中
   OnMouseMove(event: MouseEvent, obj: any) {
-    onMouseMove(event, obj, this)
+    event_MouseMove(event, obj, this)
   }
 
   /**
