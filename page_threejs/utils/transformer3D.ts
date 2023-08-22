@@ -77,7 +77,6 @@ export default class Transformer3D {
   rotateRingLinesZ: THREE.LineSegments | null = null
 
   // 存放所有的箭头
-
   arrowArray: any[] = []
   // 当前选择对象
   m_iSelected: number = -1 // 1:X 2:Y 3:Z  4:X 5:Y 6:Z
@@ -1214,24 +1213,25 @@ export default class Transformer3D {
       console.log('箭头mesh', object.name)
       this.selectArrow = ESelectArrow[object.name]
       console.log('选择的箭头', this.selectArrow)
+
       switch (Number(object.name)) {
         case ESelectArrow.ARROWX:
           this.m_iSelected = 1
           this.lastMouseX = intersects[0].point.x
-          ;(this.rotateArrowCenter as THREE.Object3D).visible = false
           this.updateController(this.staff)
+          this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.ARROWY:
           this.m_iSelected = 2
           this.lastMouseY = intersects[0].point.y
-          ;(this.rotateArrowCenter as THREE.Object3D).visible = false
           this.updateController(this.staff)
+          this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.ARROWZ:
           this.m_iSelected = 3
           this.lastMouseZ = intersects[0].point.z
-          ;(this.rotateArrowCenter as THREE.Object3D).visible = false
           this.updateController(this.staff)
+          this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.RINGX:
           this.m_iSelected = 4
@@ -1240,9 +1240,7 @@ export default class Transformer3D {
           this.showRotateRing(this.staff)
           this.showRotateHelp(this.staff)
           this.updateController(this.staff)
-          ;(this.transform as THREE.Object3D).visible = false
-          this.rotateArrowY!.visible = false
-          this.rotateArrowZ!.visible = false
+          this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.RINGY:
           this.m_iSelected = 5
@@ -1251,9 +1249,7 @@ export default class Transformer3D {
           this.showRotateRing(this.staff)
           this.showRotateHelp(this.staff)
           this.updateController(this.staff)
-          ;(this.transform as THREE.Object3D).visible = false
-          this.rotateArrowX!.visible = false
-          this.rotateArrowZ!.visible = false
+          this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.RINGZ:
           this.m_iSelected = 6
@@ -1262,9 +1258,7 @@ export default class Transformer3D {
           this.showRotateRing(this.staff)
           this.showRotateHelp(this.staff)
           this.updateController(this.staff)
-          ;(this.transform as THREE.Object3D).visible = false
-          this.rotateArrowX!.visible = false
-          this.rotateArrowY!.visible = false
+          this.showArrowOnMove(Number(object.name))
           return true
         default:
           break
@@ -1278,6 +1272,54 @@ export default class Transformer3D {
     if (this.controller_3d == null) return false
   }
 
+  /**@description 移动时显示箭头 */
+  showArrowOnMove(type: ESelectArrow) {
+    switch (type) {
+      case ESelectArrow.ARROWX:
+        this.rotateArrowCenter!.visible = false
+        this.transformArrowY!.visible = false
+        this.transformArrowZ!.visible = false
+        break
+      case ESelectArrow.ARROWY:
+        this.rotateArrowCenter!.visible = false
+        this.transformArrowX!.visible = false
+        this.transformArrowZ!.visible = false
+        break
+      case ESelectArrow.ARROWZ:
+        this.rotateArrowCenter!.visible = false
+        this.transformArrowX!.visible = false
+        this.transformArrowY!.visible = false
+        break
+      case ESelectArrow.RINGX:
+        ;(this.transform as THREE.Object3D).visible = false
+        this.rotateArrowY!.visible = false
+        this.rotateArrowZ!.visible = false
+        break
+      case ESelectArrow.RINGY:
+        ;(this.transform as THREE.Object3D).visible = false
+        this.rotateArrowX!.visible = false
+        this.rotateArrowZ!.visible = false
+        break
+      case ESelectArrow.RINGZ:
+        ;(this.transform as THREE.Object3D).visible = false
+        this.rotateArrowX!.visible = false
+        this.rotateArrowY!.visible = false
+        break
+
+      default:
+        break
+    }
+  }
+  /**@description 鼠标抬起时显示箭头 */
+  showArrowOnUp() {
+    if (!this.rotateRingCenter) {
+      this.transform!.visible = true
+      this.rotateArrowCenter!.visible = true
+      this.transformArrowX!.visible = true
+      this.transformArrowY!.visible = true
+      this.transformArrowZ!.visible = true
+    }
+  }
   /**
    * @api OnMouseMove
    * @apiGroup TransformController3D
@@ -1515,24 +1557,26 @@ export default class Transformer3D {
    * @apiGroup TransformController3D
    * @apiDescription 鼠标抬起时进行判断
    */
-  OnMouseUp(obj: any) {
-    // if (this.controller_3d == null) return false;
-    // this.m_iSelected = -1;
-    // this.showRotateArrow(obj);
-    // this.updateController(obj);
+  OnMouseUp(event: MouseEvent) {
+    console.log('mouseup', this)
 
-    if (this.controller_3d == null) return false
-
-    if (this.m_iSelected >= 0) {
-      this.m_iSelected = -1
-      this.showController(obj)
-      this.updateController(obj)
-
-      // 若是正在进行操作,返回true
-      return true
+    if (this.isDragging === true) {
+      this.isDragging = false
     }
+    this.showArrowOnUp()
 
-    return false
+    // if (this.controller_3d == null) return false
+
+    // if (this.m_iSelected >= 0) {
+    //   this.m_iSelected = -1
+    //   this.showController(this)
+    //   this.updateController(this)
+
+    //   // 若是正在进行操作,返回true
+    //   return true
+    // }
+
+    // return false
   }
 
   /**

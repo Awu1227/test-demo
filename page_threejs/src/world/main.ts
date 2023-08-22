@@ -40,15 +40,6 @@ export default class World {
 
     const cube = createTorusKnot()
     this._meshs.push(cube)
-    const stuff = {
-      m_Object3D: cube,
-      setVisible: () => {},
-      destory: () => {}
-    }
-
-    // this.tsf = new Transformer3D(stuff, this.camera)
-    // console.log('controller',this.tsf);
-    // this.tsf.showController(stuff)
 
     const light = createLight()
 
@@ -106,12 +97,7 @@ export default class World {
     console.log('intersect', intersects)
   }
   onPointerUp(event: MouseEvent) {
-    if (this.tsf?.isDragging === true) {
-      this.tsf.isDragging = false
-    }
-    this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
-    this.raycaster.setFromCamera(this.pointer, this.camera)
+    this.tsf && this.tsf.OnMouseUp(event)
   }
   render() {
     this.renderer.render(this.scene, this.camera)
