@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { ESelectArrow } from './type'
-import { event_MouseMove } from './EventHandlers'
+import { event_MouseDown, event_MouseMove } from './EventHandlers'
 /**@description 传入的Staff */
 interface IStaff {
   m_Object3D: THREE.Object3D
@@ -107,9 +107,7 @@ export default class Transformer3D {
     this.arrowArray.push(this.transformArrowX, this.transformArrowY, this.transformArrowZ, ...this.rotateArrowX?.children!, ...this.rotateArrowY?.children!, ...this.rotateArrowZ?.children!)
   }
 
-  /**
-   * @apiDescription 平移箭头显示
-   */
+  /**@apiDescription 平移箭头显示 */
   showTransformArrow(obj: any) {
     let vertices = new Array()
     this.transform = new THREE.Object3D()
@@ -398,9 +396,7 @@ export default class Transformer3D {
     ;(this.controller_3d as THREE.Object3D).add(this.transform as THREE.Object3D)
   }
 
-  /**
-   * @apiDescription 旋转箭头显示
-   */
+  /**@apiDescription 旋转箭头显示 */
   showRotateArrow(obj: any) {
     if (this.rotateArrowCenter) this.rotateArrowCenter.remove(this.rotateArrowX as THREE.Object3D, this.rotateArrowY as THREE.Object3D, this.rotateArrowZ as THREE.Object3D)
     if (this.rotateArrowX) this.rotateArrowX.remove(this.rotateArrowRingX as THREE.Mesh, this.rotateArrowLeftX as THREE.Mesh, this.rotateArrowRightX as THREE.Mesh)
@@ -771,9 +767,7 @@ export default class Transformer3D {
 
     this.controller_3d!.add(this.rotateRingCenter!)
   }
-  /**
-   * @apiDescription 旋转圆环显示
-   */
+  /**@apiDescription 旋转圆环显示*/
   showRotateRingX(obj: any, Dis: number, Width: number) {
     if (this.m_iSelected != 4) return
     let vertices = new Array()
@@ -821,9 +815,7 @@ export default class Transformer3D {
     ;(this.rotateRingCenter as THREE.Object3D).add(this.rotateRingX as THREE.Object3D)
   }
 
-  /**
-   * @apiDescription 旋转圆环显示
-   */
+  /**@apiDescription 旋转圆环显示*/
   showRotateRingY(obj: any, Dis: number, Width: number) {
     if (this.m_iSelected != 5) return
     let vertices = new Array()
@@ -873,9 +865,7 @@ export default class Transformer3D {
     ;(this.rotateRingCenter as THREE.Object3D).add(this.rotateRingY as THREE.Object3D)
   }
 
-  /**
-   * @apiDescription 旋转圆环显示
-   */
+  /**@apiDescription 旋转圆环显示 */
   showRotateRingZ(obj: any, Dis: number, Width: number) {
     if (this.m_iSelected != 6) return
     let vertices = new Array()
@@ -926,7 +916,7 @@ export default class Transformer3D {
 
   showRotateHelp(obj: any) {
     // 旋转辅助平面
-    // TODO
+    // TODO:
     let rotateArrowHelpGeo = new THREE.BufferGeometry()
     let vertices = new Array()
     switch (this.m_iSelected) {
@@ -1017,11 +1007,7 @@ export default class Transformer3D {
     ;(this.rotateArrowCenter as THREE.Object3D).add(this.rotateArrowHelp as THREE.Mesh)
   }
 
-  /**
-   * @api updateController
-   * @apiGroup TransformController3D
-   * @apiDescription 总更新
-   */
+  /**@apiDescription 总更新 */
   updateController(obj: any) {
     if (this.controller_3d == null || obj == null) return
     ;(this.controller_3d as THREE.Object3D).position.x = obj.m_Object3D.position.x
@@ -1046,12 +1032,9 @@ export default class Transformer3D {
     this.controller_3d.scale.z *= proportion
     this.updateTransformArrow(obj)
     this.updateRotateArrow(obj)
-    this.updateRotateRing(obj)
   }
 
-  /**
-   * @apiDescription 平移箭头更新
-   */
+  /**@apiDescription 平移箭头更新 */
   updateTransformArrow(obj: any) {
     // 根据摄像机与模型角度修改箭头方向
     ;(this.transformArrowX as THREE.Mesh).rotation.x =
@@ -1099,9 +1082,7 @@ export default class Transformer3D {
     ;(this.transformArrowZHelp as THREE.Mesh).rotation.z = (this.transformArrowZ as THREE.Mesh).rotation.z
   }
 
-  /**
-   * @apiDescription 旋转箭头显示
-   */
+  /**@apiDescription 旋转箭头显示 */
   updateRotateArrow(obj: any) {
     let cameraRadianX = Math.atan2(this.camera.position.z - (this.controller_3d as THREE.Object3D).position.z, this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y)
     ;(this.rotateArrowX as THREE.Object3D).rotation.x = Math.floor(cameraRadianX / (Math.PI / 2)) * (Math.PI / 2)
@@ -1123,80 +1104,9 @@ export default class Transformer3D {
     }
   }
 
-  /**
-   * @apiDescription 旋转圆环更新
-   */
-  updateRotateRing(obj: any) {
-    if (this.m_iSelected != 4) return
-  }
-
-  /**
-   * @apiDescription 鼠标按下时进行判断
-   */
-  // 在对obj进行mousedown判定时先判定Controller,返回为true即为选中
+  /**@apiDescription 鼠标按下时进行判断 */
   OnMouseDown(event: MouseEvent) {
-    console.log('downevt', event)
-    this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
-    this.raycaster.setFromCamera(this.pointer, this.camera)
-    const intersects = this.raycaster.intersectObjects(this.arrowArray, false)
-    if (intersects.length > 0) {
-      this.isDragging = true
-      const object = intersects[0].object
-      console.log('箭头mesh', object.name)
-      this.m_iSelected = Number(object.name)
-      console.log('选择的箭头', this.selectArrow)
-
-      switch (Number(object.name)) {
-        case ESelectArrow.ARROWX:
-          this.lastMouseX = intersects[0].point.x
-          this.updateController(this.staff)
-          this.showArrowOnMove(Number(object.name))
-          return true
-        case ESelectArrow.ARROWY:
-          this.lastMouseY = intersects[0].point.y
-          this.updateController(this.staff)
-          this.showArrowOnMove(Number(object.name))
-          return true
-        case ESelectArrow.ARROWZ:
-          this.lastMouseZ = intersects[0].point.z
-          this.updateController(this.staff)
-          this.showArrowOnMove(Number(object.name))
-          return true
-        case ESelectArrow.RINGX:
-          this.lastRadian = -Math.atan2(intersects[0].point.y - this.staff.m_Object3D.position.y, intersects[0].point.z - this.staff.m_Object3D.position.z)
-          this.showRotateArrow(this.staff)
-          this.showRotateRing(this.staff)
-          this.showRotateHelp(this.staff)
-          this.updateController(this.staff)
-          this.showArrowOnMove(Number(object.name))
-          return true
-        case ESelectArrow.RINGY:
-          this.lastRadian = -Math.atan2(intersects[0].point.z - this.staff.m_Object3D.position.z, intersects[0].point.x - this.staff.m_Object3D.position.x)
-          this.showRotateArrow(this.staff)
-          this.showRotateRing(this.staff)
-          this.showRotateHelp(this.staff)
-          this.updateController(this.staff)
-          this.showArrowOnMove(Number(object.name))
-          return true
-        case ESelectArrow.RINGZ:
-          this.lastRadian = -Math.atan2(intersects[0].point.x - this.staff.m_Object3D.position.x, intersects[0].point.y - this.staff.m_Object3D.position.y)
-          this.showRotateArrow(this.staff)
-          this.showRotateRing(this.staff)
-          this.showRotateHelp(this.staff)
-          this.updateController(this.staff)
-          this.showArrowOnMove(Number(object.name))
-          return true
-        default:
-          break
-      }
-    } else {
-      // 未点击到
-      this.m_iSelected = -1
-      this.updateController(this.staff)
-      return false
-    }
-    if (this.controller_3d == null) return false
+    return event_MouseDown(event, this) // 如果return false，意味着没有点击到
   }
 
   /**@description 移动时显示箭头 */
@@ -1247,20 +1157,13 @@ export default class Transformer3D {
       this.transformArrowZ!.visible = true
     }
   }
-  /**
-   * @apiDescription 鼠标移动时进行判断
-   */
-  // 在对obj进行移动判定时先判定Controller,返回为true即为选中
+  /**@apiDescription 鼠标移动时进行判断 */
   OnMouseMove(event: MouseEvent, obj: any) {
-    event_MouseMove(event, obj, this)
+    return event_MouseMove(event, obj, this)
   }
 
-  /**
-   * @apiDescription 鼠标抬起时进行判断
-   */
+  /**@description 鼠标抬起时进行判断 */
   OnMouseUp(event: MouseEvent) {
-    console.log('mouseup', this)
-
     if (this.isDragging === true) {
       this.isDragging = false
     }

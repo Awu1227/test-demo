@@ -42,6 +42,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
       }
     }
   }
+  console.log('isSelect', tfs.m_iSelected)
 
   if (tfs.m_iSelected < 0 || tfs.controller_3d == null || obj.m_Locking == true || !tfs.isDragging) return false
 
@@ -187,4 +188,69 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
 
   tfs.updateController(obj)
   return true
+}
+
+export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
+  console.log('downevt', event)
+  tfs.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+  tfs.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+  tfs.raycaster.setFromCamera(tfs.pointer, tfs.camera)
+  const intersects = tfs.raycaster.intersectObjects(tfs.arrowArray, false)
+  if (intersects.length > 0) {
+    tfs.isDragging = true
+    const object = intersects[0].object
+    console.log('箭头mesh', object.name)
+    tfs.m_iSelected = Number(object.name)
+    console.log('选择的箭头', tfs.selectArrow)
+
+    switch (Number(object.name)) {
+      case ESelectArrow.ARROWX:
+        tfs.lastMouseX = intersects[0].point.x
+        tfs.updateController(tfs.staff)
+        tfs.showArrowOnMove(Number(object.name))
+        return true
+      case ESelectArrow.ARROWY:
+        tfs.lastMouseY = intersects[0].point.y
+        tfs.updateController(tfs.staff)
+        tfs.showArrowOnMove(Number(object.name))
+        return true
+      case ESelectArrow.ARROWZ:
+        tfs.lastMouseZ = intersects[0].point.z
+        tfs.updateController(tfs.staff)
+        tfs.showArrowOnMove(Number(object.name))
+        return true
+      case ESelectArrow.RINGX:
+        tfs.lastRadian = -Math.atan2(intersects[0].point.y - tfs.staff.m_Object3D.position.y, intersects[0].point.z - tfs.staff.m_Object3D.position.z)
+        tfs.showRotateArrow(tfs.staff)
+        tfs.showRotateRing(tfs.staff)
+        tfs.showRotateHelp(tfs.staff)
+        tfs.updateController(tfs.staff)
+        tfs.showArrowOnMove(Number(object.name))
+        return true
+      case ESelectArrow.RINGY:
+        tfs.lastRadian = -Math.atan2(intersects[0].point.z - tfs.staff.m_Object3D.position.z, intersects[0].point.x - tfs.staff.m_Object3D.position.x)
+        tfs.showRotateArrow(tfs.staff)
+        tfs.showRotateRing(tfs.staff)
+        tfs.showRotateHelp(tfs.staff)
+        tfs.updateController(tfs.staff)
+        tfs.showArrowOnMove(Number(object.name))
+        return true
+      case ESelectArrow.RINGZ:
+        tfs.lastRadian = -Math.atan2(intersects[0].point.x - tfs.staff.m_Object3D.position.x, intersects[0].point.y - tfs.staff.m_Object3D.position.y)
+        tfs.showRotateArrow(tfs.staff)
+        tfs.showRotateRing(tfs.staff)
+        tfs.showRotateHelp(tfs.staff)
+        tfs.updateController(tfs.staff)
+        tfs.showArrowOnMove(Number(object.name))
+        return true
+      default:
+        break
+    }
+  } else {
+    // 未点击到
+    tfs.m_iSelected = -1
+    tfs.updateController(tfs.staff)
+    return false
+  }
+  if (tfs.controller_3d == null) return false
 }
