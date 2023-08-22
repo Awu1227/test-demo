@@ -1212,29 +1212,26 @@ export default class Transformer3D {
       const object = intersects[0].object
       console.log('箭头mesh', object.name)
       this.selectArrow = ESelectArrow[object.name]
+      this.m_iSelected = Number(object.name)
       console.log('选择的箭头', this.selectArrow)
 
       switch (Number(object.name)) {
         case ESelectArrow.ARROWX:
-          this.m_iSelected = 1
           this.lastMouseX = intersects[0].point.x
           this.updateController(this.staff)
           this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.ARROWY:
-          this.m_iSelected = 2
           this.lastMouseY = intersects[0].point.y
           this.updateController(this.staff)
           this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.ARROWZ:
-          this.m_iSelected = 3
           this.lastMouseZ = intersects[0].point.z
           this.updateController(this.staff)
           this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.RINGX:
-          this.m_iSelected = 4
           this.lastRadian = -Math.atan2(intersects[0].point.y - this.staff.m_Object3D.position.y, intersects[0].point.z - this.staff.m_Object3D.position.z)
           this.showRotateArrow(this.staff)
           this.showRotateRing(this.staff)
@@ -1243,7 +1240,6 @@ export default class Transformer3D {
           this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.RINGY:
-          this.m_iSelected = 5
           this.lastRadian = -Math.atan2(intersects[0].point.z - this.staff.m_Object3D.position.z, intersects[0].point.x - this.staff.m_Object3D.position.x)
           this.showRotateArrow(this.staff)
           this.showRotateRing(this.staff)
@@ -1252,7 +1248,6 @@ export default class Transformer3D {
           this.showArrowOnMove(Number(object.name))
           return true
         case ESelectArrow.RINGZ:
-          this.m_iSelected = 6
           this.lastRadian = -Math.atan2(intersects[0].point.x - this.staff.m_Object3D.position.x, intersects[0].point.y - this.staff.m_Object3D.position.y)
           this.showRotateArrow(this.staff)
           this.showRotateRing(this.staff)
@@ -1564,19 +1559,6 @@ export default class Transformer3D {
       this.isDragging = false
     }
     this.showArrowOnUp()
-
-    // if (this.controller_3d == null) return false
-
-    // if (this.m_iSelected >= 0) {
-    //   this.m_iSelected = -1
-    //   this.showController(this)
-    //   this.updateController(this)
-
-    //   // 若是正在进行操作,返回true
-    //   return true
-    // }
-
-    // return false
   }
 
   /**
