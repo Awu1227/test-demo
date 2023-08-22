@@ -88,6 +88,8 @@ export default class Transformer3D {
   lastMouseZ: number = -999999
   lastRadian: number = 0
 
+  radius = 0
+
   constructor(staff: IStaff, camera: THREE.PerspectiveCamera) {
     this.staff = staff
     this.camera = camera
@@ -1250,7 +1252,6 @@ export default class Transformer3D {
           ;(this.transform as THREE.Object3D).visible = false
           this.rotateArrowX!.visible = false
           this.rotateArrowZ!.visible = false
-          console.log(this.rotateArrowCenter)
           return true
         case ESelectArrow.RINGZ:
           this.m_iSelected = 6
@@ -1288,15 +1289,12 @@ export default class Transformer3D {
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
 
       this.raycaster.setFromCamera(this.pointer, this.camera)
-      console.log('arrowArray', this.arrowArray)
 
       const intersects = this.raycaster.intersectObjects(this.arrowArray, false)
-      console.log('intersect', intersects)
       if (intersects.length > 0) {
         const object = intersects[0].object as any
         if (Number(object.name) > 3) {
           const arrowParent = object.parent
-          console.log('obj11', object, arrowParent)
           this.highLightArrow = arrowParent
           // 将箭头高亮
           const prevColor = new THREE.Color(this.highLightArrow.userData.prevColor)
@@ -1326,7 +1324,6 @@ export default class Transformer3D {
     }
 
     if (this.m_iSelected < 0 || this.controller_3d == null || obj.m_Locking == true || !this.isDragging) return false
-    console.log('this.pointer', this.m_iSelected, this.pointer)
 
     switch (this.m_iSelected) {
       case ESelectArrow.ARROWX: {
@@ -1388,14 +1385,15 @@ export default class Transformer3D {
 
           //距离中点过近时不操作
           if (new THREE.Vector3(Intersection[0].point.x, 0, Intersection[0].point.z).distanceTo(obj.m_Object3D.position) >= 2) {
-            obj.mJsonParam.m_fRotateX = (obj.mJsonParam.m_fRotateX * Math.PI) / 180
+            this.radius = (this.radius * Math.PI) / 180
 
-            obj.mJsonParam.m_fRotateX += diffRadian
+            this.radius += diffRadian
 
             //将结果限制在0-2PI
-            obj.mJsonParam.m_fRotateX = (obj.mJsonParam.m_fRotateX + Math.PI * 2) % (Math.PI * 2)
+            this.radius = (this.radius + Math.PI * 2) % (Math.PI * 2)
 
-            obj.mJsonParam.m_fRotateX = (obj.mJsonParam.m_fRotateX * 180) / Math.PI
+            this.radius = (this.radius * 180) / Math.PI
+            obj.m_Object3D.rotation.x = THREE.MathUtils.degToRad(this.radius)
           }
         }
         break
