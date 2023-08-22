@@ -73,6 +73,7 @@ export default class World {
   onPointerMove(evt:MouseEvent) {
     // this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
      if (this.tsf?.isDragging) {
+      this.tsf.OnMouseMove(evt, 1)
       this.controls.enableRotate = false
      } else {
       this.controls.enableRotate = true

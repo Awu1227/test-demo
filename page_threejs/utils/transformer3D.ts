@@ -10,12 +10,13 @@ interface IStaff{
 
 /**@description 选择的箭头 */
 enum ESelectArrow {
-    ARROWX = 'x',
-    ARROWY = 'y',
-    ARROWZ = 'z',
-    RINGX = 'rx',
-    RINGY = 'ry',
-    RINGZ = 'rz',
+    NONE = 0,
+    ARROWX,
+    ARROWY,
+    ARROWZ,
+    RINGX,
+    RINGY,
+    RINGZ,
 }
 
 export default class Transformer3D {
@@ -82,7 +83,7 @@ export default class Transformer3D {
     arrowArray:any[] = []
     // 当前选择对象
     m_iSelected: number = -1;   // 1:X 2:Y 3:Z  4:X 5:Y 6:Z
-
+    selectArrow = ESelectArrow.NONE
     // 上一事件状态
     lastMouseX: number = -999999;
     lastMouseY: number = -999999;
@@ -187,7 +188,7 @@ export default class Transformer3D {
         this.transformArrowX.userData={
             prevColor: 0xF8AB04
         }
-        this.transformArrowX.name="x箭头"
+        this.transformArrowX.name=ESelectArrow.ARROWX.toString()
         // X 箭头辅助平面
         let arrowXHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -242,7 +243,7 @@ export default class Transformer3D {
         this.transformArrowY.userData={
             prevColor: 0x48D9A7
         }
-        this.transformArrowY.name="y箭头"
+        this.transformArrowY.name=ESelectArrow.ARROWY.toString()
         // Y 箭头辅助平面
         let arrowYHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -293,7 +294,7 @@ export default class Transformer3D {
         this.transformArrowZ.userData={
             prevColor: 0x1890FF
         }
-        this.transformArrowZ.name="z箭头"
+        this.transformArrowZ.name=ESelectArrow.ARROWZ.toString()
         // Z 箭头辅助平面
         let arrowZHelpGeo = new THREE.BufferGeometry();
         vertices = new Array();
@@ -365,7 +366,7 @@ export default class Transformer3D {
     showRotateX(obj: any, arrowDis: number, rotateDis: number, rotateWidth: number, RidianLeft: number, RidianRight: number, RidianWidth: number, arrowWidth: number) {
         this.rotateArrowX = new THREE.Object3D();
         let vertices = new Array();
-        this.rotateArrowX.name="x箭头组"
+        this.rotateArrowX.name=ESelectArrow.RINGX.toString()
         this.rotateArrowX.userData = {
             prevColor: 0xffad28
         }
@@ -383,7 +384,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
-            (this.rotateArrowRingX as THREE.Mesh).name="x箭头中段";
+            (this.rotateArrowRingX as THREE.Mesh).name=ESelectArrow.RINGX.toString();
             (this.rotateArrowX as THREE.Object3D).add((this.rotateArrowRingX as THREE.Mesh));
 
             //左箭头
@@ -407,7 +408,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
-            (this.rotateArrowLeftX as THREE.Mesh).name="x左箭头";
+            (this.rotateArrowLeftX as THREE.Mesh).name=ESelectArrow.RINGX.toString();
             (this.rotateArrowX as THREE.Object3D).add((this.rotateArrowLeftX as THREE.Mesh));
 
             //右箭头
@@ -459,7 +460,7 @@ export default class Transformer3D {
 
     showRotateY(obj: any, arrowDis: number, rotateDis: number, rotateWidth: number, RidianLeft: number, RidianRight: number, RidianWidth: number, arrowWidth: number) {
         this.rotateArrowY = new THREE.Object3D();
-        this.rotateArrowY.name = "y箭头组";
+        this.rotateArrowY.name = ESelectArrow.RINGY.toString();
         this.rotateArrowY.userData = {
             prevColor: 0x48D9A7
         }
@@ -480,7 +481,7 @@ export default class Transformer3D {
                 })
             );
             (this.rotateArrowRingY as THREE.Mesh).rotation.x = Math.PI / 2;
-            (this.rotateArrowRingY as THREE.Mesh).name="y箭头中段";
+            (this.rotateArrowRingY as THREE.Mesh).name=ESelectArrow.RINGY.toString();
 
             (this.rotateArrowY as THREE.Object3D).add((this.rotateArrowRingY as THREE.Mesh));
 
@@ -505,7 +506,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
-            (this.rotateArrowLeftY as THREE.Mesh).name="y左箭头";
+            (this.rotateArrowLeftY as THREE.Mesh).name=ESelectArrow.RINGY.toString();
             (this.rotateArrowY as THREE.Object3D).add((this.rotateArrowLeftY as THREE.Mesh));
 
             //右箭头
@@ -528,7 +529,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
-            (this.rotateArrowRightY as THREE.Mesh).name="y右箭头";
+            (this.rotateArrowRightY as THREE.Mesh).name=ESelectArrow.RINGY.toString();
             (this.rotateArrowY as THREE.Object3D).add((this.rotateArrowRightY as THREE.Mesh));
             (this.rotateArrowY as THREE.Object3D).position.y = 2;
 
@@ -558,7 +559,7 @@ export default class Transformer3D {
 
     showRotateZ(obj: any, arrowDis: number, rotateDis: number, rotateWidth: number, RidianLeft: number, RidianRight: number, RidianWidth: number, arrowWidth: number) {
         this.rotateArrowZ = new THREE.Object3D();
-        this.rotateArrowZ.name="z箭头组"
+        this.rotateArrowZ.name=ESelectArrow.RINGZ.toString()
         this.rotateArrowZ.userData = {
             prevColor: 0x1890FF
         }
@@ -578,7 +579,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
-            (this.rotateArrowRingZ as THREE.Mesh).name="z箭头中段";
+            (this.rotateArrowRingZ as THREE.Mesh).name=ESelectArrow.RINGZ.toString();
 
             (this.rotateArrowZ as THREE.Object3D).add((this.rotateArrowRingZ as THREE.Mesh));
 
@@ -603,7 +604,7 @@ export default class Transformer3D {
                     depthTest: false,
                 })
             );
-            (this.rotateArrowLeftZ as THREE.Mesh).name="z左箭头";
+            (this.rotateArrowLeftZ as THREE.Mesh).name=ESelectArrow.RINGZ.toString();
             (this.rotateArrowZ as THREE.Object3D).add((this.rotateArrowLeftZ as THREE.Mesh));
 
             //右箭头
@@ -627,7 +628,7 @@ export default class Transformer3D {
                 })
             );
 
-            (this.rotateArrowRightZ as THREE.Mesh).name="z右箭头";
+            (this.rotateArrowRightZ as THREE.Mesh).name=ESelectArrow.RINGZ.toString();
             (this.rotateArrowZ as THREE.Object3D).add((this.rotateArrowRightZ as THREE.Mesh));
             (this.rotateArrowZ as THREE.Object3D).position.z = 2;
 
@@ -1086,93 +1087,74 @@ export default class Transformer3D {
         const intersects= this.raycaster.intersectObjects(this.arrowArray, false)
         if (intersects.length > 0) {
             const object = intersects[0].object
-            console.log('箭头mesh',object);
+            console.log('箭头mesh',object.name);
+            this.selectArrow = ESelectArrow[object.name]
+            console.log('选择的箭头',this.selectArrow);
+            switch (Number(object.name)) {
+                case ESelectArrow.ARROWX:
+                    this.m_iSelected = 1;
+                    this.lastMouseX = intersects[0].point.x;
+                    (this.rotateArrowCenter as THREE.Object3D).visible = false;
+                    this.updateController(this.staff);
+                    return true;
+                case ESelectArrow.ARROWY:
+                    this.m_iSelected = 2;
+                    this.lastMouseY = intersects[0].point.y;
+                    (this.rotateArrowCenter as THREE.Object3D).visible = false;
+                    this.updateController(this.staff);
+                    return true;
+                case ESelectArrow.ARROWZ:
+                    this.m_iSelected = 3;
+                    this.lastMouseZ = intersects[0].point.z;
+                    (this.rotateArrowCenter as THREE.Object3D).visible = false;
+                    this.updateController(this.staff);
+                    return true;
+                case ESelectArrow.RINGX:
+                    this.m_iSelected = 4;
+                    this.lastRadian = -Math.atan2(intersects[0].point.y - this.staff.m_Object3D.position.y, intersects[0].point.z - this.staff.m_Object3D.position.z);
+                    this.showRotateArrow(this.staff);
+                    this.showRotateRing(this.staff);
+                    this.showRotateHelp(this.staff);
+                    this.updateController(this.staff);
+                    (this.transform as THREE.Object3D).visible = false;
+                    this.rotateArrowY!.visible = false;
+                    this.rotateArrowZ!.visible = false;
+                    return true;
+                case ESelectArrow.RINGY:
+                    this.m_iSelected = 5;
+                    this.lastRadian = -Math.atan2(intersects[0].point.z - this.staff.m_Object3D.position.z, intersects[0].point.x - this.staff.m_Object3D.position.x);
+                    this.showRotateArrow(this.staff);
+                    this.showRotateRing(this.staff);
+                    this.showRotateHelp(this.staff);
+                    this.updateController(this.staff);
+                    (this.transform as THREE.Object3D).visible = false;
+                    this.rotateArrowX!.visible = false;
+                    this.rotateArrowZ!.visible = false;
+                    console.log(this.rotateArrowCenter)
+                    return true;
+                case ESelectArrow.RINGZ:
+                    this.m_iSelected = 6;
+                    this.lastRadian = -Math.atan2(intersects[0].point.x - this.staff.m_Object3D.position.x, intersects[0].point.y - this.staff.m_Object3D.position.y);
+                    this.showRotateArrow(this.staff);
+                    this.showRotateRing(this.staff);
+                    this.showRotateHelp(this.staff);
+                    this.updateController(this.staff);
+                    (this.transform as THREE.Object3D).visible = false;
+                    this.rotateArrowX!.visible = false;
+                    this.rotateArrowY!.visible = false;
+                    return true;
+            
+                default:
+                    break;
+            }
             
         } else {
-            return false
-        }
-        if (this.controller_3d == null) return false;
-
-        let Intersection: any;
-
-        // 判断X
-        Intersection = this.raycaster.intersectObject((this.transformArrowX as THREE.Mesh));
-        if (Intersection.length > 0) {
-            this.m_iSelected = 1;
-            this.lastMouseX = Intersection[0].point.x;
-            (this.rotateArrowCenter as THREE.Object3D).visible = false;
-            this.updateController(this.staff);
-            return true;
-        }
-
-        // 判断Y
-        Intersection = this.raycaster.intersectObject((this.transformArrowY as THREE.Mesh));
-        if (Intersection.length > 0) {
-            this.m_iSelected = 2;
-            this.lastMouseY = Intersection[0].point.y;
-            (this.rotateArrowCenter as THREE.Object3D).visible = false;
-            this.updateController(this.staff);
-            return true;
-        }
-
-        // 判断Z
-        Intersection = this.raycaster.intersectObject((this.transformArrowZ as THREE.Mesh));
-        if (Intersection.length > 0) {
-            this.m_iSelected = 3;
-            this.lastMouseZ = Intersection[0].point.z;
-            (this.rotateArrowCenter as THREE.Object3D).visible = false;
-            this.updateController(this.staff);
-            return true;
-        }
-
-        // 判断X旋转
-        Intersection = this.raycaster.intersectObjects((this.rotateArrowX as THREE.Object3D).children);
-        if (Intersection.length > 0) {
-            this.m_iSelected = 4;
-            this.lastRadian = -Math.atan2(Intersection[0].point.y - this.staff.m_Object3D.position.y, Intersection[0].point.z - this.staff.m_Object3D.position.z);
-            this.showRotateArrow(this.staff);
-            this.showRotateRing(this.staff);
-            this.showRotateHelp(this.staff);
-            this.updateController(this.staff);
-            (this.transform as THREE.Object3D).visible = false;
-            this.rotateArrowY!.visible = false;
-            this.rotateArrowZ!.visible = false;
-            return true;
-        }
-        // 判断Y旋转
-        Intersection = this.raycaster.intersectObjects((this.rotateArrowY as THREE.Object3D).children);
-        if (Intersection.length > 0) {
-            this.m_iSelected = 5;
-            this.lastRadian = -Math.atan2(Intersection[0].point.z - this.staff.m_Object3D.position.z, Intersection[0].point.x - this.staff.m_Object3D.position.x);
-            this.showRotateArrow(this.staff);
-            this.showRotateRing(this.staff);
-            this.showRotateHelp(this.staff);
-            this.updateController(this.staff);
-            (this.transform as THREE.Object3D).visible = false;
-            this.rotateArrowX!.visible = false;
-            this.rotateArrowZ!.visible = false;
-            console.log(this.rotateArrowCenter)
-            return true;
-        }
-        // 判断Z旋转
-        Intersection = this.raycaster.intersectObjects((this.rotateArrowZ as THREE.Object3D).children);
-        if (Intersection.length > 0) {
-            this.m_iSelected = 6;
-            this.lastRadian = -Math.atan2(Intersection[0].point.x - this.staff.m_Object3D.position.x, Intersection[0].point.y - this.staff.m_Object3D.position.y);
-            this.showRotateArrow(this.staff);
-            this.showRotateRing(this.staff);
-            this.showRotateHelp(this.staff);
-            this.updateController(this.staff);
-            (this.transform as THREE.Object3D).visible = false;
-            this.rotateArrowX!.visible = false;
-            this.rotateArrowY!.visible = false;
-            return true;
-        }
-
         // 未点击到
         this.m_iSelected = -1;
         this.updateController(this.staff);
-        return false;
+            return false
+        }
+        if (this.controller_3d == null) return false;
     }
 
     /**
@@ -1195,7 +1177,9 @@ export default class Transformer3D {
             console.log('intersect',intersects);
             if (intersects.length > 0) {
                 const object = intersects[0].object as any
-                if (object.name.includes('箭头')) {
+                console.log('move_object',object);
+                
+                if (Number(object.name) > 3) {
                     const arrowParent = object.parent
                     console.log('obj11',object,arrowParent);
                     this.highLightArrow = arrowParent
