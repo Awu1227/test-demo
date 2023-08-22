@@ -1,21 +1,11 @@
 import * as THREE from 'three'
-
+import { ESelectArrow } from './type'
+import onMouseMove from './EventHandlers'
 /**@description 传入的Staff */
 interface IStaff {
   m_Object3D: THREE.Object3D
   setVisible()
   destory()
-}
-
-/**@description 选择的箭头 */
-enum ESelectArrow {
-  NONE = 0,
-  ARROWX,
-  ARROWY,
-  ARROWZ,
-  RINGX,
-  RINGY,
-  RINGZ
 }
 
 export default class Transformer3D {
@@ -1154,7 +1144,6 @@ export default class Transformer3D {
       this.isDragging = true
       const object = intersects[0].object
       console.log('箭头mesh', object.name)
-      this.selectArrow = ESelectArrow[object.name]
       this.m_iSelected = Number(object.name)
       console.log('选择的箭头', this.selectArrow)
 
@@ -1263,205 +1252,7 @@ export default class Transformer3D {
    */
   // 在对obj进行移动判定时先判定Controller,返回为true即为选中
   OnMouseMove(event: MouseEvent, obj: any) {
-    if (this.arrowArray.length) {
-      // 移动到箭头上高亮
-      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
-
-      this.raycaster.setFromCamera(this.pointer, this.camera)
-
-      const intersects = this.raycaster.intersectObjects(this.arrowArray, false)
-      if (intersects.length > 0) {
-        const object = intersects[0].object as any
-        if (Number(object.name) > 3) {
-          const arrowParent = object.parent
-          this.highLightArrow = arrowParent
-          // 将箭头高亮
-          const prevColor = new THREE.Color(this.highLightArrow.userData.prevColor)
-          prevColor.multiply(prevColor)
-          arrowParent.children.forEach((item: any) => {
-            item.material.color.set(prevColor)
-          })
-        } else {
-          this.highLightArrow = object
-          // 将箭头高亮
-          const prevColor = new THREE.Color(this.highLightArrow.userData.prevColor)
-          prevColor.multiply(prevColor)
-          object.material.color.set(prevColor)
-        }
-      } else {
-        // 恢复箭头之前的颜色
-        if (this.highLightArrow) {
-          if (this.highLightArrow.children.length) {
-            this.highLightArrow.children.forEach((item: any) => {
-              item.material.color.set(this.highLightArrow.userData.prevColor)
-            })
-          } else {
-            this.highLightArrow.material.color.set(this.highLightArrow.userData.prevColor)
-          }
-        }
-      }
-    }
-
-    if (this.m_iSelected < 0 || this.controller_3d == null || obj.m_Locking == true || !this.isDragging) return false
-
-    switch (this.m_iSelected) {
-      case ESelectArrow.ARROWX: {
-        let Intersection = this.raycaster.intersectObject(this.transformArrowXHelp as THREE.Mesh)
-        if (Intersection.length > 0) {
-          obj.m_Object3D.position.x += Intersection[0].point.x - this.lastMouseX
-          this.lastMouseX = Intersection[0].point.x
-        }
-        break
-      }
-      case ESelectArrow.ARROWY: {
-        let Intersection = this.raycaster.intersectObject(this.transformArrowYHelp as THREE.Mesh)
-        if (Intersection.length > 0) {
-          obj.m_Object3D.position.y += Intersection[0].point.y - this.lastMouseY
-          this.lastMouseY = Intersection[0].point.y
-
-          // 限制y轴坐标
-          if (obj.m_Object3D.position.y < 0) {
-            obj.m_Object3D.position.y = 0
-          }
-        }
-        break
-      }
-      case ESelectArrow.ARROWZ: {
-        let Intersection = this.raycaster.intersectObject(this.transformArrowZHelp as THREE.Mesh)
-        if (Intersection.length > 0) {
-          obj.m_Object3D.position.z += Intersection[0].point.z - this.lastMouseZ
-          this.lastMouseZ = Intersection[0].point.z
-        }
-        break
-      }
-      case ESelectArrow.RINGX: {
-        let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh)
-
-        if (Intersection.length > 0) {
-          let mouseRadian = -Math.atan2(Intersection[0].point.y - obj.m_Object3D.position.y, Intersection[0].point.z - obj.m_Object3D.position.z)
-
-          // 角度限制为正数
-          mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
-
-          // 限制 5 度为最小旋转值,可修改
-          let minRadian = (5 * Math.PI) / 180
-          if ((mouseRadian - minRadian * Math.floor(mouseRadian / minRadian)) % minRadian < minRadian / 2) {
-            mouseRadian -= mouseRadian - minRadian * Math.floor(mouseRadian / minRadian)
-          } else if ((minRadian - (mouseRadian - minRadian * Math.floor(mouseRadian / minRadian))) % minRadian < minRadian / 2) {
-            mouseRadian += minRadian - (mouseRadian - minRadian * Math.floor(mouseRadian / minRadian))
-          }
-
-          if ((this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian)) % minRadian < minRadian / 2) {
-            this.lastRadian -= this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian)
-          } else if ((minRadian - (this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian))) % minRadian < minRadian / 2) {
-            this.lastRadian += minRadian - (this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian))
-          }
-
-          let diffRadian = mouseRadian - this.lastRadian
-
-          this.lastRadian = mouseRadian
-
-          this.radiusX = (this.radiusX * Math.PI) / 180
-
-          this.radiusX += diffRadian
-
-          //将结果限制在0-2PI
-          this.radiusX = (this.radiusX + Math.PI * 2) % (Math.PI * 2)
-
-          this.radiusX = (this.radiusX * 180) / Math.PI
-          console.log('x-radiusX', this.radiusX)
-
-          obj.m_Object3D.rotation.x = THREE.MathUtils.degToRad(this.radiusX)
-        }
-        break
-      }
-      case ESelectArrow.RINGY: {
-        let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh)
-
-        if (Intersection.length > 0) {
-          let mouseRadian = -Math.atan2(Intersection[0].point.z - obj.m_Object3D.position.z, Intersection[0].point.x - obj.m_Object3D.position.x)
-
-          // 角度限制为正数
-          mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
-
-          // 限制 5 度为最小旋转值,可修改
-          let minRadian = (5 * Math.PI) / 180
-          if ((mouseRadian - minRadian * Math.floor(mouseRadian / minRadian)) % minRadian < minRadian / 2) {
-            mouseRadian -= mouseRadian - minRadian * Math.floor(mouseRadian / minRadian)
-          } else if ((minRadian - (mouseRadian - minRadian * Math.floor(mouseRadian / minRadian))) % minRadian < minRadian / 2) {
-            mouseRadian += minRadian - (mouseRadian - minRadian * Math.floor(mouseRadian / minRadian))
-          }
-
-          if ((this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian)) % minRadian < minRadian / 2) {
-            this.lastRadian -= this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian)
-          } else if ((minRadian - (this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian))) % minRadian < minRadian / 2) {
-            this.lastRadian += minRadian - (this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian))
-          }
-
-          let diffRadian = mouseRadian - this.lastRadian
-
-          this.lastRadian = mouseRadian
-
-          this.radiusY = (this.radiusY * Math.PI) / 180
-
-          this.radiusY += diffRadian
-
-          //将结果限制在0-2PI
-          this.radiusY = (this.radiusY + Math.PI * 2) % (Math.PI * 2)
-
-          this.radiusY = (this.radiusY * 180) / Math.PI
-          console.log('x-radiusY', this.radiusY)
-
-          obj.m_Object3D.rotation.y = THREE.MathUtils.degToRad(this.radiusY)
-        }
-        break
-      }
-      case ESelectArrow.RINGZ: {
-        let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh)
-
-        if (Intersection.length > 0) {
-          let mouseRadian = -Math.atan2(Intersection[0].point.x - obj.m_Object3D.position.x, Intersection[0].point.y - obj.m_Object3D.position.y)
-
-          // 角度限制为正数
-          mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
-
-          // 限制 5 度为最小旋转值,可修改
-          let minRadian = (5 * Math.PI) / 180
-          if ((mouseRadian - minRadian * Math.floor(mouseRadian / minRadian)) % minRadian < minRadian / 2) {
-            mouseRadian -= mouseRadian - minRadian * Math.floor(mouseRadian / minRadian)
-          } else if ((minRadian - (mouseRadian - minRadian * Math.floor(mouseRadian / minRadian))) % minRadian < minRadian / 2) {
-            mouseRadian += minRadian - (mouseRadian - minRadian * Math.floor(mouseRadian / minRadian))
-          }
-
-          if ((this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian)) % minRadian < minRadian / 2) {
-            this.lastRadian -= this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian)
-          } else if ((minRadian - (this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian))) % minRadian < minRadian / 2) {
-            this.lastRadian += minRadian - (this.lastRadian - minRadian * Math.floor(this.lastRadian / minRadian))
-          }
-
-          let diffRadian = mouseRadian - this.lastRadian
-
-          this.lastRadian = mouseRadian
-
-          this.radiusZ = (this.radiusZ * Math.PI) / 180
-
-          this.radiusZ += diffRadian
-
-          //将结果限制在0-2PI
-          this.radiusZ = (this.radiusZ + Math.PI * 2) % (Math.PI * 2)
-
-          this.radiusZ = (this.radiusZ * 180) / Math.PI
-          console.log('x-radiusZ', this.radiusZ)
-
-          obj.m_Object3D.rotation.z = THREE.MathUtils.degToRad(this.radiusZ)
-        }
-        break
-      }
-    }
-
-    this.updateController(obj)
-    return true
+    onMouseMove(event, obj, this)
   }
 
   /**
