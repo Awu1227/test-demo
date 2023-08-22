@@ -97,13 +97,9 @@ export default class Transformer3D {
   }
 
   /**
-   * @api showController
-   * @apiGroup TransformController3D
    * @apiDescription 总显示
    */
   showController(obj: any) {
-    this.clearController()
-
     if (obj == null) return
     if (obj.m_Locking == true) return
     this.controller_3d = new THREE.Object3D()
@@ -122,8 +118,6 @@ export default class Transformer3D {
   }
 
   /**
-   * @api showTransformArrow
-   * @apiGroup TransformController3D
    * @apiDescription 平移箭头显示
    */
   showTransformArrow(obj: any) {
@@ -415,8 +409,6 @@ export default class Transformer3D {
   }
 
   /**
-   * @api showRotateArrow
-   * @apiGroup TransformController3D
    * @apiDescription 旋转箭头显示
    */
   showRotateArrow(obj: any) {
@@ -790,8 +782,6 @@ export default class Transformer3D {
     this.controller_3d!.add(this.rotateRingCenter!)
   }
   /**
-   * @api showRotateRingX
-   * @apiGroup TransformController3D
    * @apiDescription 旋转圆环显示
    */
   showRotateRingX(obj: any, Dis: number, Width: number) {
@@ -838,14 +828,10 @@ export default class Transformer3D {
     ;(this.rotateRingX as THREE.Object3D).add(this.rotateRingBelowX, this.rotateRingLinesX)
     ;(this.rotateRingX as THREE.Object3D).position.x = 1
     ;(this.rotateRingX as THREE.Object3D).rotation.y = -Math.PI / 2
-
-    // 添加入场景
     ;(this.rotateRingCenter as THREE.Object3D).add(this.rotateRingX as THREE.Object3D)
   }
 
   /**
-   * @api showRotateRingY
-   * @apiGroup TransformController3D
    * @apiDescription 旋转圆环显示
    */
   showRotateRingY(obj: any, Dis: number, Width: number) {
@@ -898,8 +884,6 @@ export default class Transformer3D {
   }
 
   /**
-   * @api showRotateRingZ
-   * @apiGroup TransformController3D
    * @apiDescription 旋转圆环显示
    */
   showRotateRingZ(obj: any, Dis: number, Width: number) {
@@ -1073,14 +1057,9 @@ export default class Transformer3D {
     this.updateTransformArrow(obj)
     this.updateRotateArrow(obj)
     this.updateRotateRing(obj)
-
-    // TODO:
-    // GlobalApi.scene3D.add(this.controller_3d);
   }
 
   /**
-   * @api updateTransformArrow
-   * @apiGroup TransformController3D
    * @apiDescription 平移箭头更新
    */
   updateTransformArrow(obj: any) {
@@ -1131,8 +1110,6 @@ export default class Transformer3D {
   }
 
   /**
-   * @api updateRotateArrow
-   * @apiGroup TransformController3D
    * @apiDescription 旋转箭头显示
    */
   updateRotateArrow(obj: any) {
@@ -1157,47 +1134,13 @@ export default class Transformer3D {
   }
 
   /**
-   * @api updateRotateRing
-   * @apiGroup TransformController3D
    * @apiDescription 旋转圆环更新
    */
   updateRotateRing(obj: any) {
     if (this.m_iSelected != 4) return
   }
 
-  /*--------------------------------------------------------------------------------*/
-
-  // /**
-  //  * @api clearController
-  //  * @apiGroup TransformController3D
-  //  * @apiDescription 总清空
-  //  */
-  clearController() {
-    let stack = [this.controller_3d] // 初始化栈，并将根节点入栈
-    while (stack.length > 0) {
-      let node = stack.pop() // 弹出栈顶节点
-      if (node == null || 'children' in node == false) continue
-      for (let child of node.children) {
-        stack.push(child) // 将子节点入栈
-      }
-      this.clearChild(node)
-    }
-  }
-
-  clearChild(ele: any) {
-    if (ele == null || 'children' in ele == false) return
-    while (ele.children.length > 0) {
-      let child = ele.children[0]
-      this.clearChild(child) // 递归删除子节点
-      ele.remove(child) // 删除当前节点
-    }
-  }
-
-  /*---------------------------------------------------------------------------------*/
-
   /**
-   * @api OnMouseDown
-   * @apiGroup TransformController3D
    * @apiDescription 鼠标按下时进行判断
    */
   // 在对obj进行mousedown判定时先判定Controller,返回为true即为选中
@@ -1316,8 +1259,6 @@ export default class Transformer3D {
     }
   }
   /**
-   * @api OnMouseMove
-   * @apiGroup TransformController3D
    * @apiDescription 鼠标移动时进行判断
    */
   // 在对obj进行移动判定时先判定Controller,返回为true即为选中
@@ -1525,8 +1466,6 @@ export default class Transformer3D {
   }
 
   /**
-   * @api OnMouseUp
-   * @apiGroup TransformController3D
    * @apiDescription 鼠标抬起时进行判断
    */
   OnMouseUp(event: MouseEvent) {
@@ -1536,14 +1475,5 @@ export default class Transformer3D {
       this.isDragging = false
     }
     this.showArrowOnUp()
-  }
-
-  /**
-   * @api OnMouseRightUp
-   * @apiGroup TransformController3D
-   * @apiDescription 右键单击清空
-   */
-  OnMouseRightUp() {
-    this.clearController()
   }
 }
