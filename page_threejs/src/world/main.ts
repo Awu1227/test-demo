@@ -36,7 +36,7 @@ export default class World {
 
     document.addEventListener('pointermove', (evt) => this.onPointerMove(evt))
     document.addEventListener('pointerdown', (evt) => this.onPointerDown(evt))
-    // document.addEventListener('pointerup',(evt) => this.onPointerUp(evt))
+    document.addEventListener('pointerup', (evt) => this.onPointerUp(evt))
 
     const cube = createTorusKnot()
     this._meshs.push(cube)
@@ -71,7 +71,7 @@ export default class World {
   onPointerMove(evt: MouseEvent) {
     // this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
     if (this.tsf?.isDragging) {
-      this.tsf.OnMouseMove(evt, 1)
+      this.tsf.OnMouseMove(evt, this.tsf.staff)
       this.controls.enableRotate = false
     } else {
       this.controls.enableRotate = true
@@ -105,7 +105,23 @@ export default class World {
     }
     console.log('intersect', intersects)
   }
-
+  onPointerUp(event: MouseEvent) {
+    if (this.tsf?.isDragging === true) {
+      this.tsf.isDragging = false
+    }
+    this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+    this.raycaster.setFromCamera(this.pointer, this.camera)
+    // const intersects = this.raycaster.intersectObjects(this.tsf.arrowArray, false)
+    // if (intersects.length > 0) {
+    //   if (this.tsf.isDragging) {
+    //     console.log('dragup')
+    //     this.tsf.isDragging = false
+    //     this.tsf && this.scene.remove(this.tsf.controller_3d!)
+    //     this.tsf = undefined
+    //   }
+    // }
+  }
   render() {
     this.renderer.render(this.scene, this.camera)
   }

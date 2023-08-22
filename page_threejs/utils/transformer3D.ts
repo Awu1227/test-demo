@@ -91,7 +91,6 @@ export default class Transformer3D {
   constructor(staff: IStaff, camera: THREE.PerspectiveCamera) {
     this.staff = staff
     this.camera = camera
-    this.isDragging = true
   }
 
   /**
@@ -230,7 +229,7 @@ export default class Transformer3D {
       new THREE.MeshBasicMaterial({
         color: 'red',
         transparent: true,
-        opacity: 0,
+        opacity: 0.1,
         depthWrite: false,
         side: THREE.DoubleSide
       })
@@ -1200,13 +1199,13 @@ export default class Transformer3D {
    */
   // 在对obj进行mousedown判定时先判定Controller,返回为true即为选中
   OnMouseDown(event: MouseEvent) {
-    //mouseX:X     mouseY:Z
     console.log('downevt', event)
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
     this.raycaster.setFromCamera(this.pointer, this.camera)
     const intersects = this.raycaster.intersectObjects(this.arrowArray, false)
     if (intersects.length > 0) {
+      this.isDragging = true
       const object = intersects[0].object
       console.log('箭头mesh', object.name)
       this.selectArrow = ESelectArrow[object.name]
@@ -1264,7 +1263,6 @@ export default class Transformer3D {
           this.rotateArrowX!.visible = false
           this.rotateArrowY!.visible = false
           return true
-
         default:
           break
       }
@@ -1296,8 +1294,6 @@ export default class Transformer3D {
       console.log('intersect', intersects)
       if (intersects.length > 0) {
         const object = intersects[0].object as any
-        console.log('move_object', object)
-
         if (Number(object.name) > 3) {
           const arrowParent = object.parent
           console.log('obj11', object, arrowParent)
@@ -1329,11 +1325,11 @@ export default class Transformer3D {
       }
     }
 
-    console.log('this.pointer', this.pointer)
     if (this.m_iSelected < 0 || this.controller_3d == null || obj.m_Locking == true) return false
+    console.log('this.pointer', this.m_iSelected, this.pointer)
 
     switch (this.m_iSelected) {
-      case 1: {
+      case ESelectArrow.ARROWX: {
         let Intersection = this.raycaster.intersectObject(this.transformArrowXHelp as THREE.Mesh)
         if (Intersection.length > 0) {
           obj.m_Object3D.position.x += Intersection[0].point.x - this.lastMouseX
@@ -1341,11 +1337,11 @@ export default class Transformer3D {
         }
         break
       }
-      case 2: {
+      case ESelectArrow.ARROWY: {
         let Intersection = this.raycaster.intersectObject(this.transformArrowYHelp as THREE.Mesh)
         if (Intersection.length > 0) {
-          // obj.m_Object3D.position.y += Intersection[0].point.y - this.lastMouseY;
-          if (obj.mJsonParam.m_fHight >= 0) obj.mJsonParam.m_fHight += (Intersection[0].point.y - this.lastMouseY) * 10
+          obj.m_Object3D.position.y += Intersection[0].point.y - this.lastMouseY
+          // if (obj.mJsonParam.m_fHight >= 0) obj.mJsonParam.m_fHight += (Intersection[0].point.y - this.lastMouseY) * 10
           this.lastMouseY = Intersection[0].point.y
 
           // 限制y轴坐标
@@ -1355,7 +1351,7 @@ export default class Transformer3D {
         }
         break
       }
-      case 3: {
+      case ESelectArrow.ARROWZ: {
         let Intersection = this.raycaster.intersectObject(this.transformArrowZHelp as THREE.Mesh)
         if (Intersection.length > 0) {
           obj.m_Object3D.position.z += Intersection[0].point.z - this.lastMouseZ
@@ -1363,7 +1359,7 @@ export default class Transformer3D {
         }
         break
       }
-      case 4: {
+      case ESelectArrow.RINGX: {
         let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh)
 
         if (Intersection.length > 0) {
@@ -1404,7 +1400,7 @@ export default class Transformer3D {
         }
         break
       }
-      case 5: {
+      case ESelectArrow.RINGY: {
         let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh)
 
         if (Intersection.length > 0) {
@@ -1445,7 +1441,7 @@ export default class Transformer3D {
         }
         break
       }
-      case 6: {
+      case ESelectArrow.RINGZ: {
         let Intersection = this.raycaster.intersectObject(this.rotateArrowHelp as THREE.Mesh)
 
         if (Intersection.length > 0) {
