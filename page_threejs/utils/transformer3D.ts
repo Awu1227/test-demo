@@ -1318,7 +1318,6 @@ export default class Transformer3D {
         let Intersection = this.raycaster.intersectObject(this.transformArrowYHelp as THREE.Mesh)
         if (Intersection.length > 0) {
           obj.m_Object3D.position.y += Intersection[0].point.y - this.lastMouseY
-          // if (obj.mJsonParam.m_fHight >= 0) obj.mJsonParam.m_fHight += (Intersection[0].point.y - this.lastMouseY) * 10
           this.lastMouseY = Intersection[0].point.y
 
           // 限制y轴坐标
