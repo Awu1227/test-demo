@@ -1521,29 +1521,6 @@ export default class Transformer3D {
     }
 
     this.updateController(obj)
-    if (this.m_iSelected == 1 || this.m_iSelected == 2 || this.m_iSelected == 3) {
-    } else if (this.m_iSelected == 4 || this.m_iSelected == 5 || this.m_iSelected == 6) {
-    }
-    switch (this.m_iSelected) {
-      case 1 || 2 || 3:
-        ;(this.rotateArrowCenter as THREE.Object3D).visible = false
-        break
-      case 4:
-        ;(this.transform as THREE.Object3D).visible = false
-        this.rotateArrowY!.visible = false
-        this.rotateArrowZ!.visible = false
-        break
-      case 5:
-        ;(this.transform as THREE.Object3D).visible = false
-        this.rotateArrowX!.visible = false
-        this.rotateArrowZ!.visible = false
-        break
-      case 6:
-        ;(this.transform as THREE.Object3D).visible = false
-        this.rotateArrowX!.visible = false
-        this.rotateArrowY!.visible = false
-        break
-    }
     return true
   }
 
