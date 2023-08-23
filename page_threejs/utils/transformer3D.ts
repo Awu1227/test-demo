@@ -78,8 +78,10 @@ export default class Transformer3D implements ITransformer3D {
   radiusY = 0
   radiusZ = 0
   scene: THREE.Scene
+  type: string // controller类型
 
-  constructor(staff: IStaff, scene: THREE.Scene, camera: THREE.PerspectiveCamera) {
+  constructor(staff: IStaff, scene: THREE.Scene, camera: THREE.PerspectiveCamera, type: string = 'normal') {
+    this.type = type
     this.staff = staff
     this.scene = scene
     this.camera = camera
@@ -1166,6 +1168,7 @@ export default class Transformer3D implements ITransformer3D {
   mouseup(event: MouseEvent) {
     event_MouseUp(event, this)
   }
+
   /**@description tfs销毁 */
   destory() {
     this.scene.remove(this.controller_3d!)

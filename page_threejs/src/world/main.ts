@@ -85,7 +85,7 @@ export default class World {
       if (!this.tsf?.controller_3d) {
         console.log('create')
 
-        this.tsf = new Transformer3D(stuff, this.scene, this.camera)
+        this.tsf = new Transformer3D(stuff, this.scene, this.camera, 'pipe')
         this.scene.add(this.tsf.controller_3d!)
       }
     } else {
