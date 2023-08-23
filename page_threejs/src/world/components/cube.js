@@ -1,40 +1,30 @@
-import {
-  BoxBufferGeometry,
-  BoxGeometry,
-  Matrix4,
-  Mesh,
-  MeshBasicMaterial,
-  MeshStandardMaterial,
-  MathUtils
-} from "three";
+import { BoxBufferGeometry, BoxGeometry, Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, MathUtils } from 'three'
 
 export const createCube = () => {
   // 单位为米
-  const geometry = new BoxGeometry(1, 1, 1);
+  const geometry = new BoxGeometry(4, 4, 4)
 
   // create a default (white) Basic material
-  const material = new MeshStandardMaterial({ color: "purple" });
+  const material = new MeshStandardMaterial({ color: 'purple' })
 
   // create a Mesh containing the geometry and material
-  const cube = new Mesh(geometry, material);
+  const cube = new Mesh(geometry, material)
 
-  const radiansPerSecond = MathUtils.degToRad(30);
+  const radiansPerSecond = MathUtils.degToRad(30)
 
   // this method will be called once per frame
   cube.tick = (delta) => {
     // increase the cube's rotation each frame
-    cube.rotation.z += radiansPerSecond * delta;
-    cube.rotation.x += radiansPerSecond * delta;
-    cube.rotation.y += radiansPerSecond * delta;
-  };
+    cube.rotation.z += radiansPerSecond * delta
+    cube.rotation.x += radiansPerSecond * delta
+    cube.rotation.y += radiansPerSecond * delta
+  }
 
-  console.log(cube.matrixWorld);
+  console.log(cube.matrixWorld)
   // cube.matrixWorld = new Matrix4();
   // cube.matrix = new Matrix4();
   // cube.updateMatrix();
   // cube.updateMatrixWorld();
 
-  cube.rotation.set(-0.5, -0.1, 0.8);
-
-  return cube;
-};
+  return cube
+}

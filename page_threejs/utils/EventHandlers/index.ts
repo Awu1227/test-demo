@@ -46,7 +46,6 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
       }
     }
   }
-  console.log('isSelect', tfs.m_iSelected)
 
   if (tfs.m_iSelected < 0 || tfs.controller_3d == null || !tfs.isDragging) return false
 
@@ -81,6 +80,8 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
       break
     }
     case ESelectArrow.RINGX: {
+      console.log('ringx')
+
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
@@ -108,15 +109,23 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         tfs.lastRadian = mouseRadian
         tfs.radiusX = (tfs.radiusX * Math.PI) / 180
         tfs.radiusX += diffRadian
+        console.log(tfs.radiusX)
+
         //将结果限制在0-2PI
         tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusX = (tfs.radiusX * 180) / Math.PI
 
-        tfs.staff.m_Object3D.rotation.x = THREE.MathUtils.degToRad(tfs.radiusX)
+        let position = new THREE.Vector3(tfs.staff.m_Object3D.position.x, tfs.staff.m_Object3D.position.y, tfs.staff.m_Object3D.position.z)
+
+        tfs.staff.m_Object3D.position.set(0, 0, 0)
+        tfs.staff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationX(diffRadian))
+        tfs.staff.m_Object3D.position.set(position.x, position.y, position.z)
       }
       break
     }
     case ESelectArrow.RINGY: {
+      console.log('ringy')
+
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
@@ -148,11 +157,16 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         tfs.radiusY = (tfs.radiusY + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusY = (tfs.radiusY * 180) / Math.PI
 
-        tfs.staff.m_Object3D.rotation.y = THREE.MathUtils.degToRad(tfs.radiusY)
+        let position = new THREE.Vector3(tfs.staff.m_Object3D.position.x, tfs.staff.m_Object3D.position.y, tfs.staff.m_Object3D.position.z)
+
+        tfs.staff.m_Object3D.position.set(0, 0, 0)
+        tfs.staff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationY(diffRadian))
+        tfs.staff.m_Object3D.position.set(position.x, position.y, position.z)
       }
       break
     }
     case ESelectArrow.RINGZ: {
+      console.log('ringz')
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
@@ -184,7 +198,11 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         tfs.radiusZ = (tfs.radiusZ + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusZ = (tfs.radiusZ * 180) / Math.PI
 
-        tfs.staff.m_Object3D.rotation.z = THREE.MathUtils.degToRad(tfs.radiusZ)
+        let position = new THREE.Vector3(tfs.staff.m_Object3D.position.x, tfs.staff.m_Object3D.position.y, tfs.staff.m_Object3D.position.z)
+
+        tfs.staff.m_Object3D.position.set(0, 0, 0)
+        tfs.staff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationZ(diffRadian))
+        tfs.staff.m_Object3D.position.set(position.x, position.y, position.z)
       }
       break
     }

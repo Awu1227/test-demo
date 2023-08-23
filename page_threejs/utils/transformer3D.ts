@@ -83,20 +83,17 @@ export default class Transformer3D implements ITransformer3D {
     this.staff = staff
     this.scene = scene
     this.camera = camera
+    this.showController(staff)
   }
 
   /**
    * @apiDescription 总显示
    */
   showController(obj: any) {
-    if (obj == null) return
-    if (obj.m_Locking == true) return
     this.controller_3d = new THREE.Object3D()
     this.showTransformArrow(obj)
     this.showRotateArrow(obj)
-
     this.addArrowToArr()
-
     this.updateController(obj)
     this.isShow = true
   }
@@ -399,7 +396,6 @@ export default class Transformer3D implements ITransformer3D {
     if (this.rotateArrowX) this.rotateArrowX.remove(this.rotateArrowRingX as THREE.Mesh, this.rotateArrowLeftX as THREE.Mesh, this.rotateArrowRightX as THREE.Mesh)
     if (this.rotateArrowY) this.rotateArrowY.remove(this.rotateArrowRingY as THREE.Mesh, this.rotateArrowLeftY as THREE.Mesh, this.rotateArrowRightY as THREE.Mesh)
     if (this.rotateArrowZ) this.rotateArrowZ.remove(this.rotateArrowRingZ as THREE.Mesh, this.rotateArrowLeftZ as THREE.Mesh, this.rotateArrowRightZ as THREE.Mesh)
-
     this.rotateArrowCenter = new THREE.Object3D()
 
     // let arrowDis = 500;
@@ -1147,6 +1143,15 @@ export default class Transformer3D implements ITransformer3D {
       this.transformArrowX!.visible = true
       this.transformArrowY!.visible = true
       this.transformArrowZ!.visible = true
+    } else {
+      console.log('旋转11111111', this.transformArrowX)
+      this.destory()
+
+      // this.controller_3d!.remove(this.rotateRingCenter)
+      // this.rotateArrowCenter!.visible = true
+      // this.rotateArrowX!.visible = false
+      // this.rotateArrowY!.visible = false
+      // this.rotateArrowZ!.visible = false
     }
   }
   /**@apiDescription 鼠标按下时进行判断 */
@@ -1164,5 +1169,6 @@ export default class Transformer3D implements ITransformer3D {
   /**@description tfs销毁 */
   destory() {
     this.scene.remove(this.controller_3d!)
+    this.controller_3d = null
   }
 }

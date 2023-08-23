@@ -38,7 +38,7 @@ export default class World {
     document.addEventListener('mousedown', (evt) => this.onPointerDown(evt))
     document.addEventListener('mouseup', (evt) => this.onPointerUp(evt))
 
-    const cube = createTorusKnot()
+    const cube = createCube()
     this._meshs.push(cube)
 
     const light = createLight()
@@ -82,11 +82,11 @@ export default class World {
         setVisible: () => {},
         destory: () => {}
       }
-      if (!this.tsf) {
+      if (!this.tsf?.controller_3d) {
+        console.log('create')
+
         this.tsf = new Transformer3D(stuff, this.scene, this.camera)
-        this.tsf.showController(stuff)
         this.scene.add(this.tsf.controller_3d!)
-        console.log('controller', this.tsf)
       }
     } else {
       if (!this.tsf?.mousedown(event)) {
