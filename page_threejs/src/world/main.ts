@@ -81,6 +81,7 @@ export default class World {
     this.raycaster.setFromCamera(this.pointer, this.camera)
     const intersects = this.raycaster.intersectObjects(this._meshs, false)
     if (intersects.length > 0) {
+      console.log(intersects[0])
       const object = intersects[0].object
       const stuff = {
         m_Object3D: object,
@@ -89,9 +90,10 @@ export default class World {
       }
       if (!this.tsf?.controller_3d) {
         console.log('create')
-
         this.tsf = new Transformer3D(stuff, this.scene, this.camera, 'pipe')
         this.scene.add(this.tsf.controller_3d!)
+      } else {
+        this.tsf?.mousedown(event)
       }
     } else {
       if (!this.tsf?.mousedown(event)) {

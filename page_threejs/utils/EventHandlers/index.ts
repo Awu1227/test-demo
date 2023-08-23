@@ -48,7 +48,6 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
   }
 
   if (tfs.m_iSelected < 0 || tfs.controller_3d == null || !tfs.isDragging) return false
-
   switch (tfs.m_iSelected) {
     case ESelectArrow.ARROWX: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowXHelp as THREE.Mesh)
