@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { ESelectArrow, IStaff } from './type'
-import { event_MouseDown, event_MouseMove, event_MouseUp } from './EventHandlers'
+import { event_KeyDown, event_MouseDown, event_MouseMove, event_MouseUp } from './EventHandlers'
 
 interface ITransformer3D {
   mousedown: (event: MouseEvent) => boolean
@@ -79,6 +79,7 @@ export default class Transformer3D implements ITransformer3D {
   radiusZ = 0
   scene: THREE.Scene
   type: string // controller类型
+  meshBoundingBox = new THREE.Box3Helper(new THREE.Box3())
 
   constructor(staff: IStaff, scene: THREE.Scene, camera: THREE.PerspectiveCamera, type: string = 'normal') {
     this.type = type
@@ -91,13 +92,23 @@ export default class Transformer3D implements ITransformer3D {
   /**
    * @apiDescription 总显示
    */
-  showController(obj: any) {
+  showController(obj: IStaff) {
     this.controller_3d = new THREE.Object3D()
     this.showTransformArrow(obj)
     this.showRotateArrow(obj)
+    this.showBoundingBox(obj)
     this.addArrowToArr()
     this.updateController(obj)
     this.isShow = true
+  }
+  showBoundingBox(obj: any) {
+    console.log('mesh', obj.m_Object3D)
+    const box = new THREE.Box3().setFromObject(obj.m_Object3D)
+
+    this.meshBoundingBox = new THREE.Box3Helper(box, new THREE.Color(0xffad28))
+
+    // 将助手添加到场景中
+    this.scene.add(this.meshBoundingBox)
   }
   addArrowToArr() {
     this.arrowArray.push(this.transformArrowX, this.transformArrowY, this.transformArrowZ, ...this.rotateArrowX?.children!, ...this.rotateArrowY?.children!, ...this.rotateArrowZ?.children!)
@@ -1148,7 +1159,6 @@ export default class Transformer3D implements ITransformer3D {
     } else {
       console.log('旋转11111111', this.transformArrowX)
       this.destory()
-
       // this.controller_3d!.remove(this.rotateRingCenter)
       // this.rotateArrowCenter!.visible = true
       // this.rotateArrowX!.visible = false
@@ -1168,10 +1178,14 @@ export default class Transformer3D implements ITransformer3D {
   mouseup(event: MouseEvent) {
     event_MouseUp(event, this)
   }
+  keydown(event: KeyboardEvent) {
+    event_KeyDown(event, this)
+  }
 
   /**@description tfs销毁 */
   destory() {
     this.scene.remove(this.controller_3d!)
+    this.scene.remove(this.meshBoundingBox)
     this.controller_3d = null
   }
 }

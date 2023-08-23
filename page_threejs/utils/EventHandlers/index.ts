@@ -224,6 +224,7 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
     console.log('箭头mesh', object.name)
     tfs.m_iSelected = Number(object.name)
     console.log('选择的箭头', tfs.selectArrow)
+    tfs.scene.remove(tfs.meshBoundingBox)
     switch (Number(object.name)) {
       case ESelectArrow.ARROWX:
         tfs.lastMouseX = intersects[0].point.x
@@ -281,6 +282,24 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
 export function event_MouseUp(event: MouseEvent, tfs: Transformer3D) {
   if (tfs.isDragging === true) {
     tfs.isDragging = false
+    tfs.showBoundingBox(tfs.staff)
   }
   tfs.showArrowOnUp()
+}
+/**@description 键盘按下事件 */
+export function event_KeyDown(event: KeyboardEvent, tfs: Transformer3D) {
+  console.log(event)
+
+  if (event.code === 'KeyD') {
+    tfs.raycaster = new THREE.Raycaster((tfs.staff.m_Object3D as any).position, new THREE.Vector3(0, -1, 0), 0.1, 100)
+    console.log(tfs.raycaster)
+    const intersects = tfs.raycaster.intersectObjects(tfs.scene.children)
+    if (intersects.length > 0) {
+      const distance = intersects[0].distance
+      tfs.staff.m_Object3D.position.y -= distance - 2
+    }
+    console.log(11, intersects)
+    tfs.destory()
+    tfs.raycaster = new THREE.Raycaster()
+  }
 }

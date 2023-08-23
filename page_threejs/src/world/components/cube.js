@@ -9,7 +9,8 @@ export const createCube = () => {
 
   // create a Mesh containing the geometry and material
   const cube = new Mesh(geometry, material)
-
+  cube.name = 'cube'
+  cube.position.set(0, 8, 0)
   const radiansPerSecond = MathUtils.degToRad(30)
 
   // this method will be called once per frame
@@ -19,7 +20,6 @@ export const createCube = () => {
     cube.rotation.x += radiansPerSecond * delta
     cube.rotation.y += radiansPerSecond * delta
   }
-
   console.log(cube.matrixWorld)
   // cube.matrixWorld = new Matrix4();
   // cube.matrix = new Matrix4();

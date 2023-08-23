@@ -37,9 +37,14 @@ export default class World {
     document.addEventListener('mousemove', (evt) => this.onPointerMove(evt))
     document.addEventListener('mousedown', (evt) => this.onPointerDown(evt))
     document.addEventListener('mouseup', (evt) => this.onPointerUp(evt))
+    document.addEventListener('keydown', (evt) => this.onKeyDown(evt))
 
     const cube = createCube()
-    this._meshs.push(cube)
+    const cube1 = createCube()
+    const cube2 = createCube()
+    cube1.position.set(0, 0, 0)
+    cube2.position.set(8, 8, 8)
+    this._meshs.push(cube, cube1, cube2)
 
     const light = createLight()
 
@@ -48,7 +53,7 @@ export default class World {
     this.controls = createControls(this.camera, this.renderer.domElement)
 
     this.loop.updatables.push(this.controls)
-    this.scene.add(cube, gridHelper, light)
+    this.scene.add(cube, cube1, cube2, gridHelper, light)
 
     console.log('scene', this.scene)
 
@@ -98,6 +103,9 @@ export default class World {
   }
   onPointerUp(event: MouseEvent) {
     this.tsf && this.tsf.mouseup(event)
+  }
+  onKeyDown(event: KeyboardEvent) {
+    this.tsf && this.tsf.keydown(event)
   }
   render() {
     this.renderer.render(this.scene, this.camera)
