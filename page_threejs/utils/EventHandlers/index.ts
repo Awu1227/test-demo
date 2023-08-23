@@ -3,7 +3,7 @@ import Transformer3D from '../transformer3D'
 import { ESelectArrow } from '../type'
 
 /**@description 鼠标移动事件 */
-export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D) {
+export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
   if (tfs.arrowArray.length) {
     // 移动到箭头上高亮
     tfs.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
@@ -44,13 +44,13 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
   }
   console.log('isSelect', tfs.m_iSelected)
 
-  if (tfs.m_iSelected < 0 || tfs.controller_3d == null || obj.m_Locking == true || !tfs.isDragging) return false
+  if (tfs.m_iSelected < 0 || tfs.controller_3d == null || !tfs.isDragging) return false
 
   switch (tfs.m_iSelected) {
     case ESelectArrow.ARROWX: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowXHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        obj.m_Object3D.position.x += Intersection[0].point.x - tfs.lastMouseX
+        tfs.staff.m_Object3D.position.x += Intersection[0].point.x - tfs.lastMouseX
         tfs.lastMouseX = Intersection[0].point.x
       }
       break
@@ -58,12 +58,12 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
     case ESelectArrow.ARROWY: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowYHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        obj.m_Object3D.position.y += Intersection[0].point.y - tfs.lastMouseY
+        tfs.staff.m_Object3D.position.y += Intersection[0].point.y - tfs.lastMouseY
         tfs.lastMouseY = Intersection[0].point.y
 
         // 限制y轴坐标
-        if (obj.m_Object3D.position.y < 0) {
-          obj.m_Object3D.position.y = 0
+        if (tfs.staff.m_Object3D.position.y < 0) {
+          tfs.staff.m_Object3D.position.y = 0
         }
       }
       break
@@ -71,7 +71,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
     case ESelectArrow.ARROWZ: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowZHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        obj.m_Object3D.position.z += Intersection[0].point.z - tfs.lastMouseZ
+        tfs.staff.m_Object3D.position.z += Intersection[0].point.z - tfs.lastMouseZ
         tfs.lastMouseZ = Intersection[0].point.z
       }
       break
@@ -80,7 +80,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
-        let mouseRadian = -Math.atan2(Intersection[0].point.y - obj.m_Object3D.position.y, Intersection[0].point.z - obj.m_Object3D.position.z)
+        let mouseRadian = -Math.atan2(Intersection[0].point.y - tfs.staff.m_Object3D.position.y, Intersection[0].point.z - tfs.staff.m_Object3D.position.z)
 
         // 角度限制为正数
         mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
@@ -108,7 +108,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
         tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusX = (tfs.radiusX * 180) / Math.PI
 
-        obj.m_Object3D.rotation.x = THREE.MathUtils.degToRad(tfs.radiusX)
+        tfs.staff.m_Object3D.rotation.x = THREE.MathUtils.degToRad(tfs.radiusX)
       }
       break
     }
@@ -116,7 +116,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
-        let mouseRadian = -Math.atan2(Intersection[0].point.z - obj.m_Object3D.position.z, Intersection[0].point.x - obj.m_Object3D.position.x)
+        let mouseRadian = -Math.atan2(Intersection[0].point.z - tfs.staff.m_Object3D.position.z, Intersection[0].point.x - tfs.staff.m_Object3D.position.x)
 
         // 角度限制为正数
         mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
@@ -144,7 +144,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
         tfs.radiusY = (tfs.radiusY + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusY = (tfs.radiusY * 180) / Math.PI
 
-        obj.m_Object3D.rotation.y = THREE.MathUtils.degToRad(tfs.radiusY)
+        tfs.staff.m_Object3D.rotation.y = THREE.MathUtils.degToRad(tfs.radiusY)
       }
       break
     }
@@ -152,7 +152,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
-        let mouseRadian = -Math.atan2(Intersection[0].point.x - obj.m_Object3D.position.x, Intersection[0].point.y - obj.m_Object3D.position.y)
+        let mouseRadian = -Math.atan2(Intersection[0].point.x - tfs.staff.m_Object3D.position.x, Intersection[0].point.y - tfs.staff.m_Object3D.position.y)
 
         // 角度限制为正数
         mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
@@ -180,13 +180,13 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
         tfs.radiusZ = (tfs.radiusZ + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusZ = (tfs.radiusZ * 180) / Math.PI
 
-        obj.m_Object3D.rotation.z = THREE.MathUtils.degToRad(tfs.radiusZ)
+        tfs.staff.m_Object3D.rotation.z = THREE.MathUtils.degToRad(tfs.radiusZ)
       }
       break
     }
   }
 
-  tfs.updateController(obj)
+  tfs.updateController(tfs.staff)
   return true
 }
 /**@description 鼠标点击事件 */
@@ -202,7 +202,6 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
     console.log('箭头mesh', object.name)
     tfs.m_iSelected = Number(object.name)
     console.log('选择的箭头', tfs.selectArrow)
-
     switch (Number(object.name)) {
       case ESelectArrow.ARROWX:
         tfs.lastMouseX = intersects[0].point.x
@@ -244,6 +243,7 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
         tfs.showArrowOnMove(Number(object.name))
         return true
       default:
+        return true
         break
     }
   } else {
@@ -253,4 +253,12 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
     return false
   }
   if (tfs.controller_3d == null) return false
+}
+
+/**@description 鼠标抬起事件 */
+export function event_MouseUp(event: MouseEvent, tfs: Transformer3D) {
+  if (tfs.isDragging === true) {
+    tfs.isDragging = false
+  }
+  tfs.showArrowOnUp()
 }

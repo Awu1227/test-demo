@@ -1,5 +1,5 @@
 /**@description 选择的箭头 */
-export const enum ESelectArrow {
+export enum ESelectArrow {
   NONE = 0,
   ARROWX,
   ARROWY,
@@ -7,4 +7,11 @@ export const enum ESelectArrow {
   RINGX,
   RINGY,
   RINGZ
+}
+
+/**@description 传入的Staff */
+export interface IStaff {
+  m_Object3D: THREE.Object3D
+  setVisible()
+  destory()
 }

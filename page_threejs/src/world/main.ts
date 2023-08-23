@@ -34,9 +34,9 @@ export default class World {
 
     container.append(this.renderer.domElement)
 
-    document.addEventListener('pointermove', (evt) => this.onPointerMove(evt))
-    document.addEventListener('pointerdown', (evt) => this.onPointerDown(evt))
-    document.addEventListener('pointerup', (evt) => this.onPointerUp(evt))
+    document.addEventListener('mousemove', (evt) => this.onPointerMove(evt))
+    document.addEventListener('mousedown', (evt) => this.onPointerDown(evt))
+    document.addEventListener('mouseup', (evt) => this.onPointerUp(evt))
 
     const cube = createTorusKnot()
     this._meshs.push(cube)
@@ -62,7 +62,7 @@ export default class World {
   onPointerMove(evt: MouseEvent) {
     // this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
     if (this.tsf?.isShow) {
-      this.tsf.OnMouseMove(evt, this.tsf.staff)
+      this.tsf.mousemove(evt)
       this.controls.enableRotate = false
     } else {
       this.controls.enableRotate = true
@@ -89,7 +89,7 @@ export default class World {
         console.log('controller', this.tsf)
       }
     } else {
-      if (!this.tsf?.OnMouseDown(event)) {
+      if (!this.tsf?.mousedown(event)) {
         this.tsf && this.scene.remove(this.tsf.controller_3d!)
         this.tsf = undefined
       }
@@ -97,7 +97,7 @@ export default class World {
     console.log('intersect', intersects)
   }
   onPointerUp(event: MouseEvent) {
-    this.tsf && this.tsf.OnMouseUp(event)
+    this.tsf && this.tsf.mouseup(event)
   }
   render() {
     this.renderer.render(this.scene, this.camera)

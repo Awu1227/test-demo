@@ -1,14 +1,14 @@
 import * as THREE from 'three'
-import { ESelectArrow } from './type'
-import { event_MouseDown, event_MouseMove } from './EventHandlers'
-/**@description 传入的Staff */
-interface IStaff {
-  m_Object3D: THREE.Object3D
-  setVisible()
-  destory()
+import { ESelectArrow, IStaff } from './type'
+import { event_MouseDown, event_MouseMove, event_MouseUp } from './EventHandlers'
+
+interface ITransformer3D {
+  mousedown: (event: MouseEvent) => boolean
+  mousemove: (event: MouseEvent) => boolean
+  mouseup: (event: MouseEvent) => void
 }
 
-export default class Transformer3D {
+export default class Transformer3D implements ITransformer3D {
   isShow = false
   isDragging = false
   camera!: THREE.PerspectiveCamera
@@ -1101,11 +1101,6 @@ export default class Transformer3D {
     }
   }
 
-  /**@apiDescription 鼠标按下时进行判断 */
-  OnMouseDown(event: MouseEvent) {
-    return event_MouseDown(event, this) // 如果return false，意味着没有点击到
-  }
-
   /**@description 移动时显示箭头 */
   showArrowOnMove(type: ESelectArrow) {
     switch (type) {
@@ -1154,16 +1149,16 @@ export default class Transformer3D {
       this.transformArrowZ!.visible = true
     }
   }
-  /**@apiDescription 鼠标移动时进行判断 */
-  OnMouseMove(event: MouseEvent, obj: any) {
-    return event_MouseMove(event, obj, this)
+  /**@apiDescription 鼠标按下时进行判断 */
+  mousedown(event: MouseEvent) {
+    return event_MouseDown(event, this) // 如果return false，意味着没有点击到
   }
-
+  /**@apiDescription 鼠标移动时进行判断 */
+  mousemove(event: MouseEvent) {
+    return event_MouseMove(event, this)
+  }
   /**@description 鼠标抬起时进行判断 */
-  OnMouseUp(event: MouseEvent) {
-    if (this.isDragging === true) {
-      this.isDragging = false
-    }
-    this.showArrowOnUp()
+  mouseup(event: MouseEvent) {
+    event_MouseUp(event, this)
   }
 }
