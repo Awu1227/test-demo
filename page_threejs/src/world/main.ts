@@ -34,9 +34,9 @@ export default class World {
 
     container.append(this.renderer.domElement)
 
-    document.addEventListener('mousemove', (evt) => this.onPointerMove(evt))
-    document.addEventListener('mousedown', (evt) => this.onPointerDown(evt))
-    document.addEventListener('mouseup', (evt) => this.onPointerUp(evt))
+    document.addEventListener('pointermove', (evt) => this.onPointerMove(evt))
+    document.addEventListener('pointerdown', (evt) => this.onPointerDown(evt))
+    document.addEventListener('pointerup', (evt) => this.onPointerUp(evt))
     document.addEventListener('keydown', (evt) => this.onKeyDown(evt))
 
     for (let i = 0; i < 50; i++) {
