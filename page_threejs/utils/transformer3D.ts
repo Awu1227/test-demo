@@ -511,7 +511,7 @@ export default class Transformer3D implements ITransformer3D {
           depthTest: false
         })
       )
-      ;(this.rotateArrowRightX as THREE.Mesh).name = 'x右箭头'
+      ;(this.rotateArrowRightX as THREE.Mesh).name = '4'
       ;(this.rotateArrowX as THREE.Object3D).add(this.rotateArrowRightX as THREE.Mesh)
       ;(this.rotateArrowX as THREE.Object3D).position.x = 2
       ;(this.rotateArrowX as THREE.Object3D).rotation.y = -Math.PI / 2
