@@ -95,8 +95,6 @@ export default class Transformer3D implements ITransformer3D {
 
     this.addArrowToArr()
 
-    // this.showRotateRing(obj);
-
     this.updateController(obj)
     this.isShow = true
   }
