@@ -93,6 +93,12 @@ export default class World {
         this.tsf = new Transformer3D(stuff, this.scene, this.camera, 'pipe')
         this.scene.add(this.tsf.controller_3d!)
       } else {
+        if (object !== this.tsf.staff.m_Object3D && !this.tsf?.mousedown(event)) {
+          console.log('create')
+          this.tsf.destory()
+          this.tsf = new Transformer3D(stuff, this.scene, this.camera, 'pipe')
+          this.scene.add(this.tsf.controller_3d!)
+        }
         this.tsf?.mousedown(event)
       }
     } else {
