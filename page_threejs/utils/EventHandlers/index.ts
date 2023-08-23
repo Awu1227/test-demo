@@ -189,7 +189,7 @@ export function event_MouseMove(event: MouseEvent, obj: any, tfs: Transformer3D)
   tfs.updateController(obj)
   return true
 }
-
+/**@description 鼠标点击事件 */
 export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
   console.log('downevt', event)
   tfs.pointer.x = (event.clientX / window.innerWidth) * 2 - 1

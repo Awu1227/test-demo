@@ -50,7 +50,6 @@ export default class Transformer3D {
   rotateArrowRingZ: THREE.Mesh | null = null
   rotateArrowLeftZ: THREE.Mesh | null = null
   rotateArrowRightZ: THREE.Mesh | null = null
-
   // 旋转圆环
   rotateRingCenter: THREE.Object3D | null = null
   // YZ平面
@@ -65,7 +64,6 @@ export default class Transformer3D {
   rotateRingZ: THREE.Object3D | null = null
   rotateRingBelowZ: THREE.Mesh | null = null
   rotateRingLinesZ: THREE.LineSegments | null = null
-
   // 存放所有的箭头
   arrowArray: any[] = []
   // 当前选择对象
@@ -76,7 +74,6 @@ export default class Transformer3D {
   lastMouseY: number = -999999
   lastMouseZ: number = -999999
   lastRadian: number = 0
-
   radiusX = 0
   radiusY = 0
   radiusZ = 0
