@@ -39,12 +39,15 @@ export default class World {
     document.addEventListener('mouseup', (evt) => this.onPointerUp(evt))
     document.addEventListener('keydown', (evt) => this.onKeyDown(evt))
 
-    const cube = createCube()
-    const cube1 = createCube()
-    const cube2 = createCube()
-    cube1.position.set(0, 0, 0)
-    cube2.position.set(8, 8, 8)
-    this._meshs.push(cube, cube1, cube2)
+    for (let i = 0; i < 50; i++) {
+      const cube = createCube()
+      const ispostive1 = Math.random() > 0.5 ? 1 : -1
+      const ispostive2 = Math.random() > 0.5 ? 1 : -1
+      cube.position.set(ispostive1 * Math.random() * 50, Math.random() * 50, ispostive2 * Math.random() * 50)
+
+      this._meshs.push(cube)
+      this.scene.add(cube)
+    }
 
     const light = createLight()
 
@@ -53,7 +56,7 @@ export default class World {
     this.controls = createControls(this.camera, this.renderer.domElement)
 
     this.loop.updatables.push(this.controls)
-    this.scene.add(cube, cube1, cube2, gridHelper, light)
+    this.scene.add(gridHelper, light)
 
     console.log('scene', this.scene)
 

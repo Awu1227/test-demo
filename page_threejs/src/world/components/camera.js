@@ -1,4 +1,4 @@
-import { PerspectiveCamera } from "three";
+import { PerspectiveCamera } from 'three'
 
 export const createCamera = () => {
   const camera = new PerspectiveCamera(
@@ -6,7 +6,7 @@ export const createCamera = () => {
     1, // aspect radio (dummy value)
     0.1, // near clipping plane
     300 // far clipping plane
-  );
-  camera.position.set(10, 20, 40);
-  return camera;
-};
+  )
+  camera.position.set(40, 40, 80)
+  return camera
+}
