@@ -17,17 +17,21 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         const arrowParent = object.parent
         tfs.highLightArrow = arrowParent
         // 将箭头高亮
-        const prevColor = new THREE.Color(tfs.highLightArrow.userData.prevColor)
-        prevColor.multiply(prevColor)
-        arrowParent.children.forEach((item: any) => {
-          item.material.color.set(prevColor)
-        })
+        if (tfs.highLightArrow) {
+          const prevColor = new THREE.Color(tfs.highLightArrow.userData.prevColor)
+          prevColor.multiply(prevColor)
+          arrowParent.children.forEach((item: any) => {
+            item.material.color.set(prevColor)
+          })
+        }
       } else {
         tfs.highLightArrow = object
         // 将箭头高亮
-        const prevColor = new THREE.Color(tfs.highLightArrow.userData.prevColor)
-        prevColor.multiply(prevColor)
-        object.material.color.set(prevColor)
+        if (tfs.highLightArrow) {
+          const prevColor = new THREE.Color(tfs.highLightArrow.userData.prevColor)
+          prevColor.multiply(prevColor)
+          object.material.color.set(prevColor)
+        }
       }
     } else {
       // 恢复箭头之前的颜色

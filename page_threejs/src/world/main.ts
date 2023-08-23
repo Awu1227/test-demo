@@ -83,14 +83,14 @@ export default class World {
         destory: () => {}
       }
       if (!this.tsf) {
-        this.tsf = new Transformer3D(stuff, this.camera)
+        this.tsf = new Transformer3D(stuff, this.scene, this.camera)
         this.tsf.showController(stuff)
         this.scene.add(this.tsf.controller_3d!)
         console.log('controller', this.tsf)
       }
     } else {
       if (!this.tsf?.mousedown(event)) {
-        this.tsf && this.scene.remove(this.tsf.controller_3d!)
+        this.tsf && this.tsf.destory()
         this.tsf = undefined
       }
     }
