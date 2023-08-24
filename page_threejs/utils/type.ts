@@ -13,7 +13,12 @@ export enum ESelectArrow {
 export interface Istuff {
   m_Object3D: THREE.Object3D
   destory()
-  setVisible()
   move?: (vect3: THREE.Vector3) => any
   rotate?: (vect3: THREE.Vector3) => any
+  mirrorX?: () => any
+  mirrorY?: () => any
+  mirrorZ?: () => any
+  release?: () => any
+  setVisible?: (isV: boolean) => any
+  copy?: () => any
 }

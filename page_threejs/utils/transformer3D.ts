@@ -1159,11 +1159,6 @@ export default class Transformer3D implements ITransformer3D {
     } else {
       console.log('旋转11111111', this.transformArrowX)
       this.destory()
-      // this.controller_3d!.remove(this.rotateRingCenter)
-      // this.rotateArrowCenter!.visible = true
-      // this.rotateArrowX!.visible = false
-      // this.rotateArrowY!.visible = false
-      // this.rotateArrowZ!.visible = false
     }
   }
   /**@apiDescription 鼠标按下事件 */
@@ -1219,12 +1214,52 @@ export default class Transformer3D implements ITransformer3D {
       }
     }
   }
-  mirror() {}
-  /**@description this销毁 */
-  destory() {
-    this.stuff.destory()
+
+  /**@description 绕X轴翻转 */
+  mirrorX() {
+    this.rotate(new THREE.Vector3(Math.PI, 0, 0))
+  }
+  /**@description 绕Y轴翻转 */
+  mirrorY() {
+    this.rotate(new THREE.Vector3(0, Math.PI, 0))
+  }
+  /**@description 绕Z轴翻转 */
+  mirrorZ() {
+    this.rotate(new THREE.Vector3(0, 0, Math.PI))
+  }
+
+  /**@description 复制方法 */
+  copy() {
+    if (this.stuff.copy) {
+      this.stuff.copy()
+    }
+  }
+
+  /**@description 控制器显示与隐藏方法 */
+  setVisible(isV: boolean) {
+    if (this.stuff.setVisible) {
+      this.stuff.setVisible(isV)
+    } else {
+      this.stuff.m_Object3D.visible = isV
+      if (!isV) {
+        this.release()
+      }
+    }
+  }
+
+  /**@description 销毁控制器方法 */
+  release() {
+    if (this.stuff.release) {
+      this.stuff.release()
+    }
     this.scene.remove(this.controller_3d!)
     this.scene.remove(this.meshBoundingBox)
     this.controller_3d = null
+  }
+
+  /**@description 总销毁方法 */
+  destory() {
+    this.release()
+    this.stuff.destory()
   }
 }

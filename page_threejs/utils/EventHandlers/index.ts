@@ -112,7 +112,8 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusX = (tfs.radiusX * 180) / Math.PI
-        tfs.rotate(new THREE.Vector3(diffRadian, 0, 0))
+        // tfs.rotate(new THREE.Vector3(diffRadian, 0, 0))
+        tfs.mirrorX()
       }
       break
     }
