@@ -52,7 +52,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWX: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowXHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.staff.move(new THREE.Vector3(Intersection[0].point.x - tfs.lastMouseX, 0, 0))
+        tfs.stuff.move(new THREE.Vector3(Intersection[0].point.x - tfs.lastMouseX, 0, 0))
         tfs.lastMouseX = Intersection[0].point.x
       }
       break
@@ -60,12 +60,12 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWY: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowYHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.staff.move(new THREE.Vector3(0, Intersection[0].point.y - tfs.lastMouseY, 0))
+        tfs.stuff.move(new THREE.Vector3(0, Intersection[0].point.y - tfs.lastMouseY, 0))
         tfs.lastMouseY = Intersection[0].point.y
 
         // 限制y轴坐标
-        if (tfs.staff.m_Object3D.position.y < 0) {
-          tfs.staff.m_Object3D.position.y = 0
+        if (tfs.stuff.m_Object3D.position.y < 0) {
+          tfs.stuff.m_Object3D.position.y = 0
         }
       }
       break
@@ -73,7 +73,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWZ: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowZHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.staff.move(new THREE.Vector3(0, 0, Intersection[0].point.z - tfs.lastMouseZ))
+        tfs.stuff.move(new THREE.Vector3(0, 0, Intersection[0].point.z - tfs.lastMouseZ))
         tfs.lastMouseZ = Intersection[0].point.z
       }
       break
@@ -83,7 +83,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
-        let mouseRadian = -Math.atan2(Intersection[0].point.y - tfs.staff.m_Object3D.position.y, Intersection[0].point.z - tfs.staff.m_Object3D.position.z)
+        let mouseRadian = -Math.atan2(Intersection[0].point.y - tfs.stuff.m_Object3D.position.y, Intersection[0].point.z - tfs.stuff.m_Object3D.position.z)
 
         // 角度限制为正数
         mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
@@ -112,7 +112,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusX = (tfs.radiusX * 180) / Math.PI
-        tfs.staff.rotate(new THREE.Vector3(diffRadian, 0, 0))
+        tfs.stuff.rotate(new THREE.Vector3(diffRadian, 0, 0))
       }
       break
     }
@@ -122,7 +122,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
-        let mouseRadian = -Math.atan2(Intersection[0].point.z - tfs.staff.m_Object3D.position.z, Intersection[0].point.x - tfs.staff.m_Object3D.position.x)
+        let mouseRadian = -Math.atan2(Intersection[0].point.z - tfs.stuff.m_Object3D.position.z, Intersection[0].point.x - tfs.stuff.m_Object3D.position.x)
 
         // 角度限制为正数
         mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
@@ -149,7 +149,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusY = (tfs.radiusY + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusY = (tfs.radiusY * 180) / Math.PI
-        tfs.staff.rotate(new THREE.Vector3(0, diffRadian, 0))
+        tfs.stuff.rotate(new THREE.Vector3(0, diffRadian, 0))
       }
       break
     }
@@ -158,7 +158,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
-        let mouseRadian = -Math.atan2(Intersection[0].point.x - tfs.staff.m_Object3D.position.x, Intersection[0].point.y - tfs.staff.m_Object3D.position.y)
+        let mouseRadian = -Math.atan2(Intersection[0].point.x - tfs.stuff.m_Object3D.position.x, Intersection[0].point.y - tfs.stuff.m_Object3D.position.y)
 
         // 角度限制为正数
         mouseRadian = (mouseRadian + Math.PI * 2) % (Math.PI * 2)
@@ -185,13 +185,13 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusZ = (tfs.radiusZ + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusZ = (tfs.radiusZ * 180) / Math.PI
-        tfs.staff.rotate(new THREE.Vector3(0, 0, diffRadian))
+        tfs.stuff.rotate(new THREE.Vector3(0, 0, diffRadian))
       }
       break
     }
   }
 
-  tfs.updateController(tfs.staff)
+  tfs.updateController(tfs.stuff)
   return true
 }
 /**@description 鼠标点击事件 */
@@ -211,41 +211,41 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
     switch (Number(object.name)) {
       case ESelectArrow.ARROWX:
         tfs.lastMouseX = intersects[0].point.x
-        tfs.updateController(tfs.staff)
+        tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       case ESelectArrow.ARROWY:
         tfs.lastMouseY = intersects[0].point.y
-        tfs.updateController(tfs.staff)
+        tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       case ESelectArrow.ARROWZ:
         tfs.lastMouseZ = intersects[0].point.z
-        tfs.updateController(tfs.staff)
+        tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       case ESelectArrow.RINGX:
-        tfs.lastRadian = -Math.atan2(intersects[0].point.y - tfs.staff.m_Object3D.position.y, intersects[0].point.z - tfs.staff.m_Object3D.position.z)
-        tfs.showRotateArrow(tfs.staff)
-        tfs.showRotateRing(tfs.staff)
-        tfs.showRotateHelp(tfs.staff)
-        tfs.updateController(tfs.staff)
+        tfs.lastRadian = -Math.atan2(intersects[0].point.y - tfs.stuff.m_Object3D.position.y, intersects[0].point.z - tfs.stuff.m_Object3D.position.z)
+        tfs.showRotateArrow(tfs.stuff)
+        tfs.showRotateRing(tfs.stuff)
+        tfs.showRotateHelp(tfs.stuff)
+        tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       case ESelectArrow.RINGY:
-        tfs.lastRadian = -Math.atan2(intersects[0].point.z - tfs.staff.m_Object3D.position.z, intersects[0].point.x - tfs.staff.m_Object3D.position.x)
-        tfs.showRotateArrow(tfs.staff)
-        tfs.showRotateRing(tfs.staff)
-        tfs.showRotateHelp(tfs.staff)
-        tfs.updateController(tfs.staff)
+        tfs.lastRadian = -Math.atan2(intersects[0].point.z - tfs.stuff.m_Object3D.position.z, intersects[0].point.x - tfs.stuff.m_Object3D.position.x)
+        tfs.showRotateArrow(tfs.stuff)
+        tfs.showRotateRing(tfs.stuff)
+        tfs.showRotateHelp(tfs.stuff)
+        tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       case ESelectArrow.RINGZ:
-        tfs.lastRadian = -Math.atan2(intersects[0].point.x - tfs.staff.m_Object3D.position.x, intersects[0].point.y - tfs.staff.m_Object3D.position.y)
-        tfs.showRotateArrow(tfs.staff)
-        tfs.showRotateRing(tfs.staff)
-        tfs.showRotateHelp(tfs.staff)
-        tfs.updateController(tfs.staff)
+        tfs.lastRadian = -Math.atan2(intersects[0].point.x - tfs.stuff.m_Object3D.position.x, intersects[0].point.y - tfs.stuff.m_Object3D.position.y)
+        tfs.showRotateArrow(tfs.stuff)
+        tfs.showRotateRing(tfs.stuff)
+        tfs.showRotateHelp(tfs.stuff)
+        tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       default:
@@ -255,7 +255,7 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
   } else {
     // 未点击到
     tfs.m_iSelected = -1
-    tfs.updateController(tfs.staff)
+    tfs.updateController(tfs.stuff)
     return false
   }
   if (tfs.controller_3d == null) return false
@@ -265,7 +265,7 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
 export function event_MouseUp(event: MouseEvent, tfs: Transformer3D) {
   if (tfs.isDragging === true) {
     tfs.isDragging = false
-    tfs.showBoundingBox(tfs.staff)
+    tfs.showBoundingBox(tfs.stuff)
   }
   tfs.showArrowOnUp()
 }
@@ -274,14 +274,14 @@ export function event_KeyDown(event: KeyboardEvent, tfs: Transformer3D) {
   console.log(event)
 
   if (event.code === 'KeyD') {
-    tfs.raycaster = new THREE.Raycaster((tfs.staff.m_Object3D as any).position, new THREE.Vector3(0, -1, 0), 0.1, 100)
+    tfs.raycaster = new THREE.Raycaster((tfs.stuff.m_Object3D as any).position, new THREE.Vector3(0, -1, 0), 0.1, 100)
     const intersects = tfs.raycaster.intersectObjects(tfs.scene.children)
     if (intersects.length > 0) {
       const distance = intersects[0].distance
-      console.log('tfs.staff', tfs.staff)
-      const boundingBox = (tfs.staff.m_Object3D as THREE.Mesh).geometry.boundingBox!
+      console.log('tfs.stuff', tfs.stuff)
+      const boundingBox = (tfs.stuff.m_Object3D as THREE.Mesh).geometry.boundingBox!
       const bounding_height = boundingBox.max.y - boundingBox.min.y
-      tfs.staff.m_Object3D.position.y -= distance - bounding_height / 2
+      tfs.stuff.m_Object3D.position.y -= distance - bounding_height / 2
     }
     tfs.destory()
     tfs.raycaster = new THREE.Raycaster()

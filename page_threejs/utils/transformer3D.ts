@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { ESelectArrow, IStaff } from './type'
+import { ESelectArrow, Istuff } from './type'
 import { event_KeyDown, event_MouseDown, event_MouseMove, event_MouseUp } from './EventHandlers'
 
 interface ITransformer3D {
@@ -15,7 +15,7 @@ export default class Transformer3D implements ITransformer3D {
   raycaster = new THREE.Raycaster()
 
   pointer = new THREE.Vector2()
-  staff: IStaff
+  stuff: Istuff
   // 空父对象
   controller_3d: THREE.Object3D | null = null
 
@@ -81,18 +81,18 @@ export default class Transformer3D implements ITransformer3D {
   type: string // controller类型
   meshBoundingBox = new THREE.Box3Helper(new THREE.Box3())
 
-  constructor(staff: IStaff, scene: THREE.Scene, camera: THREE.PerspectiveCamera, type: string = 'normal') {
+  constructor(stuff: Istuff, scene: THREE.Scene, camera: THREE.PerspectiveCamera, type: string = 'normal') {
     this.type = type
-    this.staff = staff
+    this.stuff = stuff
     this.scene = scene
     this.camera = camera
-    this.showController(staff)
+    this.showController(stuff)
   }
 
   /**
    * @apiDescription 总显示
    */
-  showController(obj: IStaff) {
+  showController(obj: Istuff) {
     this.controller_3d = new THREE.Object3D()
     this.showTransformArrow(obj)
     this.showRotateArrow(obj)

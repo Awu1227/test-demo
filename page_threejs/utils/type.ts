@@ -9,8 +9,8 @@ export enum ESelectArrow {
   RINGZ
 }
 
-/**@description 传入的Staff */
-export interface IStaff {
+/**@description 传入的stuff */
+export interface Istuff {
   m_Object3D: THREE.Object3D
   destory()
   setVisible()
