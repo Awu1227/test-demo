@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import Transformer3D from '..'
 import { ESelectArrow } from '../type'
+import { process_ShowRotateArrow, process_ShowRotateHelp, process_ShowRotateRing } from '../../processArrow'
 
 /**@description 鼠标移动事件 */
 export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
@@ -112,8 +113,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusX = (tfs.radiusX * 180) / Math.PI
-        // tfs.rotate(new THREE.Vector3(diffRadian, 0, 0))
-        tfs.mirrorX()
+        tfs.rotate(new THREE.Vector3(diffRadian, 0, 0))
       }
       break
     }
@@ -227,25 +227,25 @@ export function event_MouseDown(event: MouseEvent, tfs: Transformer3D) {
         return true
       case ESelectArrow.RINGX:
         tfs.lastRadian = -Math.atan2(intersects[0].point.y - tfs.stuff.m_Object3D.position.y, intersects[0].point.z - tfs.stuff.m_Object3D.position.z)
-        tfs.showRotateArrow(tfs.stuff)
-        tfs.showRotateRing(tfs.stuff)
-        tfs.showRotateHelp(tfs.stuff)
+        process_ShowRotateArrow(tfs)
+        process_ShowRotateRing(tfs)
+        process_ShowRotateHelp(tfs)
         tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       case ESelectArrow.RINGY:
         tfs.lastRadian = -Math.atan2(intersects[0].point.z - tfs.stuff.m_Object3D.position.z, intersects[0].point.x - tfs.stuff.m_Object3D.position.x)
-        tfs.showRotateArrow(tfs.stuff)
-        tfs.showRotateRing(tfs.stuff)
-        tfs.showRotateHelp(tfs.stuff)
+        process_ShowRotateArrow(tfs)
+        process_ShowRotateRing(tfs)
+        process_ShowRotateHelp(tfs)
         tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
       case ESelectArrow.RINGZ:
         tfs.lastRadian = -Math.atan2(intersects[0].point.x - tfs.stuff.m_Object3D.position.x, intersects[0].point.y - tfs.stuff.m_Object3D.position.y)
-        tfs.showRotateArrow(tfs.stuff)
-        tfs.showRotateRing(tfs.stuff)
-        tfs.showRotateHelp(tfs.stuff)
+        process_ShowRotateArrow(tfs)
+        process_ShowRotateRing(tfs)
+        process_ShowRotateHelp(tfs)
         tfs.updateController(tfs.stuff)
         tfs.showArrowOnMove(Number(object.name))
         return true
