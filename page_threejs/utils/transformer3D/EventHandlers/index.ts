@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import Transformer3D from '..'
 import { ESelectArrow } from '../type'
-import { process_ShowRotateArrow, process_ShowRotateHelp, process_ShowRotateRing } from '../../processArrow'
+import { process_ShowRotateArrow, process_ShowRotateHelp, process_ShowRotateRing } from '../processArrow'
 
 /**@description 鼠标移动事件 */
 export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {

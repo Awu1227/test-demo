@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import Transformer3D from '../transformer3D'
+import Transformer3D from '..'
 
 export function process_ShowRotateHelp(tfs: Transformer3D) {
   let rotateArrowHelpGeo = new THREE.BufferGeometry()

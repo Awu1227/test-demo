@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import { ESelectArrow } from '../transformer3D/type'
-import Transformer3D from '../transformer3D'
+import { ESelectArrow } from '../type'
+import Transformer3D from '..'
 
 /**@apiDescription 旋转箭头显示 */
 export function process_ShowRotateArrow(tfs: Transformer3D) {

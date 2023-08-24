@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import { ESelectArrow } from '../transformer3D/type'
-import Transformer3D from '../transformer3D'
+import { ESelectArrow } from '../type'
+import Transformer3D from '..'
 
 export function process_ShowRotateRing(tfs: Transformer3D) {
   tfs.rotateRingCenter = new THREE.Object3D()

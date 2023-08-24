@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { ESelectArrow, Istuff } from './type'
 import { event_KeyDown, event_MouseDown, event_MouseMove, event_MouseUp } from './EventHandlers'
-import { process_ShowRotateArrow, process_ShowTransformArrow } from '../processArrow'
+import { process_ShowRotateArrow, process_ShowTransformArrow } from './processArrow'
 
 interface ITransformer3D {
   mousedown: (event: MouseEvent) => boolean
