@@ -130,7 +130,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         if (tfs.stuff.rotate) {
           tfs.stuff.rotate(new THREE.Vector3(diffRadian, 0, 0))
         } else {
-          console.warn('没有实现warn方法')
+          console.warn('没有实现rotate方法')
           let position = new THREE.Vector3(tfs.stuff.m_Object3D.position.x, tfs.stuff.m_Object3D.position.y, tfs.stuff.m_Object3D.position.z)
           tfs.stuff.m_Object3D.position.set(0, 0, 0)
           tfs.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationX(diffRadian))
@@ -175,7 +175,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         if (tfs.stuff.rotate) {
           tfs.stuff.rotate(new THREE.Vector3(0, diffRadian, 0))
         } else {
-          console.warn('没有实现warn方法')
+          console.warn('没有实现rotate方法')
           let position = new THREE.Vector3(tfs.stuff.m_Object3D.position.x, tfs.stuff.m_Object3D.position.y, tfs.stuff.m_Object3D.position.z)
           tfs.stuff.m_Object3D.position.set(0, 0, 0)
           tfs.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationY(diffRadian))
@@ -219,7 +219,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         if (tfs.stuff.rotate) {
           tfs.stuff.rotate(new THREE.Vector3(0, 0, diffRadian))
         } else {
-          console.warn('没有实现warn方法')
+          console.warn('没有实现rotate方法')
           let position = new THREE.Vector3(tfs.stuff.m_Object3D.position.x, tfs.stuff.m_Object3D.position.y, tfs.stuff.m_Object3D.position.z)
           tfs.stuff.m_Object3D.position.set(0, 0, 0)
           tfs.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationZ(diffRadian))
