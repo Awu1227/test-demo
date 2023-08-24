@@ -52,7 +52,12 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWX: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowXHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.stuff.move(new THREE.Vector3(Intersection[0].point.x - tfs.lastMouseX, 0, 0))
+        if (tfs.stuff.move) {
+          tfs.stuff.move(new THREE.Vector3(Intersection[0].point.x - tfs.lastMouseX, 0, 0))
+        } else {
+          console.warn('没有实现move方法')
+          tfs.stuff.m_Object3D.position.x += Intersection[0].point.x - tfs.lastMouseX
+        }
         tfs.lastMouseX = Intersection[0].point.x
       }
       break
@@ -60,7 +65,12 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWY: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowYHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.stuff.move(new THREE.Vector3(0, Intersection[0].point.y - tfs.lastMouseY, 0))
+        if (tfs.stuff.move) {
+          tfs.stuff.move(new THREE.Vector3(0, Intersection[0].point.y - tfs.lastMouseY, 0))
+        } else {
+          console.warn('没有实现move方法')
+          tfs.stuff.m_Object3D.position.y += Intersection[0].point.y - tfs.lastMouseY
+        }
         tfs.lastMouseY = Intersection[0].point.y
 
         // 限制y轴坐标
@@ -73,7 +83,12 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWZ: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowZHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.stuff.move(new THREE.Vector3(0, 0, Intersection[0].point.z - tfs.lastMouseZ))
+        if (tfs.stuff.move) {
+          tfs.stuff.move(new THREE.Vector3(0, 0, Intersection[0].point.z - tfs.lastMouseZ))
+        } else {
+          console.warn('没有实现move方法')
+          tfs.stuff.m_Object3D.position.z += Intersection[0].point.z - tfs.lastMouseZ
+        }
         tfs.lastMouseZ = Intersection[0].point.z
       }
       break
@@ -112,7 +127,15 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusX = (tfs.radiusX * 180) / Math.PI
-        tfs.stuff.rotate(new THREE.Vector3(diffRadian, 0, 0))
+        if (tfs.stuff.rotate) {
+          tfs.stuff.rotate(new THREE.Vector3(diffRadian, 0, 0))
+        } else {
+          console.warn('没有实现warn方法')
+          let position = new THREE.Vector3(tfs.stuff.m_Object3D.position.x, tfs.stuff.m_Object3D.position.y, tfs.stuff.m_Object3D.position.z)
+          tfs.stuff.m_Object3D.position.set(0, 0, 0)
+          tfs.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationX(diffRadian))
+          tfs.stuff.m_Object3D.position.set(position.x, position.y, position.z)
+        }
       }
       break
     }
@@ -149,7 +172,15 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusY = (tfs.radiusY + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusY = (tfs.radiusY * 180) / Math.PI
-        tfs.stuff.rotate(new THREE.Vector3(0, diffRadian, 0))
+        if (tfs.stuff.rotate) {
+          tfs.stuff.rotate(new THREE.Vector3(0, diffRadian, 0))
+        } else {
+          console.warn('没有实现warn方法')
+          let position = new THREE.Vector3(tfs.stuff.m_Object3D.position.x, tfs.stuff.m_Object3D.position.y, tfs.stuff.m_Object3D.position.z)
+          tfs.stuff.m_Object3D.position.set(0, 0, 0)
+          tfs.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationY(diffRadian))
+          tfs.stuff.m_Object3D.position.set(position.x, position.y, position.z)
+        }
       }
       break
     }
@@ -185,7 +216,15 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusZ = (tfs.radiusZ + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusZ = (tfs.radiusZ * 180) / Math.PI
-        tfs.stuff.rotate(new THREE.Vector3(0, 0, diffRadian))
+        if (tfs.stuff.rotate) {
+          tfs.stuff.rotate(new THREE.Vector3(0, 0, diffRadian))
+        } else {
+          console.warn('没有实现warn方法')
+          let position = new THREE.Vector3(tfs.stuff.m_Object3D.position.x, tfs.stuff.m_Object3D.position.y, tfs.stuff.m_Object3D.position.z)
+          tfs.stuff.m_Object3D.position.set(0, 0, 0)
+          tfs.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationZ(diffRadian))
+          tfs.stuff.m_Object3D.position.set(position.x, position.y, position.z)
+        }
       }
       break
     }
