@@ -89,7 +89,9 @@ export default class World {
       const stuff = {
         m_Object3D: object,
         setVisible: () => {},
-        destory: () => {},
+        destory: () => {
+          console.log('销毁了')
+        },
         move: function ({ x, y, z }: THREE.Vector3) {
           console.log('move', x, y, z)
           const matrix = new Matrix4()

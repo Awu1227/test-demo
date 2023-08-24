@@ -1181,10 +1181,45 @@ export default class Transformer3D implements ITransformer3D {
   keydown(event: KeyboardEvent) {
     event_KeyDown(event, this)
   }
-
+  move(vect3: THREE.Vector3) {
+    if (this.stuff.move) {
+      this.stuff.move(vect3)
+    } else {
+      console.warn('stuff没有实现move方法')
+      this.stuff.m_Object3D.position.x += vect3.x
+      this.stuff.m_Object3D.position.y += vect3.y
+      this.stuff.m_Object3D.position.z += vect3.z
+    }
+  }
+  rotate(vect3: THREE.Vector3) {
+    if (this.stuff.rotate) {
+      this.stuff.rotate(vect3)
+    } else {
+      console.warn('stuff没有实现rotate方法')
+      if (vect3.x) {
+        let position = new THREE.Vector3(this.stuff.m_Object3D.position.x, this.stuff.m_Object3D.position.y, this.stuff.m_Object3D.position.z)
+        this.stuff.m_Object3D.position.set(0, 0, 0)
+        this.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationX(vect3.x))
+        this.stuff.m_Object3D.position.set(position.x, position.y, position.z)
+      }
+      if (vect3.y) {
+        let position = new THREE.Vector3(this.stuff.m_Object3D.position.x, this.stuff.m_Object3D.position.y, this.stuff.m_Object3D.position.z)
+        this.stuff.m_Object3D.position.set(0, 0, 0)
+        this.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationY(vect3.y))
+        this.stuff.m_Object3D.position.set(position.x, position.y, position.z)
+      }
+      if (vect3.z) {
+        let position = new THREE.Vector3(this.stuff.m_Object3D.position.x, this.stuff.m_Object3D.position.y, this.stuff.m_Object3D.position.z)
+        this.stuff.m_Object3D.position.set(0, 0, 0)
+        this.stuff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationZ(vect3.z))
+        this.stuff.m_Object3D.position.set(position.x, position.y, position.z)
+      }
+    }
+  }
   mirror() {}
-  /**@description tfs销毁 */
+  /**@description this销毁 */
   destory() {
+    this.stuff.destory()
     this.scene.remove(this.controller_3d!)
     this.scene.remove(this.meshBoundingBox)
     this.controller_3d = null

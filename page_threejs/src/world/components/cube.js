@@ -20,7 +20,6 @@ export const createCube = () => {
     cube.rotation.x += radiansPerSecond * delta
     cube.rotation.y += radiansPerSecond * delta
   }
-  console.log(cube.matrixWorld)
   // cube.matrixWorld = new Matrix4();
   // cube.matrix = new Matrix4();
   // cube.updateMatrix();
