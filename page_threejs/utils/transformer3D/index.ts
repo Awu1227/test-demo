@@ -1246,7 +1246,7 @@ export default class Transformer3D implements ITransformer3D {
     }
   }
 
-  /**@description 控制器显示与隐藏方法 */
+  /**@description 显示与隐藏方法 */
   setVisible(isV: boolean) {
     if (this.stuff.setVisible) {
       this.stuff.setVisible(isV)
