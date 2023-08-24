@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import Transformer3D from '../transformer3D'
+import Transformer3D from '..'
 import { ESelectArrow } from '../type'
 
 /**@description 鼠标移动事件 */
