@@ -2,7 +2,7 @@ import { BoxBufferGeometry, BoxGeometry, Matrix4, Mesh, MeshBasicMaterial, MeshS
 
 export const createCube = () => {
   // 单位为米
-  const geometry = new BoxGeometry(4, 4, 4)
+  const geometry = new BoxGeometry(8, 2, 4)
 
   // create a default (white) Basic material
   const material = new MeshStandardMaterial({ color: 'purple' })

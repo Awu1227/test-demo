@@ -291,13 +291,14 @@ export function event_KeyDown(event: KeyboardEvent, tfs: Transformer3D) {
 
   if (event.code === 'KeyD') {
     tfs.raycaster = new THREE.Raycaster((tfs.staff.m_Object3D as any).position, new THREE.Vector3(0, -1, 0), 0.1, 100)
-    console.log(tfs.raycaster)
     const intersects = tfs.raycaster.intersectObjects(tfs.scene.children)
     if (intersects.length > 0) {
       const distance = intersects[0].distance
-      tfs.staff.m_Object3D.position.y -= distance - 2
+      console.log('tfs.staff', tfs.staff)
+      const boundingBox = (tfs.staff.m_Object3D as THREE.Mesh).geometry.boundingBox!
+      const bounding_height = boundingBox.max.y - boundingBox.min.y
+      tfs.staff.m_Object3D.position.y -= distance - bounding_height / 2
     }
-    console.log(11, intersects)
     tfs.destory()
     tfs.raycaster = new THREE.Raycaster()
   }
