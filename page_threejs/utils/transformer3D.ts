@@ -1166,21 +1166,23 @@ export default class Transformer3D implements ITransformer3D {
       // this.rotateArrowZ!.visible = false
     }
   }
-  /**@apiDescription 鼠标按下时进行判断 */
+  /**@apiDescription 鼠标按下事件 */
   mousedown(event: MouseEvent) {
     return event_MouseDown(event, this) // 如果return false，意味着没有点击到
   }
-  /**@apiDescription 鼠标移动时进行判断 */
+  /**@apiDescription 鼠标移动事件 */
   mousemove(event: MouseEvent) {
     return event_MouseMove(event, this)
   }
-  /**@description 鼠标抬起时进行判断 */
+  /**@description 鼠标抬起事件 */
   mouseup(event: MouseEvent) {
     event_MouseUp(event, this)
   }
+  /**@description 键盘按下事件 */
   keydown(event: KeyboardEvent) {
     event_KeyDown(event, this)
   }
+  /**@description 移动 */
   move(vect3: THREE.Vector3) {
     if (this.stuff.move) {
       this.stuff.move(vect3)
@@ -1191,6 +1193,7 @@ export default class Transformer3D implements ITransformer3D {
       this.stuff.m_Object3D.position.z += vect3.z
     }
   }
+  /**@description 旋转 */
   rotate(vect3: THREE.Vector3) {
     if (this.stuff.rotate) {
       this.stuff.rotate(vect3)
