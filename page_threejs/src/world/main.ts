@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Scene, WebGLRenderer, Vector2, Raycaster } from 'three'
+import { PerspectiveCamera, Scene, WebGLRenderer, Vector2, Raycaster, Matrix4, Vector3 } from 'three'
 import { createCamera } from './components/camera'
 import { createCube } from './components/cube'
 import { createTorusKnot } from './components/torusKnot'
@@ -89,7 +89,30 @@ export default class World {
       const stuff = {
         m_Object3D: object,
         setVisible: () => {},
-        destory: () => {}
+        destory: () => {},
+        move: function ({ x, y, z }: THREE.Vector3) {
+          console.log('move', x, y, z)
+          const matrix = new Matrix4()
+          matrix.makeTranslation(x, y, z)
+          this.m_Object3D.applyMatrix4(matrix)
+        },
+        rotate: function ({ x, y, z }: THREE.Vector3) {
+          console.log('rotate', x, y, z)
+          const position = new Vector3(this.m_Object3D.position.x, this.m_Object3D.position.y, this.m_Object3D.position.z)
+          this.m_Object3D.position.set(0, 0, 0)
+          const matrix = new Matrix4()
+          if (x !== 0) {
+            matrix.makeRotationX(x)
+          }
+          if (y !== 0) {
+            matrix.makeRotationY(y)
+          }
+          if (z !== 0) {
+            matrix.makeRotationZ(z)
+          }
+          this.m_Object3D.applyMatrix4(matrix)
+          this.m_Object3D.position.set(position.x, position.y, position.z)
+        }
       }
       if (!this.tsf?.controller_3d) {
         console.log('create')

@@ -1182,6 +1182,7 @@ export default class Transformer3D implements ITransformer3D {
     event_KeyDown(event, this)
   }
 
+  mirror() {}
   /**@description tfs销毁 */
   destory() {
     this.scene.remove(this.controller_3d!)

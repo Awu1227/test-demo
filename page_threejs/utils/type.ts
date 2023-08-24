@@ -12,6 +12,8 @@ export enum ESelectArrow {
 /**@description 传入的Staff */
 export interface IStaff {
   m_Object3D: THREE.Object3D
-  setVisible()
   destory()
+  setVisible()
+  move: (vect3: THREE.Vector3) => any
+  rotate: (vect3: THREE.Vector3) => any
 }

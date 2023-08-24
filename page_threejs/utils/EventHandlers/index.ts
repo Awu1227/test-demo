@@ -52,7 +52,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWX: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowXHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.staff.m_Object3D.position.x += Intersection[0].point.x - tfs.lastMouseX
+        tfs.staff.move(new THREE.Vector3(Intersection[0].point.x - tfs.lastMouseX, 0, 0))
         tfs.lastMouseX = Intersection[0].point.x
       }
       break
@@ -60,7 +60,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWY: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowYHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.staff.m_Object3D.position.y += Intersection[0].point.y - tfs.lastMouseY
+        tfs.staff.move(new THREE.Vector3(0, Intersection[0].point.y - tfs.lastMouseY, 0))
         tfs.lastMouseY = Intersection[0].point.y
 
         // 限制y轴坐标
@@ -73,14 +73,13 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
     case ESelectArrow.ARROWZ: {
       let Intersection = tfs.raycaster.intersectObject(tfs.transformArrowZHelp as THREE.Mesh)
       if (Intersection.length > 0) {
-        tfs.staff.m_Object3D.position.z += Intersection[0].point.z - tfs.lastMouseZ
+        tfs.staff.move(new THREE.Vector3(0, 0, Intersection[0].point.z - tfs.lastMouseZ))
         tfs.lastMouseZ = Intersection[0].point.z
       }
       break
     }
     case ESelectArrow.RINGX: {
       console.log('ringx')
-
       let Intersection = tfs.raycaster.intersectObject(tfs.rotateArrowHelp as THREE.Mesh)
 
       if (Intersection.length > 0) {
@@ -113,12 +112,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusX = (tfs.radiusX * 180) / Math.PI
-
-        let position = new THREE.Vector3(tfs.staff.m_Object3D.position.x, tfs.staff.m_Object3D.position.y, tfs.staff.m_Object3D.position.z)
-
-        tfs.staff.m_Object3D.position.set(0, 0, 0)
-        tfs.staff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationX(diffRadian))
-        tfs.staff.m_Object3D.position.set(position.x, position.y, position.z)
+        tfs.staff.rotate(new THREE.Vector3(diffRadian, 0, 0))
       }
       break
     }
@@ -155,12 +149,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusY = (tfs.radiusY + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusY = (tfs.radiusY * 180) / Math.PI
-
-        let position = new THREE.Vector3(tfs.staff.m_Object3D.position.x, tfs.staff.m_Object3D.position.y, tfs.staff.m_Object3D.position.z)
-
-        tfs.staff.m_Object3D.position.set(0, 0, 0)
-        tfs.staff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationY(diffRadian))
-        tfs.staff.m_Object3D.position.set(position.x, position.y, position.z)
+        tfs.staff.rotate(new THREE.Vector3(0, diffRadian, 0))
       }
       break
     }
@@ -196,12 +185,7 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         //将结果限制在0-2PI
         tfs.radiusZ = (tfs.radiusZ + Math.PI * 2) % (Math.PI * 2)
         tfs.radiusZ = (tfs.radiusZ * 180) / Math.PI
-
-        let position = new THREE.Vector3(tfs.staff.m_Object3D.position.x, tfs.staff.m_Object3D.position.y, tfs.staff.m_Object3D.position.z)
-
-        tfs.staff.m_Object3D.position.set(0, 0, 0)
-        tfs.staff.m_Object3D.applyMatrix4(new THREE.Matrix4().makeRotationZ(diffRadian))
-        tfs.staff.m_Object3D.position.set(position.x, position.y, position.z)
+        tfs.staff.rotate(new THREE.Vector3(0, 0, diffRadian))
       }
       break
     }
