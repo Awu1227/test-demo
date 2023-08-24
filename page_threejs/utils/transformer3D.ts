@@ -10,6 +10,7 @@ interface ITransformer3D {
 
 export default class Transformer3D implements ITransformer3D {
   isShow = false
+  isLock = false
   isDragging = false
   camera!: THREE.PerspectiveCamera
   raycaster = new THREE.Raycaster()
@@ -86,7 +87,9 @@ export default class Transformer3D implements ITransformer3D {
     this.stuff = stuff
     this.scene = scene
     this.camera = camera
-    this.showController(stuff)
+    if (!this.stuff.isLock) {
+      this.showController(stuff)
+    }
   }
 
   /**
@@ -1232,6 +1235,14 @@ export default class Transformer3D implements ITransformer3D {
   copy() {
     if (this.stuff.copy) {
       this.stuff.copy()
+    }
+  }
+  /**@description 锁定方法 */
+  setlock(isLock: boolean) {
+    this.stuff.setLock(isLock)
+    this.isLock = isLock
+    if (this.isLock) {
+      this.release()
     }
   }
 

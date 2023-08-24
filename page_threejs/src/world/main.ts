@@ -88,7 +88,11 @@ export default class World {
       const object = intersects[0].object
       const stuff = {
         m_Object3D: object,
+        isLock: false,
         setVisible: () => {},
+        setLock: function (isLock: boolean) {
+          this.isLock = isLock
+        },
         destory: () => {
           console.log('销毁了')
         },
