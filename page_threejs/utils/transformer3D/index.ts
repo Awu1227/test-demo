@@ -93,9 +93,7 @@ export default class Transformer3D implements ITransformer3D {
     }
   }
 
-  /**
-   * @apiDescription 总显示
-   */
+  /**@apiDescription 总显示*/
   showController(obj: Istuff) {
     this.controller_3d = new THREE.Object3D()
     process_ShowTransformArrow(this)
@@ -105,6 +103,7 @@ export default class Transformer3D implements ITransformer3D {
     this.updateController(obj)
     this.isShow = true
   }
+  /**@description 显示包围盒 */
   showBoundingBox(obj: any) {
     const box = new THREE.Box3().setFromObject(obj.m_Object3D)
     this.meshBoundingBox = new THREE.Box3Helper(box, new THREE.Color(0xffad28))
@@ -134,7 +133,7 @@ export default class Transformer3D implements ITransformer3D {
     this.controller_3d.scale.y *= proportion
     this.controller_3d.scale.z *= proportion
     this.updateTransformArrow(obj)
-    this.updateRotateArrow(obj)
+    this.updateRotateArrow()
   }
 
   /**@apiDescription 平移箭头更新 */
@@ -186,7 +185,7 @@ export default class Transformer3D implements ITransformer3D {
   }
 
   /**@apiDescription 旋转箭头显示 */
-  updateRotateArrow(obj: any) {
+  updateRotateArrow() {
     let cameraRadianX = Math.atan2(this.camera.position.z - (this.controller_3d as THREE.Object3D).position.z, this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y)
     ;(this.rotateArrowX as THREE.Object3D).rotation.x = Math.floor(cameraRadianX / (Math.PI / 2)) * (Math.PI / 2)
 
@@ -196,13 +195,13 @@ export default class Transformer3D implements ITransformer3D {
     let cameraRadianZ = Math.atan2(this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y, this.camera.position.x - (this.controller_3d as THREE.Object3D).position.x)
     ;(this.rotateArrowZ as THREE.Object3D).rotation.z = Math.floor(cameraRadianZ / (Math.PI / 2)) * (Math.PI / 2)
 
-    if (this.m_iSelected == 4) {
+    if (this.m_iSelected == ESelectArrow.RINGX) {
       ;(this.rotateArrowX as THREE.Object3D).rotation.x = this.lastRadian + (Math.PI * 1) / 4
     }
-    if (this.m_iSelected == 5) {
+    if (this.m_iSelected == ESelectArrow.RINGY) {
       ;(this.rotateArrowY as THREE.Object3D).rotation.y = this.lastRadian + (Math.PI * 1) / 4
     }
-    if (this.m_iSelected == 6) {
+    if (this.m_iSelected == ESelectArrow.RINGZ) {
       ;(this.rotateArrowZ as THREE.Object3D).rotation.z = this.lastRadian + (Math.PI * 1) / 4
     }
   }
