@@ -106,13 +106,6 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         let diffRadian = mouseRadian - tfs.lastRadian
 
         tfs.lastRadian = mouseRadian
-        tfs.radiusX = (tfs.radiusX * Math.PI) / 180
-        tfs.radiusX += diffRadian
-        console.log(tfs.radiusX)
-
-        //将结果限制在0-2PI
-        tfs.radiusX = (tfs.radiusX + Math.PI * 2) % (Math.PI * 2)
-        tfs.radiusX = (tfs.radiusX * 180) / Math.PI
         tfs.rotate(new THREE.Vector3(diffRadian, 0, 0))
       }
       break
@@ -145,11 +138,6 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         let diffRadian = mouseRadian - tfs.lastRadian
 
         tfs.lastRadian = mouseRadian
-        tfs.radiusY = (tfs.radiusY * Math.PI) / 180
-        tfs.radiusY += diffRadian
-        //将结果限制在0-2PI
-        tfs.radiusY = (tfs.radiusY + Math.PI * 2) % (Math.PI * 2)
-        tfs.radiusY = (tfs.radiusY * 180) / Math.PI
         tfs.rotate(new THREE.Vector3(0, diffRadian, 0))
       }
       break
@@ -181,11 +169,6 @@ export function event_MouseMove(event: MouseEvent, tfs: Transformer3D) {
         let diffRadian = mouseRadian - tfs.lastRadian
 
         tfs.lastRadian = mouseRadian
-        tfs.radiusZ = (tfs.radiusZ * Math.PI) / 180
-        tfs.radiusZ += diffRadian
-        //将结果限制在0-2PI
-        tfs.radiusZ = (tfs.radiusZ + Math.PI * 2) % (Math.PI * 2)
-        tfs.radiusZ = (tfs.radiusZ * 180) / Math.PI
         tfs.rotate(new THREE.Vector3(0, 0, diffRadian))
       }
       break

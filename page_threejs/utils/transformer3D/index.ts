@@ -11,14 +11,11 @@ export default class Transformer3D implements ITransformer3D {
 
   pointer = new THREE.Vector2()
   stuff: Istuff
-  // 空父对象
   controller_3d: THREE.Object3D | null = null
-
   /**@description 高亮的箭头 */
   highLightArrow?: any
   // 平移
   transform: THREE.Object3D | null = null
-  // 平移箭头
   transformArrowX: THREE.Mesh | null = null
   transformArrowXHelp: THREE.Mesh | null = null
   transformArrowY: THREE.Mesh | null = null
@@ -28,7 +25,6 @@ export default class Transformer3D implements ITransformer3D {
 
   // 旋转
   rotateArrowCenter: THREE.Object3D | null = null
-  // 辅助平面
   rotateArrowHelp: THREE.Mesh | null = null
   // 旋转箭头X
   rotateArrowX: THREE.Object3D | null = null
@@ -69,9 +65,6 @@ export default class Transformer3D implements ITransformer3D {
   lastMouseY: number = -999999
   lastMouseZ: number = -999999
   lastRadian: number = 0
-  radiusX = 0
-  radiusY = 0
-  radiusZ = 0
   scene: THREE.Scene
   type: string // controller类型
   meshBoundingBox = new THREE.Box3Helper(new THREE.Box3())
@@ -85,7 +78,6 @@ export default class Transformer3D implements ITransformer3D {
       this.showController(stuff)
     }
   }
-
   /**@apiDescription 总显示*/
   showController(obj: Istuff) {
     this.controller_3d = new THREE.Object3D()
@@ -107,19 +99,16 @@ export default class Transformer3D implements ITransformer3D {
   addArrowToArr() {
     this.arrowArray.push(this.transformArrowX, this.transformArrowY, this.transformArrowZ, ...this.rotateArrowX?.children!, ...this.rotateArrowY?.children!, ...this.rotateArrowZ?.children!)
   }
-
   /**@apiDescription 总更新 */
   updateController(obj: any) {
     if (this.controller_3d == null || obj == null) return
     ;(this.controller_3d as THREE.Object3D).position.x = obj.m_Object3D.position.x
     ;(this.controller_3d as THREE.Object3D).position.y = obj.m_Object3D.position.y
     ;(this.controller_3d as THREE.Object3D).position.z = obj.m_Object3D.position.z
-
     // 根据摄像机坐标调整操作箭头大小
     this.controller_3d.scale.x = 0.5
     this.controller_3d.scale.y = 0.5
     this.controller_3d.scale.z = 0.5
-
     // 根据摄像机与物体坐标原点距离改变大小
     let proportion = this.camera.position.distanceTo(obj.m_Object3D.position) / 1000
     this.controller_3d.scale.x *= proportion
@@ -128,7 +117,6 @@ export default class Transformer3D implements ITransformer3D {
     this.updateTransformArrow(obj)
     this.updateRotateArrow()
   }
-
   /**@apiDescription 平移箭头更新 */
   updateTransformArrow(obj: any) {
     // 根据摄像机与模型角度修改箭头方向
@@ -176,7 +164,6 @@ export default class Transformer3D implements ITransformer3D {
     ;(this.transformArrowZHelp as THREE.Mesh).rotation.y = (this.transformArrowZ as THREE.Mesh).rotation.y
     ;(this.transformArrowZHelp as THREE.Mesh).rotation.z = (this.transformArrowZ as THREE.Mesh).rotation.z
   }
-
   /**@apiDescription 旋转箭头显示 */
   updateRotateArrow() {
     let cameraRadianX = Math.atan2(this.camera.position.z - (this.controller_3d as THREE.Object3D).position.z, this.camera.position.y - (this.controller_3d as THREE.Object3D).position.y)
@@ -198,7 +185,6 @@ export default class Transformer3D implements ITransformer3D {
       ;(this.rotateArrowZ as THREE.Object3D).rotation.z = this.lastRadian + (Math.PI * 1) / 4
     }
   }
-
   /**@description 移动时显示箭头 */
   showArrowOnMove(type: ESelectArrow) {
     switch (type) {
@@ -303,7 +289,6 @@ export default class Transformer3D implements ITransformer3D {
       }
     }
   }
-
   /**@description 绕X轴翻转 */
   mirrorX() {
     this.rotate(new THREE.Vector3(Math.PI, 0, 0))
@@ -316,7 +301,6 @@ export default class Transformer3D implements ITransformer3D {
   mirrorZ() {
     this.rotate(new THREE.Vector3(0, 0, Math.PI))
   }
-
   /**@description 复制方法 */
   copy() {
     if (this.stuff.copy) {
@@ -331,7 +315,6 @@ export default class Transformer3D implements ITransformer3D {
       this.release()
     }
   }
-
   /**@description 显示与隐藏方法 */
   setVisible(isV: boolean) {
     if (this.stuff.setVisible) {
@@ -343,7 +326,6 @@ export default class Transformer3D implements ITransformer3D {
       }
     }
   }
-
   /**@description 销毁控制器方法 */
   release() {
     if (this.stuff.release) {
@@ -353,7 +335,6 @@ export default class Transformer3D implements ITransformer3D {
     this.scene.remove(this.meshBoundingBox)
     this.controller_3d = null
   }
-
   /**@description 总销毁方法 */
   destory() {
     this.release()
