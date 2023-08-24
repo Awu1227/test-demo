@@ -254,7 +254,7 @@ export function event_MouseUp(event: MouseEvent, tfs: Transformer3D) {
   tfs.showArrowOnUp()
 }
 /**@description 键盘按下事件 */
-export function event_KeyDown(event: KeyboardEvent, tfs: Transformer3D) {
+export function event_KeyDown(event: KeyboardEvent, tfs: Transformer3D,config: {height: number}) {
   console.log(event)
 
   if (event.code === 'KeyD') {
@@ -269,5 +269,9 @@ export function event_KeyDown(event: KeyboardEvent, tfs: Transformer3D) {
     }
     tfs.destory()
     tfs.raycaster = new THREE.Raycaster()
+  }
+  if (event.code === 'KeyU') {
+    tfs.stuff.m_Object3D.position.y = config.height
+    tfs.destory()
   }
 }

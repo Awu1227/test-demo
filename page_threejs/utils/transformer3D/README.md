@@ -33,7 +33,7 @@ tsf.mousemove(event: MouseEvent)
 tsf.mouseup(event: MouseEvent)
 
 /**@description 键盘按下事件 */
-tsf.keydown(event: KeyboardEvent)
+tsf.keydown(event: KeyboardEvent，config?: {height: number})
 
 /**@description 移动 */
 tsf.move(vect3: THREE.Vector3)
@@ -65,3 +65,8 @@ tsf.release()
 /**@description 总销毁方法 */
 tsf.destory()
 ```
+
+### 快捷键
+
+- **D** 下落
+- **U** 更改高度

@@ -249,8 +249,8 @@ export default class Transformer3D implements ITransformer3D {
     event_MouseUp(event, this)
   }
   /**@description 键盘按下事件 */
-  keydown(event: KeyboardEvent) {
-    event_KeyDown(event, this)
+  keydown(event: KeyboardEvent,config: { height: number } = { height: 20 }) {
+    event_KeyDown(event, this, config)
   }
   /**@description 移动 */
   move(vect3: THREE.Vector3) {
