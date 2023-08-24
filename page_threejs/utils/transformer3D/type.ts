@@ -14,7 +14,7 @@ export interface Istuff {
   m_Object3D: THREE.Object3D
   isLock: boolean
   setLock: (isLock: boolean) => any
-  destory()
+  destory: () => any
   move?: (vect3: THREE.Vector3) => any
   rotate?: (vect3: THREE.Vector3) => any
   mirrorX?: () => any
@@ -23,4 +23,10 @@ export interface Istuff {
   release?: () => any
   setVisible?: (isV: boolean) => any
   copy?: () => any
+}
+
+export interface ITransformer3D {
+  mousedown: (event: MouseEvent) => boolean
+  mousemove: (event: MouseEvent) => boolean
+  mouseup: (event: MouseEvent) => void
 }
