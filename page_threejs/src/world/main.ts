@@ -20,8 +20,6 @@ export default class World {
   private renderer: WebGLRenderer
   private loop: Loop
 
-  private _meshs: THREE.Mesh[] = []
-
   pointer = new Vector2()
   raycaster = new Raycaster()
   controls: OrbitControls
@@ -33,21 +31,6 @@ export default class World {
     this.loop = new Loop(this.camera, this.scene, this.renderer)
 
     container.append(this.renderer.domElement)
-
-    document.addEventListener('pointermove', (evt) => this.onPointerMove(evt))
-    document.addEventListener('pointerdown', (evt) => this.onPointerDown(evt))
-    document.addEventListener('pointerup', (evt) => this.onPointerUp(evt))
-    document.addEventListener('keydown', (evt) => this.onKeyDown(evt))
-
-    for (let i = 0; i < 50; i++) {
-      const cube = createCube()
-      const ispostive1 = Math.random() > 0.5 ? 1 : -1
-      const ispostive2 = Math.random() > 0.5 ? 1 : -1
-      cube.position.set(ispostive1 * Math.random() * 50, Math.random() * 50, ispostive2 * Math.random() * 50)
-
-      this._meshs.push(cube)
-      this.scene.add(cube)
-    }
 
     const light = createLight()
 
@@ -67,86 +50,6 @@ export default class World {
     }
   }
 
-  onPointerMove(evt: MouseEvent) {
-    // this.tsf.isShow && this.tsf.OnMouseMove(evt, 1)
-    if (this.tsf?.isShow) {
-      this.tsf.mousemove(evt)
-      this.controls.enableRotate = false
-    } else {
-      this.controls.enableRotate = true
-    }
-  }
-
-  onPointerDown(event: MouseEvent) {
-    // 移动到箭头上高亮
-    this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-    this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
-    this.raycaster.setFromCamera(this.pointer, this.camera)
-    const intersects = this.raycaster.intersectObjects(this._meshs, false)
-    if (intersects.length > 0) {
-      console.log(intersects[0])
-      const object = intersects[0].object
-      const stuff = {
-        m_Object3D: object,
-        isLock: false,
-        setVisible: () => {},
-        setLock: function (isLock: boolean) {
-          this.isLock = isLock
-        },
-        destory: () => {
-          console.log('销毁了')
-        },
-        move: function ({ x, y, z }: THREE.Vector3) {
-          console.log('move', x, y, z)
-          const matrix = new Matrix4()
-          matrix.makeTranslation(x, y, z)
-          this.m_Object3D.applyMatrix4(matrix)
-        },
-        rotate: function ({ x, y, z }: THREE.Vector3) {
-          console.log('rotate', x, y, z)
-          const position = new Vector3(this.m_Object3D.position.x, this.m_Object3D.position.y, this.m_Object3D.position.z)
-          this.m_Object3D.position.set(0, 0, 0)
-          const matrix = new Matrix4()
-          if (x !== 0) {
-            matrix.makeRotationX(x)
-          }
-          if (y !== 0) {
-            matrix.makeRotationY(y)
-          }
-          if (z !== 0) {
-            matrix.makeRotationZ(z)
-          }
-          this.m_Object3D.applyMatrix4(matrix)
-          this.m_Object3D.position.set(position.x, position.y, position.z)
-        }
-      }
-      if (!this.tsf?.controller_3d) {
-        console.log('create')
-        this.tsf = new Transformer3D(stuff, this.scene, this.camera, 'pipe')
-        this.scene.add(this.tsf.controller_3d!)
-      } else {
-        if (object !== this.tsf.stuff.m_Object3D && !this.tsf?.mousedown(event)) {
-          console.log('create')
-          this.tsf.destory()
-          this.tsf = new Transformer3D(stuff, this.scene, this.camera, 'pipe')
-          this.scene.add(this.tsf.controller_3d!)
-        }
-        this.tsf?.mousedown(event)
-      }
-    } else {
-      if (!this.tsf?.mousedown(event)) {
-        this.tsf && this.tsf.destory()
-        this.tsf = undefined
-      }
-    }
-    console.log('intersect', intersects)
-  }
-  onPointerUp(event: MouseEvent) {
-    this.tsf && this.tsf.mouseup(event)
-  }
-  onKeyDown(event: KeyboardEvent) {
-    this.tsf && this.tsf.keydown(event)
-  }
   render() {
     this.renderer.render(this.scene, this.camera)
   }
