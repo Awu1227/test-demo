@@ -1,6 +1,8 @@
 import { PerspectiveCamera, Scene, WebGLRenderer, Vector2, Raycaster, Matrix4, Vector3 } from 'three'
 import { createCamera } from './components/camera'
 import { createCube } from './components/cube'
+import { createFloor } from './components/floor'
+
 import { createTorusKnot } from './components/torusKnot'
 import { createLight } from './components/light'
 import { createScene } from './components/scene'
@@ -12,6 +14,7 @@ import Loop from './systems/Loop'
 import { createGridHelper } from './components/gridHelper'
 import Transformer3D from '../../utils/transformer3D'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { createHemiLight } from './components/hemiLight'
 
 export default class World {
   tsf?: Transformer3D
@@ -33,13 +36,16 @@ export default class World {
     container.append(this.renderer.domElement)
 
     const light = createLight()
+    const hemiLight = createHemiLight()
 
     const gridHelper = createGridHelper()
 
     this.controls = createControls(this.camera, this.renderer.domElement)
 
+    const floor = createFloor()
+
     this.loop.updatables.push(this.controls)
-    this.scene.add(gridHelper, light)
+    this.scene.add(light, hemiLight, floor)
 
     console.log('scene', this.scene)
 
