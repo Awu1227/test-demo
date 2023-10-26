@@ -45,7 +45,7 @@ export default class World {
     const floor = createFloor()
 
     this.loop.updatables.push(this.controls)
-    this.scene.add(light, hemiLight, floor)
+    this.scene.add(light, hemiLight, gridHelper)
 
     console.log('scene', this.scene)
 
