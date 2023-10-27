@@ -1,7 +1,8 @@
-import { PerspectiveCamera, Scene, WebGLRenderer, Vector2, Raycaster, Matrix4, Vector3 } from 'three'
+import { PerspectiveCamera, Scene, WebGLRenderer, Vector2, Raycaster, Matrix4, Vector3, Object3D } from 'three'
 import { createCamera } from './components/camera'
-import { createCube } from './components/cube'
+import  createDamBoard  from './components/damBoard'
 import { createFloor } from './components/floor'
+import createBall from './components/ball'
 
 import { createTorusKnot } from './components/torusKnot'
 import { createLight } from './components/light'
@@ -43,9 +44,11 @@ export default class World {
     this.controls = createControls(this.camera, this.renderer.domElement)
 
     const floor = createFloor()
+    const damBoard = createDamBoard()
+    const ball = createBall() 
 
-    this.loop.updatables.push(this.controls)
-    this.scene.add(light, hemiLight, gridHelper)
+    this.loop.updatables.push(this.controls,...ball)
+    this.scene.add(light, hemiLight, floor,...ball)
 
     console.log('scene', this.scene)
 
