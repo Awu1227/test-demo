@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@types/three": "^0.155.0",
+    "@vueuse/core": "^10.5.0",
     "element-plus": "^2.3.8",
     "konva": "^9.2.0",
     "three": "0.148",
