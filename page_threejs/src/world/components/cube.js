@@ -16,7 +16,7 @@ export const createCube = () => {
   // this method will be called once per frame
   cube.tick = (delta) => {
     // increase the cube's rotation each frame
-    cube.rotation.z += radiansPerSecond * delta
+    cube.rotation.z = radiansPerSecond * delta
     cube.rotation.x += radiansPerSecond * delta
     cube.rotation.y += radiansPerSecond * delta
   }

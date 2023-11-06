@@ -30,32 +30,34 @@ export default function createBall()  {
 
 
   const ball = new THREE.Mesh(geometry, material)
-  ball.rotation.y = Math.PI;
+  ball.rotation.x = 0;
+  ball.rotation.y = Math.PI * 2;
   ball.castShadow = true;
   ball.name = 'damBoard'
   ball.position.set(0, 10, 0)
 
   const mirrBall = new THREE.Mesh(geometry, material)
-  mirrBall.rotation.y = Math.PI;
+  mirrBall.rotation.x = Math.PI;
+  mirrBall.rotation.y = Math.PI*2;
   mirrBall.castShadow = true;
   mirrBall.name = 'damBoard'
   mirrBall.position.set(0, -10, 0)
 
 
-  const radiansPerSecond = THREE.MathUtils.degToRad(30)
+  const radiansPerSecond = THREE.MathUtils.degToRad(0.1)
 
   // this method will be called once per frame
   ball.tick = (delta) => {
     // increase the ball's rotation each frame
     ball.rotation.z += radiansPerSecond * delta
-    ball.rotation.x += radiansPerSecond * delta
-    ball.rotation.y += radiansPerSecond * delta
+    // ball.rotation.x += radiansPerSecond * delta
+    // ball.rotation.y += radiansPerSecond * delta
   }
   mirrBall.tick = (delta) => {
     // increase the mirrBall's rotation each frame
-    mirrBall.rotation.z += radiansPerSecond * delta
-    mirrBall.rotation.x += radiansPerSecond * delta
-    mirrBall.rotation.y += radiansPerSecond * delta
+    mirrBall.rotation.z -= radiansPerSecond * delta
+    // mirrBall.rotation.x -= radiansPerSecond * delta
+    // mirrBall.rotation.y -= radiansPerSecond * delta
   }
 
   
