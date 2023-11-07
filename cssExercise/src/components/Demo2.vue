@@ -42,6 +42,8 @@ watch(y, () => {
   justify-content: center;
   align-items: center;
   perspective: 800px;
+  background: rgb(18,125,54);
+  background: linear-gradient(149deg, rgba(18,125,54,1) 18%, rgba(0,177,255,1) 53%, rgba(0,151,255,1) 66%, rgba(136,0,255,1) 83%);
 }
 .title {
   font-size: 70px;
