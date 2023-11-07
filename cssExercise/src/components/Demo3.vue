@@ -1,0 +1,73 @@
+<template>
+  <div class="my_container" ref="container">
+    <div class="title" :style="rotate3DObject">Feed your eyes, feed your soul.</div>
+    <div class="sub_title" :style="rotate3DObject">开眼，看更好的世界。</div>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch,onMounted } from 'vue'
+import { useMouse } from '@vueuse/core'
+import { World } from './World/World'
+
+const { x, y, sourceType } = useMouse()
+const deltaRotateX = ref(0)
+const deltaRotateY = ref(0)
+const rotate3DObject = ref({})
+const container = ref(null)
+
+const width = window.innerWidth
+const height = window.innerHeight
+
+watch(x, () => {
+  deltaRotateY.value = (x.value - width / 2 ) * 0.06
+  rotate3DObject.value = {
+    transform: `rotateX(${deltaRotateX.value}deg) rotateY(${deltaRotateY.value}deg)`
+  }
+})
+
+watch(y, () => {
+  deltaRotateX.value = (height / 2 - y.value ) * 0.06
+  rotate3DObject.value = {
+    transform: `rotateX(${deltaRotateX.value}deg) rotateY(${deltaRotateY.value}deg)`
+  }
+})
+const initScene = async() => {
+  const world = new World(container.value);
+  await world.init()
+  world.start
+  console.log('world',world,container.value);
+  const canvas = [...document.getElementsByTagName('canvas')][0]
+  canvas.style.position = 'absolute'
+}
+onMounted(() => {
+  initScene()
+})
+</script>
+
+<style scoped>
+.my_container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  perspective: 800px;
+  background: rgb(238,174,202);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+}
+.my_container > canvas {
+  position: absolute;
+}
+.title {
+  font-size: 70px;
+  font-weight: large;
+}
+.title,
+.sub_title {
+  text-align: center;
+  cursor: default;
+}
+</style>
