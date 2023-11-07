@@ -19,14 +19,14 @@ const width = window.innerWidth
 const height = window.innerHeight
 
 watch(x, () => {
-  deltaRotateY.value = (x.value - width / 2 ) * 0.08
+  deltaRotateY.value = (x.value - width / 2 ) * 0.06
   rotate3DObject.value = {
     transform: `rotateX(${deltaRotateX.value}deg) rotateY(${deltaRotateY.value}deg)`
   }
 })
 
 watch(y, () => {
-  deltaRotateX.value = (height / 2 - y.value ) * 0.08
+  deltaRotateX.value = (height / 2 - y.value ) * 0.06
   rotate3DObject.value = {
     transform: `rotateX(${deltaRotateX.value}deg) rotateY(${deltaRotateY.value}deg)`
   }
@@ -43,7 +43,7 @@ watch(y, () => {
   align-items: center;
   perspective: 800px;
   background: rgb(238,174,202);
-background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+  background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
 }
 .title {
   font-size: 70px;
