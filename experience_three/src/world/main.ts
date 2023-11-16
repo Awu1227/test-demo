@@ -2,7 +2,9 @@ import * as THREE from 'three'
 import { createCamera } from './components/camera'
 import { createFloor } from './components/floor'
 import { createWall } from './components/wall'
-import { loadChair } from './components/chair/chair.js'
+import { loadChair } from './components/chair/chair'
+import { loadTable } from './components/table/table'
+
 import { loadWindow } from './components/window/window'
 
 import { createDirectionalLight } from './components/light/createDirectionalLight.js'
@@ -60,11 +62,12 @@ export default class World {
   async init() {
     const chair = await loadChair()
     const window = await loadWindow()
+    const table = await loadTable()
     const boxHelper = new THREE.BoxHelper(window, 0xffff00)
     console.log('boxHelper', boxHelper)
 
     // this.loop.updatables.push(chair);
-    this.scene.add(chair, window, boxHelper)
+    this.scene.add(chair, window, boxHelper, table)
   }
 
   render() {

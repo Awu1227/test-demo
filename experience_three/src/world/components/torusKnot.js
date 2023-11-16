@@ -1,4 +1,4 @@
-import { BoxBufferGeometry, BoxGeometry, TorusKnotGeometry, Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, MathUtils, MeshNormalMaterial } from 'three'
+import { TorusKnotGeometry, Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, MathUtils, MeshNormalMaterial } from 'three'
 
 export const createTorusKnot = () => {
   // 单位为米
