@@ -1,4 +1,4 @@
-import { BoxBufferGeometry, BoxGeometry, Matrix4, Mesh, MeshBasicMaterial, MeshStandardMaterial, MathUtils } from 'three'
+import { BoxGeometry, Mesh, MeshStandardMaterial, MathUtils } from 'three'
 
 export const createCube = () => {
   // 单位为米
