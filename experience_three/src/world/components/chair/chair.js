@@ -5,7 +5,7 @@ import { setupModel } from './setupModel.js';
 async function loadChair() {
   const loader = new GLTFLoader();
 
-  const chairData = await loader.loadAsync('/models/office_chair.glb');
+  const chairData = await loader.loadAsync('/test-demo/models/office_chair.glb');
 
   console.log('chairData!', chairData);
 
