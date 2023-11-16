@@ -1,10 +1,11 @@
 import * as THREE from 'three'
+import createFloorMaterial from './material/floorMaterial'
 
 export const createFloor = () => {
-  const material = new THREE.MeshBasicMaterial( { color: 0xffffff, opacity: 0.3, transparent: true } )
+  const material = createFloorMaterial()
 
   // 单位为米
-  const planeGeometry = new THREE.BoxGeometry(500, 500,0.1)
+  const planeGeometry = new THREE.BoxGeometry(500, 500, 0.1)
   planeGeometry.rotateX(-Math.PI / 2)
 
   // create a Mesh containing the geometry and material

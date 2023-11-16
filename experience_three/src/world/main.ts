@@ -43,10 +43,10 @@ export default class World {
 
     const floor = createFloor()
 
-    const wall = createWall()
+    const [wall1, wall2, wall3] = createWall()
 
     this.loop.updatables.push(this.controls)
-    this.scene.add(gridHelper, hemiLight, floor, wall)
+    this.scene.add(hemiLight, floor, wall1, wall2, wall3)
 
     console.log('scene', this.scene)
 

@@ -16,10 +16,17 @@ export const createWall = () => {
   brush_window.updateMatrixWorld()
 
   const evaluator = new Evaluator()
-  const wall = evaluator.evaluate(brush_wall, brush_window, SUBTRACTION)
-  wall.material = createWallMaterial()
+  const wall1 = evaluator.evaluate(brush_wall, brush_window, SUBTRACTION)
+  wall1.material = createWallMaterial()
 
-  wall.position.set(0, 140, -250)
-  wall.rotation.set(0, Math.PI / 2, 0)
-  return wall
+  wall1.position.set(0, 140, -250)
+  wall1.rotation.set(0, Math.PI / 2, 0)
+
+  const wall2 = new THREE.Mesh(wall_geometry, wall1.material.clone())
+  wall2.position.set(250, 140, 0)
+
+  const wall3 = new THREE.Mesh(wall_geometry, wall1.material.clone())
+  wall3.position.set(-250, 140, 0)
+
+  return [wall1, wall2, wall3]
 }
