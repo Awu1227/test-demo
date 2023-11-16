@@ -27,7 +27,8 @@
     "@vueuse/core": "^10.5.0",
     "element-plus": "^2.3.8",
     "konva": "^9.2.0",
-    "three": "0.148",
+    "three": "^0.158.0",
+    "three-bvh-csg": "^0.0.13",
     "vue": "^3.3.4",
     "vue-router": "4"
   }

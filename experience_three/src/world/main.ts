@@ -1,7 +1,10 @@
-import { PerspectiveCamera, Scene, WebGLRenderer, Vector2, Raycaster, Matrix4, Vector3, Object3D } from 'three'
+import * as THREE from 'three'
 import { createCamera } from './components/camera'
 import { createFloor } from './components/floor'
-import { loadChair } from './components/chair/chair.js';
+import { createWall } from './components/wall'
+import { loadChair } from './components/chair/chair.js'
+import { loadWindow } from './components/window/window'
+
 import { createDirectionalLight } from './components/light/createDirectionalLight.js'
 import { createScene } from './components/scene'
 
@@ -14,13 +17,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { createHemiLight } from './components/light/createHemiLight.js'
 
 export default class World {
-  private camera: PerspectiveCamera
-  private scene: Scene
-  private renderer: WebGLRenderer
+  private camera: THREE.PerspectiveCamera
+  private scene: THREE.Scene
+  private renderer: THREE.WebGLRenderer
   private loop: Loop
 
-  pointer = new Vector2()
-  raycaster = new Raycaster()
+  pointer = new THREE.Vector2()
+  raycaster = new THREE.Raycaster()
   controls: OrbitControls
 
   constructor(container: Element) {
@@ -40,8 +43,10 @@ export default class World {
 
     const floor = createFloor()
 
+    const wall = createWall()
+
     this.loop.updatables.push(this.controls)
-    this.scene.add(gridHelper,hemiLight,floor)
+    this.scene.add(gridHelper, hemiLight, floor, wall)
 
     console.log('scene', this.scene)
 
@@ -54,8 +59,12 @@ export default class World {
 
   async init() {
     const chair = await loadChair()
+    const window = await loadWindow()
+    const boxHelper = new THREE.BoxHelper(window, 0xffff00)
+    console.log('boxHelper', boxHelper)
+
     // this.loop.updatables.push(chair);
-    this.scene.add(chair);
+    this.scene.add(chair, window, boxHelper)
   }
 
   render() {
