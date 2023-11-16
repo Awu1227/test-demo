@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { Brush, Evaluator, SUBTRACTION } from 'three-bvh-csg'
+import createWallMaterial from './material/wallMaterial'
 
 export const createWall = () => {
   const wall_geometry = new THREE.BoxGeometry(10, 280, 500)
@@ -16,7 +17,7 @@ export const createWall = () => {
 
   const evaluator = new Evaluator()
   const wall = evaluator.evaluate(brush_wall, brush_window, SUBTRACTION)
-  wall.material = new THREE.MeshNormalMaterial()
+  wall.material = createWallMaterial()
 
   wall.position.set(0, 140, -250)
   wall.rotation.set(0, Math.PI / 2, 0)
