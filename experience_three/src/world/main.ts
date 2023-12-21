@@ -91,8 +91,8 @@ export default class World {
       if (this.intersect && this.mousedownPos) {
         console.log('this.line', this.line)
 
-        const points = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point)
-        console.log('points', points)
+        const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point)
+        console.log('cal', cal.points)
 
         // 更新attribute的值
         // positionAttribute.array[0] = this.mousedownPos.x
@@ -105,7 +105,7 @@ export default class World {
         // positionAttribute.array[7] = intersect.point.y
         // positionAttribute.array[8] = intersect.point.z
         // positionAttribute.count = 3
-        this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3))
+        cal.plane && this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(cal.points, 3))
 
         var positionAttribute = this.line.geometry.attributes.position
         // for (let i = 0; i < points.length; i++) {
