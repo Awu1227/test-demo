@@ -16,7 +16,8 @@ export const createWall = () => {
   // brush_window.updateMatrixWorld()
 
   // const evaluator = new Evaluator()
-  const wall1 = new THREE.Mesh(wall_geometry, createWallMaterial())
+  const wall_geometry2 = new THREE.BoxGeometry(10, 280, 490)
+  const wall1 = new THREE.Mesh(wall_geometry2, createWallMaterial())
 
   wall1.position.set(0, 140, -250)
   wall1.rotation.set(0, Math.PI / 2, 0)

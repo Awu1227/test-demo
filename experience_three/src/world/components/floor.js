@@ -1,8 +1,9 @@
 import * as THREE from 'three'
 import createFloorMaterial from './material/floorMaterial'
+import createWallMaterial from './material/wallMaterial'
 
 export const createFloor = () => {
-  const material = createFloorMaterial()
+  const material = createWallMaterial()
 
   // 单位为米
   const planeGeometry = new THREE.BoxGeometry(500, 500, 0.1)

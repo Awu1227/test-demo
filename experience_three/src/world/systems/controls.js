@@ -10,7 +10,6 @@ function createControls(camera, canvas, world) {
   controls.enableDamping = true
 
   controls.tick = () => {
-    console.log('world')
     const intersect = world.intersect
     if (intersect) {
       controls.enableRotate = false

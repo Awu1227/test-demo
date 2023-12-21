@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 export default function createWallMaterial() {
-  const material = new THREE.MeshPhysicalMaterial({
-    color: '#c3cec7',
+  const material = new THREE.MeshBasicMaterial({
+    color: '#ddd',
     roughness: 1,
     metalness: 0
   })
