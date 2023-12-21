@@ -31,8 +31,11 @@ export default class World {
   raycaster = new THREE.Raycaster()
   intersect?: THREE.Intersection
   mousedownPos?: THREE.Vector3
+  mouseupPos?: THREE.Vector2
   controls: OrbitControls
   line: THREE.Line
+  extrudeShape?: THREE.Shape
+  expandMesh: THREE.Mesh
 
   constructor(container: Element) {
     this.camera = createCamera()
@@ -68,11 +71,12 @@ export default class World {
       this.scene.add(line)
     })
     const line = createLine()
+    this.expandMesh = createCube()
     this.line = line
     console.log('line', line)
 
     this.loop.updatables.push(this.controls)
-    this.scene.add(hemiLight, floor, wall1, wall2, wall3, this.line)
+    this.scene.add(hemiLight, floor, wall1, wall2, wall3, this.line, this.expandMesh)
 
     console.log('scene', this.scene)
 
@@ -91,9 +95,86 @@ export default class World {
       if (this.intersect && this.mousedownPos) {
         const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point, this.intersect)
 
-        cal.plane && this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(cal.points, 3))
+        if (cal.plane) {
+          this.line.userData = {
+            plane: cal.plane
+          }
+          this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(cal.points, 3))
+        }
 
         var positionAttribute = this.line.geometry.attributes.position
+
+        positionAttribute.needsUpdate = true
+      }
+      if (this.mouseupPos) {
+        const mousePos = new THREE.Vector2(event.x, event.y)
+        const length = FreeCreateUtil.p2pDistance(this.mouseupPos, mousePos)
+        const points = Array.from(this.line.geometry.attributes.position.array).toSpliced(-3)
+        const plane = this.line.userData.plane
+
+        console.log('该拉伸了', length, points, plane)
+
+        let expandPoints: number[] = []
+        switch (plane) {
+          case 'X':
+            break
+          case 'Y':
+            expandPoints = points.map((pt, index) => {
+              if (index % 3 === 1) {
+                return pt + length / 4
+              } else {
+                return pt
+              }
+            })
+            break
+          case 'Z':
+            break
+
+          default:
+            break
+        }
+        const newPoints = points.concat(expandPoints)
+        console.log('newPoints', newPoints)
+        this.expandMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(newPoints), 3))
+        this.expandMesh.geometry.setIndex([
+          0,
+          1,
+          2, // 底面三角形1
+          0,
+          2,
+          3, // 底面三角形2
+          4,
+          5,
+          6, // 顶面三角形1
+          4,
+          6,
+          7, // 顶面三角形2
+          0,
+          1,
+          5, // 侧面1三角形1
+          0,
+          5,
+          4, // 侧面1三角形2
+          1,
+          2,
+          6, // 侧面2三角形1
+          1,
+          6,
+          5, // 侧面2三角形2
+          2,
+          3,
+          7, // 侧面3三角形1
+          2,
+          7,
+          6, // 侧面3三角形2
+          3,
+          0,
+          4, // 侧面4三角形1
+          3,
+          4,
+          7 // 侧面4三角形2
+        ])
+        var positionAttribute = this.expandMesh.geometry.attributes.position
 
         positionAttribute.needsUpdate = true
       }
@@ -108,11 +189,15 @@ export default class World {
       if (this.intersect) {
         this.mousedownPos = intersect.point
       }
+      this.mouseupPos = undefined
     })
     window.addEventListener('mouseup', (event) => {
       this.mousedownPos = undefined
       if (this.line.geometry.attributes.position.array.length) {
-        console.log('该拉伸了')
+        this.mouseupPos = new THREE.Vector2(event.x, event.y)
+        const pts = Array.from(this.line.geometry.attributes.position.array)
+      } else {
+        this.mouseupPos = undefined
       }
     })
   }

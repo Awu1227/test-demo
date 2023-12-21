@@ -1,3 +1,5 @@
+import * as THREE from 'three'
+
 type TPlane = 'X' | 'Y' | 'Z'
 export class FreeCreateUtil {
   static generateRectFrom2Point(downPos: THREE.Vector3, movePos: THREE.Vector3, intersect: THREE.Intersection) {
@@ -95,5 +97,12 @@ export class FreeCreateUtil {
           plane: null,
           points: []
         }
+  }
+  static generateShape(pts: number[]) {
+    console.log('pts', pts)
+    return null
+  }
+  static p2pDistance(p1: THREE.Vector2, p2: THREE.Vector2) {
+    return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
   }
 }
