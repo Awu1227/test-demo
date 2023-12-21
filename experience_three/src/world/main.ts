@@ -36,6 +36,7 @@ export default class World {
   line: THREE.Line
   extrudeShape?: THREE.Shape
   expandMesh: THREE.Mesh
+  expandMeshline?: THREE.LineSegments
 
   constructor(container: Element) {
     this.camera = createCamera()
@@ -86,6 +87,8 @@ export default class World {
       this.render()
     }
     window.addEventListener('mousemove', (event) => {
+      console.log('111111111111')
+
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
       this.raycaster.setFromCamera(this.pointer, this.camera)
@@ -121,7 +124,7 @@ export default class World {
           case 'Y':
             expandPoints = points.map((pt, index) => {
               if (index % 3 === 1) {
-                return pt + length / 4
+                return pt + 1 + length / 4
               } else {
                 return pt
               }
@@ -177,6 +180,16 @@ export default class World {
         var positionAttribute = this.expandMesh.geometry.attributes.position
 
         positionAttribute.needsUpdate = true
+        const edges = new THREE.EdgesGeometry(this.expandMesh.geometry)
+        if (this.expandMeshline) {
+          this.scene.remove(this.expandMeshline)
+          this.expandMeshline.geometry.dispose()
+          ;(<THREE.Material>this.expandMeshline.material).dispose()
+        }
+        this.expandMeshline = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#000' }))
+        line.position.copy(this.expandMesh.position)
+        line.rotation.copy(this.expandMesh.rotation)
+        this.scene.add(this.expandMeshline)
       }
     })
     window.addEventListener('mousedown', (event) => {
@@ -195,7 +208,6 @@ export default class World {
       this.mousedownPos = undefined
       if (this.line.geometry.attributes.position.array.length) {
         this.mouseupPos = new THREE.Vector2(event.x, event.y)
-        const pts = Array.from(this.line.geometry.attributes.position.array)
       } else {
         this.mouseupPos = undefined
       }

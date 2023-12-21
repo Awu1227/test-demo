@@ -1695,11 +1695,6 @@ thenify-all@^1.0.0:
   dependencies:
     any-promise "^1.0.0"
 
-three-bvh-csg@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.npmjs.org/three-bvh-csg/-/three-bvh-csg-0.0.13.tgz"
-  integrity sha512-Snp1aW+nqc4/6WYkPz1vSC8vF+s96xz8GHXzdheXP6kYvwXZJH0AumWwtqSz04nTlKyFfvS5v0GBzW+5NiPfOw==
-
 three@^0.158.0:
   version "0.158.0"
   resolved "https://registry.npmjs.org/three/-/three-0.158.0.tgz"
