@@ -2,10 +2,11 @@ import * as THREE from 'three'
 import { createCamera } from './components/camera'
 import { createFloor } from './components/floor'
 import { createWall } from './components/wall'
+import { createCube } from './components/cube'
 import { loadChair } from './components/chair/chair'
 import { loadTable } from './components/table/table'
 
-import { loadWindow } from './components/window/window'
+// import { loadWindow } from './components/window/window'
 
 import { createDirectionalLight } from './components/light/createDirectionalLight.js'
 import { createScene } from './components/scene'
@@ -26,6 +27,7 @@ export default class World {
 
   pointer = new THREE.Vector2()
   raycaster = new THREE.Raycaster()
+  intersect?: THREE.Intersection
   controls: OrbitControls
 
   constructor(container: Element) {
@@ -41,14 +43,25 @@ export default class World {
 
     const gridHelper = createGridHelper()
 
-    this.controls = createControls(this.camera, this.renderer.domElement)
+    this.controls = createControls(this.camera, this.renderer.domElement, this)
 
     const floor = createFloor()
 
     const [wall1, wall2, wall3] = createWall()
 
+    const wallArr = [wall1, wall2, wall3]
+
+    wallArr.forEach((wall) => {
+      const edges = new THREE.EdgesGeometry(wall.geometry)
+      const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#000' }))
+      line.position.copy(wall.position)
+      line.rotation.copy(wall.rotation)
+      this.scene.add(line)
+    })
+    const cube = createCube()
+
     this.loop.updatables.push(this.controls)
-    this.scene.add(hemiLight, floor, wall1, wall2, wall3)
+    this.scene.add(hemiLight, floor, wall1, wall2, wall3, cube)
 
     console.log('scene', this.scene)
 
@@ -57,17 +70,25 @@ export default class World {
     resizer.onResize = () => {
       this.render()
     }
+    window.addEventListener('mousemove', (event) => {
+      this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+      this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+      this.raycaster.setFromCamera(this.pointer, this.camera)
+
+      const intersect = this.raycaster.intersectObjects(this.scene.children)[0]
+      this.intersect = intersect
+      cube.position.copy(intersect.point)
+    })
   }
 
   async init() {
-    const chair = await loadChair()
-    const window = await loadWindow()
-    const table = await loadTable()
-    const boxHelper = new THREE.BoxHelper(window, 0xffff00)
-    console.log('boxHelper', boxHelper)
-
+    // const chair = await loadChair()
+    // const window = await loadWindow()
+    // const table = await loadTable()
+    // const boxHelper = new THREE.BoxHelper(window, 0xffff00)
+    // console.log('boxHelper', boxHelper)
     // this.loop.updatables.push(chair);
-    this.scene.add(chair, window, boxHelper, table)
+    // this.scene.add(chair)
   }
 
   render() {

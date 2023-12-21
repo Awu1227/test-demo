@@ -10,6 +10,7 @@ export const createFloor = () => {
 
   // create a Mesh containing the geometry and material
   const plane = new THREE.Mesh(planeGeometry, material)
+  plane.position.set(0, -1, 0)
   plane.receiveShadow = true
   plane.name = '平面'
   // plane.position.y = - 200;

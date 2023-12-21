@@ -1,23 +1,22 @@
 import * as THREE from 'three'
-import { Brush, Evaluator, SUBTRACTION } from 'three-bvh-csg'
+// import { Brush, Evaluator, SUBTRACTION } from 'three-bvh-csg'
 import createWallMaterial from './material/wallMaterial'
 
 export const createWall = () => {
   const wall_geometry = new THREE.BoxGeometry(10, 280, 500)
 
   // csg
-  const brush_wall = new Brush(wall_geometry)
-  brush_wall.updateMatrixWorld()
+  // const brush_wall = new Brush(wall_geometry)
+  // brush_wall.updateMatrixWorld()
 
   const window_geometry = new THREE.BoxGeometry(120, 110, 96)
 
-  const brush_window = new Brush(window_geometry)
-  brush_window.position.y = -10
-  brush_window.updateMatrixWorld()
+  // const brush_window = new Brush(window_geometry)
+  // brush_window.position.y = -10
+  // brush_window.updateMatrixWorld()
 
-  const evaluator = new Evaluator()
-  const wall1 = evaluator.evaluate(brush_wall, brush_window, SUBTRACTION)
-  wall1.material = createWallMaterial()
+  // const evaluator = new Evaluator()
+  const wall1 = new THREE.Mesh(wall_geometry, createWallMaterial())
 
   wall1.position.set(0, 140, -250)
   wall1.rotation.set(0, Math.PI / 2, 0)

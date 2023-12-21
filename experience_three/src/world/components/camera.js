@@ -7,6 +7,6 @@ export const createCamera = () => {
     0.1, // near clipping plane
     10000 // far clipping plane
   )
-  camera.position.set(0, 80, 420)
+  camera.position.set(0, 400, 720)
   return camera
 }

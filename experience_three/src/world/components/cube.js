@@ -2,7 +2,7 @@ import { BoxGeometry, Mesh, MeshStandardMaterial, MathUtils } from 'three'
 
 export const createCube = () => {
   // 单位为米
-  const geometry = new BoxGeometry(8, 2, 4)
+  const geometry = new BoxGeometry(2, 2, 2)
 
   // create a default (white) Basic material
   const material = new MeshStandardMaterial({ color: 'purple' })
