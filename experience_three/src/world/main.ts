@@ -89,28 +89,12 @@ export default class World {
       const intersect = this.raycaster.intersectObjects(this.scene.children)[0]
       this.intersect = intersect
       if (this.intersect && this.mousedownPos) {
-        console.log('this.line', this.line)
+        const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point, this.intersect)
 
-        const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point)
-        console.log('cal', cal.points)
-
-        // 更新attribute的值
-        // positionAttribute.array[0] = this.mousedownPos.x
-        // positionAttribute.array[1] = this.mousedownPos.y
-        // positionAttribute.array[2] = this.mousedownPos.z
-        // positionAttribute.array[3] = 100
-        // positionAttribute.array[4] = 100
-        // positionAttribute.array[5] = 100
-        // positionAttribute.array[6] = intersect.point.x
-        // positionAttribute.array[7] = intersect.point.y
-        // positionAttribute.array[8] = intersect.point.z
-        // positionAttribute.count = 3
         cal.plane && this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(cal.points, 3))
 
         var positionAttribute = this.line.geometry.attributes.position
-        // for (let i = 0; i < points.length; i++) {
-        //   positionAttribute.array[i] = points[i]
-        // }
+
         positionAttribute.needsUpdate = true
       }
     })
@@ -127,6 +111,9 @@ export default class World {
     })
     window.addEventListener('mouseup', (event) => {
       this.mousedownPos = undefined
+      if (this.line.geometry.attributes.position.array.length) {
+        console.log('该拉伸了')
+      }
     })
   }
 
