@@ -11,7 +11,8 @@ export class FreeCreateUtil {
     let D = movePos.clone()
     let isSamePlane = false
     let plane: TPlane | null = null
-    let points: any
+    let points: number[] = []
+    let attributesIndex: number[] = []
     if (Math.abs(deltaX) < 5) {
       C.y = movePos.y
       D.y = downPos.y
@@ -26,6 +27,44 @@ export class FreeCreateUtil {
             return item
           }
         })
+        attributesIndex = [
+          0,
+          1,
+          5, // 左侧面三角形1
+          0,
+          5,
+          4, // 左侧面三角形2
+          1,
+          2,
+          6, // 正面三角形1
+          1,
+          6,
+          5, // 正面三角形2
+          2,
+          3,
+          7, // 右侧面三角形1
+          2,
+          7,
+          6, // 右侧面三角形2
+          3,
+          0,
+          4, // 背面三角形1
+          3,
+          4,
+          7, // 背面三角形2
+          4,
+          5,
+          6, // 上面三角形1
+          4,
+          6,
+          7, // 上面三角形2
+          0,
+          3,
+          2, // 底面三角形1
+          0,
+          2,
+          1 // 底面三角形2
+        ]
       } else {
         points = [downPos.x, downPos.y, downPos.z, C.x, C.y, C.z, movePos.x, movePos.y, movePos.z, D.x, D.y, D.z, downPos.x, downPos.y, downPos.z]
         points = points.map((item, index) => {
@@ -35,6 +74,68 @@ export class FreeCreateUtil {
             return item
           }
         })
+        attributesIndex = [
+          0,
+          5,
+          1, // 右侧面三角形1
+          0,
+          4,
+          5, // 右侧面三角形2
+          1,
+          6,
+          2, // 右侧面三角形3
+          1,
+          5,
+          6, // 右侧面三角形4
+          2,
+          7,
+          3, // 左侧面三角形1
+          2,
+          6,
+          7, // 左侧面三角形2
+          3,
+          4,
+          0, // 左侧面三角形3
+          3,
+          7,
+          4, // 左侧面三角形4
+          4,
+          1,
+          0, // 上面三角形1
+          4,
+          5,
+          1, // 上面三角形2
+          5,
+          2,
+          1, // 上面三角形3
+          5,
+          6,
+          2, // 上面三角形4
+          6,
+          3,
+          2, // 上面三角形5
+          6,
+          7,
+          3, // 上面三角形6
+          7,
+          0,
+          3, // 上面三角形7
+          7,
+          4,
+          0, // 上面三角形8
+          4,
+          6,
+          5, // 前面三角形1
+          4,
+          7,
+          6, // 前面三角形2
+          0,
+          1,
+          2, // 后面三角形1
+          0,
+          2,
+          3 // 后面三角形2
+        ]
       }
     }
     if (Math.abs(deltaY) < 5) {
@@ -51,6 +152,44 @@ export class FreeCreateUtil {
             return item
           }
         })
+        attributesIndex = [
+          0,
+          1,
+          2, // 底面三角形1
+          0,
+          2,
+          3, // 底面三角形2
+          4,
+          5,
+          6, // 顶面三角形1
+          4,
+          6,
+          7, // 顶面三角形2
+          0,
+          1,
+          5, // 侧面1三角形1
+          0,
+          5,
+          4, // 侧面1三角形2
+          1,
+          2,
+          6, // 侧面2三角形1
+          1,
+          6,
+          5, // 侧面2三角形2
+          2,
+          3,
+          7, // 侧面3三角形1
+          2,
+          7,
+          6, // 侧面3三角形2
+          3,
+          0,
+          4, // 侧面4三角形1
+          3,
+          4,
+          7 // 侧面4三角形2
+        ]
       } else {
         points = [downPos.x, downPos.y, downPos.z, C.x, C.y, C.z, movePos.x, movePos.y, movePos.z, D.x, D.y, D.z, downPos.x, downPos.y, downPos.z]
         points = points.map((item, index) => {
@@ -60,14 +199,55 @@ export class FreeCreateUtil {
             return item
           }
         })
+        // :TODO
+        attributesIndex = [
+          0,
+          1,
+          2, // 底面三角形1
+          0,
+          2,
+          3, // 底面三角形2
+          4,
+          5,
+          6, // 顶面三角形1
+          4,
+          6,
+          7, // 顶面三角形2
+          0,
+          1,
+          5, // 侧面1三角形1
+          0,
+          5,
+          4, // 侧面1三角形2
+          1,
+          2,
+          6, // 侧面2三角形1
+          1,
+          6,
+          5, // 侧面2三角形2
+          2,
+          3,
+          7, // 侧面3三角形1
+          2,
+          7,
+          6, // 侧面3三角形2
+          3,
+          0,
+          4, // 侧面4三角形1
+          3,
+          4,
+          7 // 侧面4三角形2
+        ]
       }
     }
     if (Math.abs(deltaZ) < 5) {
+      console.log('normal', normal)
+
       C.x = movePos.x
       D.x = downPos.x
       isSamePlane = true
       plane = 'Z'
-      if (normal && normal.z > 0) {
+      if (normal && normal.x > 0) {
         points = [downPos.x, downPos.y, downPos.z, C.x, C.y, C.z, movePos.x, movePos.y, movePos.z, D.x, D.y, D.z, downPos.x, downPos.y, downPos.z]
         points = points.map((item, index) => {
           if (index % 3 === 2) {
@@ -76,6 +256,44 @@ export class FreeCreateUtil {
             return item
           }
         })
+        attributesIndex = [
+          0,
+          1,
+          5, // 左侧面三角形1
+          0,
+          5,
+          4, // 左侧面三角形2
+          1,
+          2,
+          6, // 正面三角形1
+          1,
+          6,
+          5, // 正面三角形2
+          2,
+          3,
+          7, // 右侧面三角形1
+          2,
+          7,
+          6, // 右侧面三角形2
+          3,
+          0,
+          4, // 背面三角形1
+          3,
+          4,
+          7, // 背面三角形2
+          4,
+          5,
+          6, // 上面三角形1
+          4,
+          6,
+          7, // 上面三角形2
+          0,
+          3,
+          2, // 底面三角形1
+          0,
+          2,
+          1 // 底面三角形2
+        ]
       } else {
         points = [downPos.x, downPos.y, downPos.z, C.x, C.y, C.z, movePos.x, movePos.y, movePos.z, D.x, D.y, D.z, downPos.x, downPos.y, downPos.z]
         points = points.map((item, index) => {
@@ -85,17 +303,60 @@ export class FreeCreateUtil {
             return item
           }
         })
+
+        attributesIndex = [
+          0,
+          1,
+          5, // 左侧面三角形1
+          0,
+          5,
+          4, // 左侧面三角形2
+          1,
+          2,
+          6, // 正面三角形1
+          1,
+          6,
+          5, // 正面三角形2
+          2,
+          3,
+          7, // 右侧面三角形1
+          2,
+          7,
+          6, // 右侧面三角形2
+          3,
+          0,
+          4, // 背面三角形1
+          3,
+          4,
+          7, // 背面三角形2
+          4,
+          5,
+          6, // 上面三角形1
+          4,
+          6,
+          7, // 上面三角形2
+          0,
+          3,
+          2, // 底面三角形1
+          0,
+          2,
+          1 // 底面三角形2
+        ]
       }
     }
 
     return isSamePlane
       ? {
           plane,
-          points
+          points,
+          normal,
+          attributesIndex
         }
       : {
           plane: null,
-          points: []
+          points: [],
+          normal,
+          attributesIndex
         }
   }
   static generateShape(pts: number[]) {

@@ -87,8 +87,6 @@ export default class World {
       this.render()
     }
     window.addEventListener('mousemove', (event) => {
-      console.log('111111111111')
-
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
       this.raycaster.setFromCamera(this.pointer, this.camera)
@@ -100,7 +98,9 @@ export default class World {
 
         if (cal.plane) {
           this.line.userData = {
-            plane: cal.plane
+            plane: cal.plane,
+            normal: cal.normal,
+            attributesIndex: cal.attributesIndex
           }
           this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(cal.points, 3))
         }
@@ -112,14 +112,32 @@ export default class World {
       if (this.mouseupPos) {
         const mousePos = new THREE.Vector2(event.x, event.y)
         const length = FreeCreateUtil.p2pDistance(this.mouseupPos, mousePos)
-        const points = Array.from(this.line.geometry.attributes.position.array).toSpliced(-3)
+        const points = (Array.from(this.line.geometry.attributes.position.array) as any).toSpliced(-3)
         const plane = this.line.userData.plane
-
-        console.log('该拉伸了', length, points, plane)
+        const normal = this.line.userData.normal
+        const attributesIndex = this.line.userData.attributesIndex
 
         let expandPoints: number[] = []
+
         switch (plane) {
           case 'X':
+            if (normal.x > 0) {
+              expandPoints = points.map((pt, index) => {
+                if (index % 3 === 0) {
+                  return pt + 1 + length / 4
+                } else {
+                  return pt
+                }
+              })
+            } else {
+              expandPoints = points.map((item, index) => {
+                if (index % 3 === 0) {
+                  return item - 1 - length / 4
+                } else {
+                  return item
+                }
+              })
+            }
             break
           case 'Y':
             expandPoints = points.map((pt, index) => {
@@ -131,52 +149,33 @@ export default class World {
             })
             break
           case 'Z':
+            if (normal.x < 0) {
+              expandPoints = points.map((pt, index) => {
+                if (index % 3 === 2) {
+                  return pt + 1 + length / 4
+                } else {
+                  return pt
+                }
+              })
+            } else {
+              expandPoints = points.map((pt, index) => {
+                if (index % 3 === 2) {
+                  return pt + 1 - length / 4
+                } else {
+                  return pt
+                }
+              })
+            }
+
             break
 
           default:
             break
         }
+        const expandGeoIndex = attributesIndex
         const newPoints = points.concat(expandPoints)
-        console.log('newPoints', newPoints)
         this.expandMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(newPoints), 3))
-        this.expandMesh.geometry.setIndex([
-          0,
-          1,
-          2, // 底面三角形1
-          0,
-          2,
-          3, // 底面三角形2
-          4,
-          5,
-          6, // 顶面三角形1
-          4,
-          6,
-          7, // 顶面三角形2
-          0,
-          1,
-          5, // 侧面1三角形1
-          0,
-          5,
-          4, // 侧面1三角形2
-          1,
-          2,
-          6, // 侧面2三角形1
-          1,
-          6,
-          5, // 侧面2三角形2
-          2,
-          3,
-          7, // 侧面3三角形1
-          2,
-          7,
-          6, // 侧面3三角形2
-          3,
-          0,
-          4, // 侧面4三角形1
-          3,
-          4,
-          7 // 侧面4三角形2
-        ])
+        this.expandMesh.geometry.setIndex(expandGeoIndex)
         var positionAttribute = this.expandMesh.geometry.attributes.position
 
         positionAttribute.needsUpdate = true
