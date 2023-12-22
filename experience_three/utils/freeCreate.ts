@@ -1,9 +1,12 @@
+import _ from 'lodash'
 import * as THREE from 'three'
 
 type TPlane = 'X' | 'Y' | 'Z'
 export class FreeCreateUtil {
+  static createdMeshes = []
+  static createdLines = []
   static generateRectFrom2Point(downPos: THREE.Vector3, movePos: THREE.Vector3, intersect: THREE.Intersection) {
-    const normal = intersect.normal
+    const normal = intersect.face?.normal
     const deltaX = downPos.x - movePos.x
     const deltaY = downPos.y - movePos.y
     const deltaZ = downPos.z - movePos.z
@@ -241,8 +244,6 @@ export class FreeCreateUtil {
       }
     }
     if (Math.abs(deltaZ) < 5) {
-      console.log('normal', normal)
-
       C.x = movePos.x
       D.x = downPos.x
       isSamePlane = true
@@ -365,5 +366,25 @@ export class FreeCreateUtil {
   }
   static p2pDistance(p1: THREE.Vector2, p2: THREE.Vector2) {
     return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+  }
+  static generateMesh(expandMesh: THREE.Mesh) {
+    const array = _.cloneDeep(expandMesh.geometry.attributes.position.array)
+    const index = _.cloneDeep(expandMesh.geometry.index)
+    const geometry = new THREE.BufferGeometry()
+    // 因为在两个三角面片里，这两个顶点都需要被用到。
+
+    // itemSize = 3 因为每个顶点都是一个三元组。
+    geometry.setAttribute('position', new THREE.BufferAttribute(array, 3))
+    geometry.setIndex(index)
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
+    const mesh = new THREE.Mesh(geometry, material)
+    const edges = new THREE.EdgesGeometry(mesh.geometry)
+    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#000' }))
+    line.position.copy(mesh.position)
+    line.rotation.copy(mesh.rotation)
+    return {
+      mesh,
+      line
+    }
   }
 }

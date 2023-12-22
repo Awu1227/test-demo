@@ -6,6 +6,7 @@ import { createCube } from './components/cube'
 import { createLine } from './components/line.js'
 import { loadChair } from './components/chair/chair'
 import { loadTable } from './components/table/table'
+import * as _ from 'lodash'
 
 // import { loadWindow } from './components/window/window'
 
@@ -116,6 +117,7 @@ export default class World {
         const plane = this.line.userData.plane
         const normal = this.line.userData.normal
         const attributesIndex = this.line.userData.attributesIndex
+        console.log('normal', normal)
 
         let expandPoints: number[] = []
 
@@ -201,7 +203,19 @@ export default class World {
       if (this.intersect) {
         this.mousedownPos = intersect.point
       }
-      this.mouseupPos = undefined
+      if (this.mouseupPos) {
+        this.mouseupPos = undefined
+        // 添加拉伸mesh
+        const { mesh, line } = FreeCreateUtil.generateMesh(this.expandMesh)
+        this.scene.add(mesh, line)
+
+        this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
+        let positionAttribute = this.line.geometry.attributes.position
+
+        positionAttribute.needsUpdate = true
+
+        console.log('结束拉伸了', this.scene.children)
+      }
     })
     window.addEventListener('mouseup', (event) => {
       this.mousedownPos = undefined
