@@ -3,8 +3,8 @@ import * as THREE from 'three'
 
 type TPlane = 'X' | 'Y' | 'Z'
 export class FreeCreateUtil {
-  static createdMeshes = []
-  static createdLines = []
+  static createdMeshes: THREE.Mesh[] = []
+  static createdLines: THREE.LineSegments[] = []
   static generateRectFrom2Point(downPos: THREE.Vector3, movePos: THREE.Vector3, intersect: THREE.Intersection) {
     const normal = intersect.face?.normal
     const deltaX = downPos.x - movePos.x
@@ -382,6 +382,8 @@ export class FreeCreateUtil {
     const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#000' }))
     line.position.copy(mesh.position)
     line.rotation.copy(mesh.rotation)
+    this.createdMeshes.push(mesh)
+    this.createdLines.push(line)
     return {
       mesh,
       line

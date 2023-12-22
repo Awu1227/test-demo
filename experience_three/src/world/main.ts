@@ -21,6 +21,8 @@ import { createGridHelper } from './components/gridHelper'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { createHemiLight } from './components/light/createHemiLight.js'
 import { FreeCreateUtil } from '../../utils/freeCreate.js'
+import { createBufferMesh } from './components/bufferMesh.js'
+import { Threshold } from 'konva/lib/filters/Threshold.js'
 
 export default class World {
   private camera: THREE.PerspectiveCamera
@@ -38,6 +40,8 @@ export default class World {
   extrudeShape?: THREE.Shape
   expandMesh: THREE.Mesh
   expandMeshline?: THREE.LineSegments
+  pointerMesh = createBufferMesh()
+  pointerMesh2 = createBufferMesh()
 
   constructor(container: Element) {
     this.camera = createCamera()
@@ -78,7 +82,7 @@ export default class World {
     console.log('line', line)
 
     this.loop.updatables.push(this.controls)
-    this.scene.add(hemiLight, floor, wall1, wall2, wall3, this.line, this.expandMesh)
+    this.scene.add(this.pointerMesh, this.pointerMesh2, hemiLight, floor, wall1, wall2, wall3, this.line, this.expandMesh)
 
     console.log('scene', this.scene)
 
@@ -94,6 +98,36 @@ export default class World {
 
       const intersect = this.raycaster.intersectObjects(this.scene.children)[0]
       this.intersect = intersect
+      if (this.intersect) {
+        var object = this.intersect.object as THREE.Mesh
+        const face = this.intersect.face!
+        const faceIndex = this.intersect.faceIndex || 0
+        const siblingIndex = faceIndex % 2 === 1 ? faceIndex - 1 : faceIndex + 1
+        const poistionArr = _.chain(Array.from(object.geometry.attributes.position.array)).chunk(3).value()
+        const trianglePts = poistionArr[face.a].concat(poistionArr[face.b], poistionArr[face.c])
+        const siblingPts = poistionArr[siblingIndex].concat(poistionArr[siblingIndex + 1], poistionArr[siblingIndex + 2])
+        this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(trianglePts, 3))
+        this.pointerMesh.geometry.setIndex([0, 1, 2])
+        console.log('siblingPts', siblingIndex, poistionArr, siblingPts)
+
+        this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute(siblingPts, 3))
+        this.pointerMesh2.geometry.setIndex([0, 1, 2])
+
+        this.pointerMesh.rotation.copy(object.rotation)
+        this.pointerMesh.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 1 : object.position.y + -1
+        this.pointerMesh.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 1 : object.position.z - 1
+        this.pointerMesh.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 1 : object.position.x - 1
+        const positionAttribute = this.pointerMesh.geometry.attributes.position
+        positionAttribute.needsUpdate = true
+        this.pointerMesh2.rotation.copy(object.rotation)
+        this.pointerMesh2.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 1 : object.position.y + -1
+        this.pointerMesh2.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 1 : object.position.z - 1
+        this.pointerMesh2.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 1 : object.position.x - 1
+        const positionAttribute2 = this.pointerMesh2.geometry.attributes.position
+        positionAttribute2.needsUpdate = true
+
+        console.log('点击到了', trianglePts, this.pointerMesh2)
+      }
       if (this.intersect && this.mousedownPos) {
         const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point, this.intersect)
 
