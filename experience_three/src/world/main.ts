@@ -130,7 +130,7 @@ export default class World {
           const positionAttribute2 = this.pointerMesh2.geometry.attributes.position
           positionAttribute2.needsUpdate = true
 
-          console.log('点击到的index', faceIndex)
+          console.log('点击到的index', faceIndex, this.pointerMesh)
         } else {
           this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
           this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
@@ -139,6 +139,7 @@ export default class World {
 
       if (this.intersect && this.mousedownPos) {
         const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point, this.intersect)
+        console.log('calllllllllllllllllllllll')
 
         if (cal.plane) {
           this.line.userData = {
@@ -240,6 +241,7 @@ export default class World {
       }
     })
     window.addEventListener('mousedown', (event) => {
+      this.mousedownPos = undefined
       this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
       this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
       this.raycaster.setFromCamera(this.pointer, this.camera)
