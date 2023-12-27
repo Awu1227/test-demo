@@ -37,6 +37,7 @@ export default class freeCreation {
 
     const intersect = this.raycaster.intersectObjects(this.scene.children)[0]
     this.intersect = intersect
+    this.world.intersect = intersect
     if (this.intersect) {
       if (intersect.object.name === 'expandMesh') {
         var object = this.intersect.object as THREE.Mesh
