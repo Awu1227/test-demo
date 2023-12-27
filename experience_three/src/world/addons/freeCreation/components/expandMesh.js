@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-export const createCube = (pts) => {
+export const createExpandMesh = (pts) => {
   // this method will be called once per frame
 
   const geometry = new THREE.BufferGeometry()
@@ -19,7 +19,7 @@ export const createCube = (pts) => {
   // itemSize = 3 因为每个顶点都是一个三元组。
   geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
   const material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
-  const cube = new THREE.Mesh(geometry, material)
-  cube.name = 'expandMesh'
-  return cube
+  const expandMesh = new THREE.Mesh(geometry, material)
+  expandMesh.name = 'expandMesh'
+  return expandMesh
 }

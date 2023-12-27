@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { createBufferMesh } from './components/bufferMesh'
 import { FreeCreateUtil } from './utils/freeCreate'
 import { createLine } from './components/line'
-import { createCube } from './components/cube'
+import { createExpandMesh } from './components/expandMesh'
 
 export default class freeCreation {
   world: any
@@ -18,7 +18,7 @@ export default class freeCreation {
   mouseupPos?: THREE.Vector2
 
   line = createLine()
-  expandMesh = createCube()
+  expandMesh = createExpandMesh()
   expandMeshline?: THREE.LineSegments
   constructor(world: any) {
     this.world = world
