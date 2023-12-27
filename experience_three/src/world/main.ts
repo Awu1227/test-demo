@@ -98,36 +98,45 @@ export default class World {
 
       const intersect = this.raycaster.intersectObjects(this.scene.children)[0]
       this.intersect = intersect
+
       if (this.intersect) {
-        var object = this.intersect.object as THREE.Mesh
-        const face = this.intersect.face!
-        const faceIndex = this.intersect.faceIndex || 0
-        const siblingIndex = faceIndex % 2 === 1 ? faceIndex - 1 : faceIndex + 1
-        const poistionArr = _.chain(Array.from(object.geometry.attributes.position.array)).chunk(3).value()
-        const trianglePts = poistionArr[face.a].concat(poistionArr[face.b], poistionArr[face.c])
-        const siblingPts = poistionArr[siblingIndex].concat(poistionArr[siblingIndex + 1], poistionArr[siblingIndex + 2])
-        this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(trianglePts, 3))
-        this.pointerMesh.geometry.setIndex([0, 1, 2])
-        console.log('siblingPts', siblingIndex, poistionArr, siblingPts)
+        if (intersect.object.name === 'expandMesh') {
+          var object = this.intersect.object as THREE.Mesh
+          const faces = _.chain(Array.from(object.geometry.index!.array)).chunk(3).value() // 所有的面
+          const face = this.intersect.face!
+          const faceIndex = this.intersect.faceIndex || 0
+          const siblingIndex = faceIndex % 2 === 1 ? faceIndex - 1 : faceIndex + 1
+          console.log('faces', faces, face, faces[siblingIndex])
+          const poistionArr = _.chain(Array.from(object.geometry.attributes.position.array)).chunk(3).value()
+          const trianglePts = poistionArr[face.a].concat(poistionArr[face.b], poistionArr[face.c])
+          const siblingPts = poistionArr[faces[siblingIndex][0]].concat(poistionArr[faces[siblingIndex][1]], poistionArr[faces[siblingIndex][2]])
+          this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(trianglePts, 3))
+          this.pointerMesh.geometry.setIndex([0, 1, 2])
+          // console.log('siblingPts', faceIndex, face, siblingPts, this.intersect)
 
-        this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute(siblingPts, 3))
-        this.pointerMesh2.geometry.setIndex([0, 1, 2])
+          this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute(siblingPts, 3))
+          this.pointerMesh2.geometry.setIndex([0, 1, 2])
 
-        this.pointerMesh.rotation.copy(object.rotation)
-        this.pointerMesh.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 1 : object.position.y + -1
-        this.pointerMesh.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 1 : object.position.z - 1
-        this.pointerMesh.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 1 : object.position.x - 1
-        const positionAttribute = this.pointerMesh.geometry.attributes.position
-        positionAttribute.needsUpdate = true
-        this.pointerMesh2.rotation.copy(object.rotation)
-        this.pointerMesh2.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 1 : object.position.y + -1
-        this.pointerMesh2.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 1 : object.position.z - 1
-        this.pointerMesh2.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 1 : object.position.x - 1
-        const positionAttribute2 = this.pointerMesh2.geometry.attributes.position
-        positionAttribute2.needsUpdate = true
+          this.pointerMesh.rotation.copy(object.rotation)
+          this.pointerMesh.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 0.1 : object.position.y + -0.1
+          this.pointerMesh.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 0.1 : object.position.z - 0.1
+          this.pointerMesh.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 0.1 : object.position.x - 0.1
+          const positionAttribute = this.pointerMesh.geometry.attributes.position
+          positionAttribute.needsUpdate = true
+          this.pointerMesh2.rotation.copy(object.rotation)
+          this.pointerMesh2.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 0.1 : object.position.y + -0.1
+          this.pointerMesh2.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 0.1 : object.position.z - 0.1
+          this.pointerMesh2.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 0.1 : object.position.x - 0.1
+          const positionAttribute2 = this.pointerMesh2.geometry.attributes.position
+          positionAttribute2.needsUpdate = true
 
-        console.log('点击到了', trianglePts, this.pointerMesh2)
+          console.log('点击到的index', faceIndex)
+        } else {
+          this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
+          this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
+        }
       }
+
       if (this.intersect && this.mousedownPos) {
         const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point, this.intersect)
 
@@ -151,7 +160,6 @@ export default class World {
         const plane = this.line.userData.plane
         const normal = this.line.userData.normal
         const attributesIndex = this.line.userData.attributesIndex
-        console.log('normal', normal)
 
         let expandPoints: number[] = []
 
@@ -185,7 +193,7 @@ export default class World {
             })
             break
           case 'Z':
-            if (normal.x < 0) {
+            if (normal.z < 0) {
               expandPoints = points.map((pt, index) => {
                 if (index % 3 === 2) {
                   return pt + 1 + length / 4
@@ -196,7 +204,7 @@ export default class World {
             } else {
               expandPoints = points.map((pt, index) => {
                 if (index % 3 === 2) {
-                  return pt + 1 - length / 4
+                  return pt + 1 + length / 4
                 } else {
                   return pt
                 }
@@ -209,9 +217,13 @@ export default class World {
             break
         }
         const expandGeoIndex = attributesIndex
+        const faces = _.chain(Array.from(expandGeoIndex)).chunk(3).value()
+
         const newPoints = points.concat(expandPoints)
         this.expandMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(newPoints), 3))
         this.expandMesh.geometry.setIndex(expandGeoIndex)
+
+        this.expandMesh.userData.faces = faces
         var positionAttribute = this.expandMesh.geometry.attributes.position
 
         positionAttribute.needsUpdate = true

@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import pitting from '/pitting.svg'
 
 export const createBufferMesh = (pts) => {
   // this method will be called once per frame
@@ -15,11 +16,27 @@ export const createBufferMesh = (pts) => {
       1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0
     ])
   }
-
+  console.log('pitting', pitting)
   // itemSize = 3 因为每个顶点都是一个三元组。
   geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
-  const material = new THREE.MeshBasicMaterial({ color: 'grey', side: THREE.DoubleSide })
-  const mesh = new THREE.Mesh(geometry, material)
+  const mat = new THREE.MeshBasicMaterial({
+    color: 0x000,
+    depthTest: false,
+    transparent: true,
+    opacity: 0.5
+  })
+  const textureLoader = new THREE.TextureLoader()
 
+  textureLoader.load('https://threejs.org/examples/screenshots/webgl_materials_blending_custom.jpg', function (tex) {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping
+    tex.repeat.set(0.001, 0.001)
+    mat.map = tex
+    mat.needsUpdate = true
+  })
+  console.log('matttttttttttttttttttttttttttt', mat)
+  const material = new THREE.MeshBasicMaterial({ color: 'blue', side: THREE.DoubleSide, depthTest: false })
+  const mesh = new THREE.Mesh(geometry, mat)
+  mesh.renderOrder = 99
+  mesh.name = 'bufferMesh'
   return mesh
 }

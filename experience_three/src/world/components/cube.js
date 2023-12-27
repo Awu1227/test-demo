@@ -20,11 +20,6 @@ export const createCube = (pts) => {
   geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3))
   const material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
   const cube = new THREE.Mesh(geometry, material)
-  cube.tick = (delta) => {
-    // increase the cube's rotation each frame
-    cube.rotation.z = radiansPerSecond * delta
-    cube.rotation.x += radiansPerSecond * delta
-    cube.rotation.y += radiansPerSecond * delta
-  }
+  cube.name = 'expandMesh'
   return cube
 }

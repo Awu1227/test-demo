@@ -16,6 +16,8 @@ export class FreeCreateUtil {
     let plane: TPlane | null = null
     let points: number[] = []
     let attributesIndex: number[] = []
+    console.log(normal, deltaX, deltaY, deltaZ)
+
     if (Math.abs(deltaX) < 5) {
       C.y = movePos.y
       D.y = downPos.y
@@ -248,11 +250,11 @@ export class FreeCreateUtil {
       D.x = downPos.x
       isSamePlane = true
       plane = 'Z'
-      if (normal && normal.x > 0) {
+      if (normal && normal.z > 0) {
         points = [downPos.x, downPos.y, downPos.z, C.x, C.y, C.z, movePos.x, movePos.y, movePos.z, D.x, D.y, D.z, downPos.x, downPos.y, downPos.z]
         points = points.map((item, index) => {
           if (index % 3 === 2) {
-            return item - 1
+            return item + 1
           } else {
             return item
           }
@@ -299,7 +301,7 @@ export class FreeCreateUtil {
         points = [downPos.x, downPos.y, downPos.z, C.x, C.y, C.z, movePos.x, movePos.y, movePos.z, D.x, D.y, D.z, downPos.x, downPos.y, downPos.z]
         points = points.map((item, index) => {
           if (index % 3 === 2) {
-            return item + 1
+            return item - 1
           } else {
             return item
           }
@@ -368,6 +370,7 @@ export class FreeCreateUtil {
     return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
   }
   static generateMesh(expandMesh: THREE.Mesh) {
+    const name = expandMesh.name
     const array = _.cloneDeep(expandMesh.geometry.attributes.position.array)
     const index = _.cloneDeep(expandMesh.geometry.index)
     const geometry = new THREE.BufferGeometry()
@@ -378,6 +381,7 @@ export class FreeCreateUtil {
     geometry.setIndex(index)
     const material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })
     const mesh = new THREE.Mesh(geometry, material)
+    mesh.name = name
     const edges = new THREE.EdgesGeometry(mesh.geometry)
     const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#000' }))
     line.position.copy(mesh.position)
