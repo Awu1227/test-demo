@@ -5,7 +5,7 @@ type TPlane = 'X' | 'Y' | 'Z'
 export class FreeCreateUtil {
   static createdMeshes: THREE.Mesh[] = []
   static createdLines: THREE.LineSegments[] = []
-  static generateRectFrom2Point(downPos: THREE.Vector3, movePos: THREE.Vector3, intersect: THREE.Intersection) {
+  static generateRectFrom2Point(downPos: THREE.Vector3, movePos: THREE.Vector3, intersect: THREE.Intersection, mode: string) {
     const normal = intersect.face?.normal
     const deltaX = downPos.x - movePos.x
     const deltaY = downPos.y - movePos.y
@@ -17,6 +17,7 @@ export class FreeCreateUtil {
     let points: number[] = []
     let attributesIndex: number[] = []
     console.log(normal, deltaX, deltaY, deltaZ)
+    console.log('mode', mode)
 
     if (Math.abs(deltaX) < 5) {
       C.y = movePos.y

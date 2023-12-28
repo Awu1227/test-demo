@@ -90,6 +90,9 @@ export default class World {
     window.addEventListener('mouseup', (event) => {
       this.freeCreation.mouseup(event)
     })
+    window.addEventListener('keydown', (event) => {
+      this.freeCreation.keydown(event)
+    })
   }
 
   async init() {}

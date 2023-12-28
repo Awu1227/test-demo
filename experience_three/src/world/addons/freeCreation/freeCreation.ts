@@ -4,8 +4,11 @@ import { createBufferMesh } from './components/bufferMesh'
 import { FreeCreateUtil } from './utils/freeCreate'
 import { createLine } from './components/line'
 import { createExpandMesh } from './components/expandMesh'
+import { ElMessage } from 'element-plus'
 
 export default class freeCreation {
+  mode = 'rect'
+
   world: any
   pointer = new THREE.Vector2()
   raycaster = new THREE.Raycaster()
@@ -76,8 +79,7 @@ export default class freeCreation {
     }
 
     if (this.intersect && this.mousedownPos) {
-      const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point, this.intersect)
-      console.log('calllllllllllllllllllllll')
+      const cal = FreeCreateUtil.generateRectFrom2Point(this.mousedownPos, this.intersect.point, this.intersect, this.mode)
 
       if (cal.plane) {
         this.line.userData = {
@@ -181,6 +183,8 @@ export default class freeCreation {
   }
 
   mousedown(event: MouseEvent) {
+    console.log('mode', this.mode)
+
     this.mousedownPos = undefined
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
@@ -212,6 +216,17 @@ export default class freeCreation {
       this.mouseupPos = new THREE.Vector2(event.x, event.y)
     } else {
       this.mouseupPos = undefined
+    }
+  }
+  keydown({ keyCode }: KeyboardEvent) {
+    switch (keyCode) {
+      case 16:
+        this.mode = this.mode === 'rect' ? 'circle' : 'rect'
+        console.log('keydown', this.mode)
+        break
+
+      default:
+        break
     }
   }
 }
