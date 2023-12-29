@@ -22,6 +22,7 @@ import { createHemiLight } from './components/light/createHemiLight.js'
 import { FreeCreateUtil } from './addons/freeCreation/utils/freeCreate.js'
 import { createBufferMesh } from './components/bufferMesh.js'
 import freeCreation from './addons/freeCreation/freeCreation.js'
+import { ElMessage } from 'element-plus'
 
 export default class World {
   private camera: THREE.PerspectiveCamera
@@ -34,7 +35,7 @@ export default class World {
   intersect?: THREE.Intersection
 
   controls: OrbitControls
-  freeCreation: freeCreation
+  freeCreation: freeCreation | null
 
   constructor(container: Element) {
     this.camera = createCamera()
@@ -44,6 +45,20 @@ export default class World {
 
     container.append(this.renderer.domElement)
 
+    const startBtn = document.createElement('button')
+    startBtn.classList.add('btn','startBtn')
+    startBtn.innerText = '开始自由建模'
+    this.renderer.domElement.parentElement?.appendChild(startBtn)
+    startBtn.onclick = () => {
+      if ( startBtn.innerText === '开始自由建模') {
+        this.freeCreation = new freeCreation(this)
+
+      } else {
+        this.freeCreation&&this.freeCreation.destroy()
+        this.freeCreation = null
+      }
+      startBtn.innerText = startBtn.innerText === '开始自由建模' ? '退出自由建模':'开始自由建模'
+    }
     const light = createDirectionalLight()
     const hemiLight = createHemiLight()
 
@@ -80,18 +95,18 @@ export default class World {
     resizer.onResize = () => {
       this.render()
     }
-    this.freeCreation = new freeCreation(this)
+
     window.addEventListener('mousemove', (event) => {
-      this.freeCreation.mousemove(event)
+      this.freeCreation&& this.freeCreation.mousemove(event)
     })
     window.addEventListener('mousedown', (event) => {
-      this.freeCreation.mousedown(event)
+      this.freeCreation&& this.freeCreation.mousedown(event)
     })
     window.addEventListener('mouseup', (event) => {
-      this.freeCreation.mouseup(event)
+      this.freeCreation&& this.freeCreation.mouseup(event)
     })
     window.addEventListener('keydown', (event) => {
-      this.freeCreation.keydown(event)
+      this.freeCreation&& this.freeCreation.keydown(event)
     })
   }
 
@@ -107,5 +122,8 @@ export default class World {
 
   stop() {
     this.loop.stop()
+  }
+  message(msg: string) {
+    ElMessage(msg)
   }
 }

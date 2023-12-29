@@ -26,6 +26,7 @@
     "@types/three": "^0.155.0",
     "@vueuse/core": "^10.5.0",
     "element-plus": "^2.3.8",
+    "gsap": "^3.12.4",
     "konva": "^9.2.0",
     "lodash": "^4.17.21",
     "three": "^0.158.0",

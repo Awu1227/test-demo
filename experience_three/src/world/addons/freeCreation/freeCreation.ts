@@ -4,8 +4,9 @@ import { createBufferMesh } from './components/bufferMesh'
 import { FreeCreateUtil } from './utils/freeCreate'
 import { createLine } from './components/line'
 import { createExpandMesh } from './components/expandMesh'
-import { ElMessage } from 'element-plus'
 import { createCylinder } from './components/cylinder'
+import { createBoxHelper } from './helper/boxHelper'
+import {gsap} from 'gsap';
 
 export default class freeCreation {
   mode = 'rect'
@@ -26,6 +27,7 @@ export default class freeCreation {
   expandMeshline?: THREE.LineSegments
   cylinder = createCylinder().cylinder
   cylinderLine = createCylinder().line
+  boxHelepr = createBoxHelper()
   /**@description 是否在绘制 */
   isDrawing = false
   constructor(world: any) {
@@ -36,7 +38,27 @@ export default class freeCreation {
     this.init()
   }
   init() {
-    this.scene.add(this.pointerMesh, this.pointerMesh2, this.line, this.expandMesh, this.cylinder)
+    this.scene.add(this.pointerMesh, this.pointerMesh2, this.line, this.expandMesh, this.cylinder, this.boxHelepr)
+    const scene_container =  this.world.renderer.domElement.parentElement
+    scene_container.style.position = 'relative'
+    console.log('container',scene_container);
+
+    const panel = document.createElement('div')
+    panel.classList.add('panel')
+    gsap.to(panel, {duration: 1, top: 300, ease: "bounce.out"})
+    const rectBtn = document.createElement('button')
+    rectBtn.classList.add('btn')
+    rectBtn.innerText='矩形'
+
+    const circleBtn = document.createElement('button')
+    circleBtn.classList.add('btn')
+    circleBtn.innerText='圆形'
+
+    const triBtn = document.createElement('button')
+    triBtn.classList.add('btn')
+    triBtn.innerText='三角形'
+    panel.append (rectBtn,circleBtn,triBtn)
+    scene_container.appendChild(panel)
   }
   mousemove(event: MouseEvent) {
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
@@ -48,35 +70,37 @@ export default class freeCreation {
     this.world.intersect = intersect
     if (this.intersect) {
       if (intersect.object.name === 'expandMesh') {
-        var object = this.intersect.object as THREE.Mesh
-        const faces = _.chain(Array.from(object.geometry.index!.array)).chunk(3).value() // 所有的面
-        const face = this.intersect.face!
-        const faceIndex = this.intersect.faceIndex || 0
-        const siblingIndex = faceIndex % 2 === 1 ? faceIndex - 1 : faceIndex + 1
-        console.log('faces', faces, face, faces[siblingIndex])
-        const poistionArr = _.chain(Array.from(object.geometry.attributes.position.array)).chunk(3).value()
-        const trianglePts = poistionArr[face.a].concat(poistionArr[face.b], poistionArr[face.c])
-        const siblingPts = poistionArr[faces[siblingIndex][0]].concat(poistionArr[faces[siblingIndex][1]], poistionArr[faces[siblingIndex][2]])
-        this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(trianglePts, 3))
-        this.pointerMesh.geometry.setIndex([0, 1, 2])
+        // var object = this.intersect.object as THREE.Mesh
+        // const faces = _.chain(Array.from(object.geometry.index!.array)).chunk(3).value() // 所有的面
+        // const face = this.intersect.face!
+        // const faceIndex = this.intersect.faceIndex || 0
+        // const siblingIndex = faceIndex % 2 === 1 ? faceIndex - 1 : faceIndex + 1
+        // console.log('faces', faces, face, faces[siblingIndex])
+        // const poistionArr = _.chain(Array.from(object.geometry.attributes.position.array)).chunk(3).value()
+        // const trianglePts = poistionArr[face.a].concat(poistionArr[face.b], poistionArr[face.c])
+        // const siblingPts = poistionArr[faces[siblingIndex][0]].concat(poistionArr[faces[siblingIndex][1]], poistionArr[faces[siblingIndex][2]])
+        // this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(trianglePts, 3))
+        // this.pointerMesh.geometry.setIndex([0, 1, 2])
 
-        this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute(siblingPts, 3))
-        this.pointerMesh2.geometry.setIndex([0, 1, 2])
+        // this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute(siblingPts, 3))
+        // this.pointerMesh2.geometry.setIndex([0, 1, 2])
 
-        this.pointerMesh.rotation.copy(object.rotation)
-        this.pointerMesh.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 0.1 : object.position.y + -0.1
-        this.pointerMesh.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 0.1 : object.position.z - 0.1
-        this.pointerMesh.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 0.1 : object.position.x - 0.1
-        const positionAttribute = this.pointerMesh.geometry.attributes.position
-        positionAttribute.needsUpdate = true
-        this.pointerMesh2.rotation.copy(object.rotation)
-        this.pointerMesh2.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 0.1 : object.position.y + -0.1
-        this.pointerMesh2.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 0.1 : object.position.z - 0.1
-        this.pointerMesh2.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 0.1 : object.position.x - 0.1
-        const positionAttribute2 = this.pointerMesh2.geometry.attributes.position
-        positionAttribute2.needsUpdate = true
+        // this.pointerMesh.rotation.copy(object.rotation)
+        // this.pointerMesh.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 0.1 : object.position.y + -0.1
+        // this.pointerMesh.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 0.1 : object.position.z - 0.1
+        // this.pointerMesh.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 0.1 : object.position.x - 0.1
+        // const positionAttribute = this.pointerMesh.geometry.attributes.position
+        // positionAttribute.needsUpdate = true
+        // this.pointerMesh2.rotation.copy(object.rotation)
+        // this.pointerMesh2.position.y = this.intersect!.face!.normal!.y > 0 ? object.position.y + 0.1 : object.position.y + -0.1
+        // this.pointerMesh2.position.z = this.intersect!.face!.normal!.z > 0 ? object.position.z + 0.1 : object.position.z - 0.1
+        // this.pointerMesh2.position.x = this.intersect!.face!.normal!.x > 0 ? object.position.x + 0.1 : object.position.x - 0.1
+        // const positionAttribute2 = this.pointerMesh2.geometry.attributes.position
+        // positionAttribute2.needsUpdate = true
 
-        console.log('点击到的index', faceIndex, this.pointerMesh)
+        // console.log('点击到的index', faceIndex, this.pointerMesh)
+        this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
+        this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
       } else {
         this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
         this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
@@ -275,6 +299,15 @@ export default class freeCreation {
     this.world.intersect = intersect
     if (this.intersect) {
       this.mousedownPos = intersect.point
+
+      if (this.intersect.object.name  === 'expandMesh') {
+
+        // helper更新
+        this.scene.remove(this.boxHelepr)
+        this.boxHelepr = new THREE.BoxHelper(this.intersect.object, '#add8e6')
+        console.log('this.boxHelepr', this.boxHelepr)
+        this.scene.add(this.boxHelepr)
+      }
     }
     if (this.mouseupPos) {
       this.isDrawing = false
@@ -282,9 +315,11 @@ export default class freeCreation {
       this.mouseupPos = undefined
       // 添加拉伸mesh
       const { mesh, line } = FreeCreateUtil.generateMesh(this.expandMesh)
+      mesh.userData.line = line
       this.scene.add(mesh, line)
 
       const { mesh: cylindermesh, line: cylinderLine } = FreeCreateUtil.generatecylinderMesh(this.cylinder)
+      cylindermesh.userData.line = cylinderLine
       this.scene.add(cylindermesh, cylinderLine)
       this.cylinder = createCylinder().cylinder
 
@@ -314,11 +349,27 @@ export default class freeCreation {
     switch (keyCode) {
       case 16:
         this.mode = this.mode === 'rect' ? 'circle' : 'rect'
+        const msg = this.mode === 'rect' ? '当前画长方体' : '当前是画圆柱体'
         console.log('keydown', this.mode)
+        this.world.message(msg)
+        break
+      case 46:
+        this.boxHelepr
+        console.log('delete', this.boxHelepr, (<any>this.boxHelepr).object, this.expandMeshline)
+        this.scene.remove(this.boxHelepr, (<any>this.boxHelepr).object, (<any>this.boxHelepr).object.userData.line)
         break
 
       default:
         break
     }
+  }
+  destroy() {
+    
+    const panel = document.getElementsByClassName('panel')[0]
+    console.log('des',panel);
+    gsap.to(panel, {duration: 1, top: -100, ease:'back.out'}).then(() => {
+    panel.remove()
+
+    })
   }
 }

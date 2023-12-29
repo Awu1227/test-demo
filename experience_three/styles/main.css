@@ -33,3 +33,40 @@ h1 {
   */
   background-color: skyblue;
 }
+.startBtn {
+  position: absolute;
+  top: 10px;
+  left:10px;
+  width:100px !important;
+}
+.panel {
+  position: absolute;
+  right: 10px;
+  top: -10px;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px;
+  border-radius: 4px;
+  background-color: #dddddd;
+}
+.btn {
+  display: inline-block;
+  width: 60px;
+  height: 40px;
+  background-color: #ffffff;
+  color: #606266;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.btn:hover {
+  color:#409eff;
+  background-color: #c6e2ff;
+}
