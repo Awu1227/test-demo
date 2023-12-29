@@ -6,7 +6,10 @@ export class FreeCreateUtil {
   static createdMeshes: THREE.Mesh[] = []
   static createdLines: THREE.LineSegments[] = []
   static generateRectFrom2Point(downPos: THREE.Vector3, movePos: THREE.Vector3, intersect: THREE.Intersection, mode: string) {
-    const normal = intersect.face?.normal
+    const normal = intersect.face?.normal || intersect.normal
+    if (!normal) {
+      console.log('interrrrrrrrrrrrrrrrrrrrr', intersect)
+    }
     const deltaX = downPos.x - movePos.x
     const deltaY = downPos.y - movePos.y
     const deltaZ = downPos.z - movePos.z
@@ -16,7 +19,7 @@ export class FreeCreateUtil {
     let plane: TPlane | null = null
     let points: number[] = []
     let attributesIndex: number[] = []
-    console.log(normal, deltaX, deltaY, deltaZ)
+    console.log('normal', normal, deltaX, deltaY, deltaZ)
     console.log('mode', mode)
 
     if (Math.abs(deltaX) < 5) {
@@ -348,19 +351,25 @@ export class FreeCreateUtil {
         ]
       }
     }
-
+    let cylinderParams
+    if (mode === 'circle') {
+      const distance = this.p2pDistance3d(downPos, movePos)
+      cylinderParams = [distance, distance, 0.1, 64]
+    }
     return isSamePlane
       ? {
           plane,
           points,
           normal,
-          attributesIndex
+          attributesIndex,
+          cylinderParams
         }
       : {
           plane: null,
           points: [],
           normal,
-          attributesIndex
+          attributesIndex,
+          cylinderParams
         }
   }
   static generateShape(pts: number[]) {
@@ -369,6 +378,11 @@ export class FreeCreateUtil {
   }
   static p2pDistance(p1: THREE.Vector2, p2: THREE.Vector2) {
     return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
+  }
+  static p2pDistance3d(point1: THREE.Vector3, point2: THREE.Vector3) {
+    var vector1 = new THREE.Vector3(point1.x, point1.y, point1.z)
+    var vector2 = new THREE.Vector3(point2.x, point2.y, point2.z)
+    return vector1.distanceTo(vector2) - 5
   }
   static generateMesh(expandMesh: THREE.Mesh) {
     const name = expandMesh.name
@@ -384,7 +398,7 @@ export class FreeCreateUtil {
     const mesh = new THREE.Mesh(geometry, material)
     mesh.name = name
     const edges = new THREE.EdgesGeometry(mesh.geometry)
-    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#000' }))
+    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 'grey' }))
     line.position.copy(mesh.position)
     line.rotation.copy(mesh.rotation)
     this.createdMeshes.push(mesh)
@@ -393,5 +407,54 @@ export class FreeCreateUtil {
       mesh,
       line
     }
+  }
+  static generatecylinderMesh(cylinder: THREE.Mesh) {
+    const mesh = cylinder.clone()
+    const edges = new THREE.EdgesGeometry(mesh.geometry, 20)
+    const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 'grey' }))
+    line.position.copy(mesh.position)
+    line.rotation.copy(mesh.rotation)
+    this.createdMeshes.push(mesh)
+    this.createdLines.push(line)
+    return {
+      mesh,
+      line
+    }
+  }
+  static changeMeshPosition(position: THREE.Vector3, normal: THREE.Vector3, mousedownPos: THREE.Vector3) {
+    if (normal) {
+      switch (Math.abs(normal.y - 1) < 0.5 ? 1 : Math.abs(normal.y + 1) < 0.5 ? -1 : 0) {
+        case 1:
+          position.y = mousedownPos.y + length / 2 + 1
+          break
+        case -1:
+          position.y = mousedownPos.y - length / 2 - 1
+          break
+        default:
+          break
+      }
+      switch (Math.abs(normal.x - 1) < 0.5 ? 1 : Math.abs(normal.x + 1) < 0.5 ? -1 : 0) {
+        case 1:
+          position.x = mousedownPos.x + length / 2 + 1
+          break
+        case -1:
+          position.x = mousedownPos.x - length / 2 - 1
+          break
+        default:
+          break
+      }
+      switch (Math.abs(normal.z - 1) < 0.5 ? 1 : Math.abs(normal.z + 1) < 0.5 ? -1 : 0) {
+        case 1:
+          position.z = mousedownPos.z + length / 2 + 1
+          break
+        case -1:
+          position.z = mousedownPos.z - length / 2 - 1
+          break
+        default:
+          break
+      }
+      return position
+    }
+    return position
   }
 }

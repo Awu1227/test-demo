@@ -5,6 +5,7 @@ import { FreeCreateUtil } from './utils/freeCreate'
 import { createLine } from './components/line'
 import { createExpandMesh } from './components/expandMesh'
 import { ElMessage } from 'element-plus'
+import { createCylinder } from './components/cylinder'
 
 export default class freeCreation {
   mode = 'rect'
@@ -23,6 +24,10 @@ export default class freeCreation {
   line = createLine()
   expandMesh = createExpandMesh()
   expandMeshline?: THREE.LineSegments
+  cylinder = createCylinder().cylinder
+  cylinderLine = createCylinder().line
+  /**@description 是否在绘制 */
+  isDrawing = false
   constructor(world: any) {
     this.world = world
     this.camera = world.camera
@@ -31,14 +36,14 @@ export default class freeCreation {
     this.init()
   }
   init() {
-    this.scene.add(this.pointerMesh, this.pointerMesh2, this.line, this.expandMesh)
+    this.scene.add(this.pointerMesh, this.pointerMesh2, this.line, this.expandMesh, this.cylinder)
   }
   mousemove(event: MouseEvent) {
     this.pointer.x = (event.clientX / window.innerWidth) * 2 - 1
     this.pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
     this.raycaster.setFromCamera(this.pointer, this.camera)
 
-    const intersect = this.raycaster.intersectObjects(this.scene.children)[0]
+    const intersect = this.raycaster.intersectObjects(this.scene.children.filter((item) => item.type !== 'LineSegments'))[0]
     this.intersect = intersect
     this.world.intersect = intersect
     if (this.intersect) {
@@ -87,98 +92,173 @@ export default class freeCreation {
           normal: cal.normal,
           attributesIndex: cal.attributesIndex
         }
-        this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(cal.points, 3))
       }
+      console.log('cal', cal)
 
-      var positionAttribute = this.line.geometry.attributes.position
+      if (this.mode === 'rect') {
+        this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute(cal.points, 3))
 
-      positionAttribute.needsUpdate = true
+        var positionAttribute = this.line.geometry.attributes.position
+
+        positionAttribute.needsUpdate = true
+      } else {
+        this.scene.remove(this.cylinder, this.cylinderLine)
+        this.cylinder.geometry.dispose()
+        ;(<THREE.Material>this.cylinder.material).dispose()
+        const { cylinder, line } = createCylinder(cal.cylinderParams, cal.normal)
+        this.cylinder = cylinder
+        this.cylinderLine = line
+        this.cylinder.position.set(this.mousedownPos.x, this.mousedownPos.y + 1, this.mousedownPos.z)
+
+        this.cylinder.userData.mousedownPos = this.mousedownPos
+        this.cylinder.userData.normal = cal.normal
+        this.cylinderLine.position.copy(this.cylinder.position)
+        this.cylinderLine.rotation.copy(this.cylinder.rotation)
+        this.scene.add(this.cylinder, this.cylinderLine)
+      }
     }
 
-    if (this.mouseupPos) {
+    if (this.isDrawing) {
       const mousePos = new THREE.Vector2(event.x, event.y)
-      const length = FreeCreateUtil.p2pDistance(this.mouseupPos, mousePos)
-      const points = (Array.from(this.line.geometry.attributes.position.array) as any).toSpliced(-3)
-      const plane = this.line.userData.plane
-      const normal = this.line.userData.normal
-      const attributesIndex = this.line.userData.attributesIndex
+      const length = FreeCreateUtil.p2pDistance(this.mouseupPos!, mousePos)
+      console.log('this.isDrawing', this.isDrawing)
+      if (this.mode === 'rect') {
+        const points = (Array.from(this.line.geometry.attributes.position.array) as any).toSpliced(-3)
+        const plane = this.line.userData.plane
+        const normal = this.line.userData.normal
+        const attributesIndex = this.line.userData.attributesIndex
 
-      let expandPoints: number[] = []
+        let expandPoints: number[] = []
 
-      switch (plane) {
-        case 'X':
-          if (normal.x > 0) {
-            expandPoints = points.map((pt, index) => {
-              if (index % 3 === 0) {
-                return pt + 1 + length / 4
-              } else {
-                return pt
-              }
-            })
-          } else {
-            expandPoints = points.map((item, index) => {
-              if (index % 3 === 0) {
-                return item - 1 - length / 4
-              } else {
-                return item
-              }
-            })
-          }
-          break
-        case 'Y':
-          expandPoints = points.map((pt, index) => {
-            if (index % 3 === 1) {
-              return pt + 1 + length / 4
+        switch (plane) {
+          case 'X':
+            if (normal.x > 0) {
+              expandPoints = points.map((pt, index) => {
+                if (index % 3 === 0) {
+                  return pt + 1 + length / 4
+                } else {
+                  return pt
+                }
+              })
             } else {
-              return pt
+              expandPoints = points.map((item, index) => {
+                if (index % 3 === 0) {
+                  return item - 1 - length / 4
+                } else {
+                  return item
+                }
+              })
             }
-          })
-          break
-        case 'Z':
-          if (normal.z < 0) {
+            break
+          case 'Y':
             expandPoints = points.map((pt, index) => {
-              if (index % 3 === 2) {
+              if (index % 3 === 1) {
                 return pt + 1 + length / 4
               } else {
                 return pt
               }
             })
-          } else {
-            expandPoints = points.map((pt, index) => {
-              if (index % 3 === 2) {
-                return pt + 1 + length / 4
-              } else {
-                return pt
-              }
-            })
+            break
+          case 'Z':
+            if (normal.z < 0) {
+              expandPoints = points.map((pt, index) => {
+                if (index % 3 === 2) {
+                  return pt + 1 + length / 4
+                } else {
+                  return pt
+                }
+              })
+            } else {
+              expandPoints = points.map((pt, index) => {
+                if (index % 3 === 2) {
+                  return pt + 1 + length / 4
+                } else {
+                  return pt
+                }
+              })
+            }
+
+            break
+
+          default:
+            break
+        }
+        const expandGeoIndex = attributesIndex
+        const faces = _.chain(Array.from(expandGeoIndex)).chunk(3).value()
+
+        const newPoints = points.concat(expandPoints)
+        this.expandMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(newPoints), 3))
+        this.expandMesh.geometry.setIndex(expandGeoIndex)
+
+        this.expandMesh.userData.faces = faces
+        var positionAttribute = this.expandMesh.geometry.attributes.position
+
+        positionAttribute.needsUpdate = true
+        const edges = new THREE.EdgesGeometry(this.expandMesh.geometry)
+        if (this.expandMeshline) {
+          this.scene.remove(this.expandMeshline)
+          this.expandMeshline.geometry.dispose()
+          ;(<THREE.Material>this.expandMeshline.material).dispose()
+        }
+        this.expandMeshline = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 'grey' }))
+        this.line.position.copy(this.expandMesh.position)
+        this.line.rotation.copy(this.expandMesh.rotation)
+        this.scene.add(this.expandMeshline)
+      } else {
+        const params = this.cylinder.geometry.parameters
+        const position = this.cylinder.position
+        const mousedownPos = this.cylinder.userData.mousedownPos
+        const normal = this.cylinder.userData.normal
+        // const changePosition = FreeCreateUtil.changeMeshPosition(position, normal, mousedownPos)
+        if (normal) {
+          switch (Math.abs(normal.y - 1) < 0.5 ? 1 : Math.abs(normal.y + 1) < 0.5 ? -1 : 0) {
+            case 1:
+              position.y = mousedownPos.y + length / 2 + 1
+              break
+            case -1:
+              position.y = mousedownPos.y - length / 2 - 1
+              break
+            default:
+              break
           }
+          switch (Math.abs(normal.x - 1) < 0.5 ? 1 : Math.abs(normal.x + 1) < 0.5 ? -1 : 0) {
+            case 1:
+              position.x = mousedownPos.x + length / 2 + 1
+              break
+            case -1:
+              position.x = mousedownPos.x - length / 2 - 1
+              break
+            default:
+              break
+          }
+          switch (Math.abs(normal.z - 1) < 0.5 ? 1 : Math.abs(normal.z + 1) < 0.5 ? -1 : 0) {
+            case 1:
+              position.z = mousedownPos.z + length / 2 + 1
+              break
+            case -1:
+              position.z = mousedownPos.z - length / 2 - 1
+              break
+            default:
+              break
+          }
+        }
 
-          break
+        const expandParams = Object.assign(params, { height: length }) as any
+        console.log('expandParams', expandParams)
 
-        default:
-          break
+        this.scene.remove(this.cylinder, this.cylinderLine)
+        this.cylinder.geometry.dispose()
+        ;(<THREE.Material>this.cylinder.material).dispose()
+        const { cylinder, line } = createCylinder(expandParams, normal)
+        this.cylinder = cylinder
+        this.cylinderLine = line
+        this.cylinder.position.copy(position)
+        this.cylinder.userData.mousedownPos = mousedownPos
+        this.cylinder.userData.normal = normal
+        this.cylinderLine.position.copy(this.cylinder.position)
+        this.cylinderLine.rotation.copy(this.cylinder.rotation)
+        this.scene.add(this.cylinder, this.cylinderLine)
       }
-      const expandGeoIndex = attributesIndex
-      const faces = _.chain(Array.from(expandGeoIndex)).chunk(3).value()
-
-      const newPoints = points.concat(expandPoints)
-      this.expandMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(newPoints), 3))
-      this.expandMesh.geometry.setIndex(expandGeoIndex)
-
-      this.expandMesh.userData.faces = faces
-      var positionAttribute = this.expandMesh.geometry.attributes.position
-
-      positionAttribute.needsUpdate = true
-      const edges = new THREE.EdgesGeometry(this.expandMesh.geometry)
-      if (this.expandMeshline) {
-        this.scene.remove(this.expandMeshline)
-        this.expandMeshline.geometry.dispose()
-        ;(<THREE.Material>this.expandMeshline.material).dispose()
-      }
-      this.expandMeshline = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: '#000' }))
-      this.line.position.copy(this.expandMesh.position)
-      this.line.rotation.copy(this.expandMesh.rotation)
-      this.scene.add(this.expandMeshline)
     }
   }
 
@@ -197,25 +277,37 @@ export default class freeCreation {
       this.mousedownPos = intersect.point
     }
     if (this.mouseupPos) {
+      this.isDrawing = false
+
       this.mouseupPos = undefined
       // 添加拉伸mesh
       const { mesh, line } = FreeCreateUtil.generateMesh(this.expandMesh)
       this.scene.add(mesh, line)
+
+      const { mesh: cylindermesh, line: cylinderLine } = FreeCreateUtil.generatecylinderMesh(this.cylinder)
+      this.scene.add(cylindermesh, cylinderLine)
+      this.cylinder = createCylinder().cylinder
 
       this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
       let positionAttribute = this.line.geometry.attributes.position
 
       positionAttribute.needsUpdate = true
 
-      console.log('结束拉伸了', this.scene.children)
+      // console.log('结束拉伸了', this.scene.children)
     }
   }
   mouseup(event: MouseEvent) {
     this.mousedownPos = undefined
-    if (this.line.geometry.attributes.position.array.length) {
+    console.log(' this.cylinder.geometry.parameters.height', this.cylinder.geometry.parameters.height)
+
+    if (this.line.geometry.attributes.position.array.length || this.cylinder.geometry.parameters.height < 1) {
       this.mouseupPos = new THREE.Vector2(event.x, event.y)
+      this.isDrawing = true
+      console.log('正在拉伸', this.line.geometry.attributes.position.array.length, this.cylinder.geometry.parameters.height)
     } else {
       this.mouseupPos = undefined
+      this.isDrawing = false
+      console.log('结束拉伸')
     }
   }
   keydown({ keyCode }: KeyboardEvent) {

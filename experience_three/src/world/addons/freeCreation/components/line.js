@@ -5,7 +5,7 @@ export const createLine = () => {
   const _points = []
   lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(_points, 3))
   const lineMaterial = new THREE.LineBasicMaterial({
-    color: 0x000
+    color: 'grey'
   })
   const line = new THREE.Line(lineGeometry, lineMaterial)
 
