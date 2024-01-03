@@ -27,5 +27,6 @@ export const createCylinder = (params = [0.01, 0.01, 0.1, 64], normal = new THRE
   cylinder.name = 'cylinder'
   const edges = new THREE.EdgesGeometry(geometry, 20)
   const line = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 'grey' }))
+  cylinder.userData.line = line
   return { cylinder, line }
 }

@@ -27,7 +27,7 @@ export const createBufferMesh = (pts) => {
   })
 
   const mesh = new THREE.Mesh(geometry, mat)
-  mesh.renderOrder = 99
+  mesh.renderOrder = 40
   mesh.name = 'bufferMesh'
   return mesh
 }

@@ -107,7 +107,8 @@ export default class World {
     })
     window.addEventListener('keydown', (event) => {
       this.freeCreation&& this.freeCreation.keydown(event)
-    })
+    });
+    (window as any).world = this
   }
 
   async init() {}

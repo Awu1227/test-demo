@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import * as THREE from 'three'
+import  Konva from 'konva';
 
 type TPlane = 'X' | 'Y' | 'Z'
 export class FreeCreateUtil {
@@ -456,5 +457,15 @@ export class FreeCreateUtil {
       return position
     }
     return position
+  }
+  static findCircleCenter(vec1:THREE.Vector2, vec2:THREE.Vector2, vec3:THREE.Vector2) {
+   const line = new Konva.Line({
+     points: [vec1.x, vec1.y, vec2.x, vec2.y,vec3.x,vec3.y],
+     stroke: 'red',
+   })
+   console.log(line.points());
+   
+   return line.getSelfRect()
+   
   }
 }
