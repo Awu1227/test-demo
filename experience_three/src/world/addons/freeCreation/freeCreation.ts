@@ -83,8 +83,8 @@ export default class freeCreation {
     this.intersect = intersect
 
     this.world.intersect = intersect
-    const normal = intersect.face?.normal
     if (this.intersect) {
+      const normal = intersect.face?.normal
       if (this.intersect.object.name === 'helper') {
         this.myCone.setHighLight(true)
       } else {
@@ -132,6 +132,7 @@ export default class freeCreation {
         // if (!this.myCone.isHighLight) {
         this.pointerMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
         this.pointerMesh2.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
+        // this.myCone.cone.position.set(-99999, -99999, -99999)
         // }
       }
     }
