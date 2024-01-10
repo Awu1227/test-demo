@@ -10,7 +10,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import checker from 'vite-plugin-checker'
 export default defineConfig({
-  plugins:[
+  plugins: [
     vue(),
     vueJsx(),
     AutoImport({
@@ -32,8 +32,9 @@ export default defineConfig({
         cssExercise: resolve(__dirname, 'cssExercise/index.html'),
         vue_router: resolve(__dirname, 'vue_router/index.html'),
         experience_three: resolve(__dirname, 'experience_three/index.html'),
-      },
+        react_three_fiber: resolve(__dirname, 'react_three_fiber/index.html')
+      }
     },
     cssCodeSplit: true // 是否提取所有CSS到一个CSS文件中, introduct: https://cn.vitejs.dev/config/build-options.html#build-csscodesplit
-  },
+  }
 })

@@ -425,11 +425,13 @@ export default class freeCreation {
       mesh.userData.line = line
       this.scene.add(mesh, line)
 
-      // const { mesh: cylindermesh, line: cylinderLine } = FreeCreateUtil.generatecylinderMesh(this.cylinder)
-      // cylindermesh.userData.line = cylinderLine
-      // this.scene.add(cylindermesh, cylinderLine)
-      // this.cylinder = createCylinder().cylinder
-
+      const { mesh: cylindermesh, line: cylinderLine } = FreeCreateUtil.generatecylinderMesh(this.cylinder)
+      this.scene.remove(this.cylinder, this.cylinderLine)
+      cylindermesh.userData.line = cylinderLine
+      this.scene.add(cylindermesh, cylinderLine)
+      const cylinder = createCylinder()
+      this.cylinder = cylinder.cylinder
+      this.cylinderLine = cylinder.line
       this.line.geometry.setAttribute('position', new THREE.Float32BufferAttribute([], 3))
       let positionAttribute = this.line.geometry.attributes.position
 
